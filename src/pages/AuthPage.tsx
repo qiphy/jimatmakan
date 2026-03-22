@@ -114,6 +114,29 @@ const AuthPage = () => {
             <Button variant="outline" className="w-full h-12 text-base font-display" onClick={() => setStep("signup")}>
               {t("signupBtn")}
             </Button>
+
+            <div className="pt-4 border-t border-border mt-6">
+              <p className="text-xs text-muted-foreground text-center mb-3">{t("demoAccounts")}</p>
+              <div className="space-y-1.5">
+                {[
+                  { email: "vendor@demo.com", label: t("roleVendor") },
+                  { email: "student@demo.com", label: t("roleUser") },
+                  { email: "compost@demo.com", label: t("roleComposter") },
+                ].map((acc) => (
+                  <button
+                    key={acc.email}
+                    onClick={async () => {
+                      const { error: err } = await login(acc.email, "demo123456");
+                      if (!err) navigate("/");
+                    }}
+                    className="w-full text-left px-3 py-2 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
+                  >
+                    <span className="text-xs font-medium text-foreground">{acc.label}</span>
+                    <span className="text-[11px] text-muted-foreground ml-2">{acc.email}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         )}
 
