@@ -1,16 +1,20 @@
 import { Home, Search, PlusCircle, Activity, User } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const BottomNav = () => {
   const { t } = useLanguage();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   const tabs = [
     { icon: Home, label: t("home"), path: "/" },
     { icon: Search, label: t("browse"), path: "/browse" },
-    { icon: PlusCircle, label: t("addListing"), path: "/list", accent: true },
+    ...(user?.role === "vendor"
+      ? [{ icon: PlusCircle, label: t("addListing"), path: "/list", accent: true }]
+      : []),
     { icon: Activity, label: t("activity"), path: "/activity" },
     { icon: User, label: t("profile"), path: "/profile" },
   ];
