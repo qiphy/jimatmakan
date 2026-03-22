@@ -186,6 +186,7 @@ const translations = {
     totalRevenue: "Jumlah Pendapatan",
     totalOrders: "Jumlah Pesanan",
     revenueChart: "Pendapatan (RM)",
+    noActivityYet: "Tiada aktiviti lagi — carta akan muncul selepas anda mula memesan atau menjual.",
     recentSales: "Jualan Terkini",
     itemName: "Nama Item",
     itemNamePlaceholder: "cth. Kelompok Nasi Lemak",
