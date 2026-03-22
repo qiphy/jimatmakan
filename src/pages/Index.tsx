@@ -1,9 +1,13 @@
-import { MapPin, Bell, Leaf, Sprout } from "lucide-react";
+import { MapPin, Bell, Leaf, Sprout, RotateCcw } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import SearchBar from "@/components/SearchBar";
-import FoodListings from "@/components/FoodListings";
 import BottomNav from "@/components/BottomNav";
 import LanguageToggle from "@/components/LanguageToggle";
+
+const reorderStores = [
+  { name: "Restoran Seri Melur", emoji: "🍚", lastOrder: "Nasi Lemak" },
+  { name: "Mamak Corner", emoji: "🫓", lastOrder: "Roti Canai" },
+  { name: "Grand Seasons Hotel", emoji: "🥬", lastOrder: "Mixed Vegetables" },
+];
 
 const Index = () => {
   const { t } = useLanguage();
@@ -30,33 +34,57 @@ const Index = () => {
         </div>
       </header>
 
-      <SearchBar />
-
-      {/* Impact Bar */}
-      <div className="px-4 py-2">
-        <div className="flex items-center gap-3 rounded-xl bg-primary/10 border border-primary/20 px-4 py-3">
-          <Leaf className="h-5 w-5 text-primary flex-shrink-0" />
-          <div className="flex items-center gap-4 flex-1">
-            <div>
-              <span className="text-lg font-bold font-display text-primary">127</span>
-              <p className="text-[10px] text-muted-foreground leading-tight">{t("foodSaved")}</p>
+      {/* Impact Bubble */}
+      <div className="px-4 py-3">
+        <div className="rounded-2xl bg-primary/10 border border-primary/20 p-5 text-center">
+          <Leaf className="h-6 w-6 text-primary mx-auto mb-2" />
+          <h2 className="font-display font-bold text-sm text-foreground mb-3">
+            {t("impactTitle")}
+          </h2>
+          <div className="flex justify-center gap-6">
+            <div className="rounded-2xl bg-card border border-border px-5 py-3 min-w-[100px]">
+              <span className="text-2xl font-bold font-display text-primary block">127</span>
+              <p className="text-[10px] text-muted-foreground mt-0.5">{t("foodSaved")}</p>
             </div>
-            <div className="w-px h-8 bg-border" />
-            <div>
-              <span className="text-lg font-bold font-display text-primary">89</span>
-              <p className="text-[10px] text-muted-foreground leading-tight">{t("co2Reduced")}</p>
+            <div className="rounded-2xl bg-card border border-border px-5 py-3 min-w-[100px]">
+              <span className="text-2xl font-bold font-display text-primary block">89</span>
+              <p className="text-[10px] text-muted-foreground mt-0.5">{t("co2Reduced")}</p>
             </div>
           </div>
         </div>
       </div>
 
-      <FoodListings />
+      {/* Reorder Section */}
+      <div className="px-4 py-2">
+        <div className="flex items-center gap-1.5 mb-3">
+          <RotateCcw className="h-4 w-4 text-primary" />
+          <h2 className="font-display font-bold text-sm text-foreground">
+            {t("reorderTitle")}
+          </h2>
+        </div>
+        <div className="flex gap-3 overflow-x-auto pb-1 scrollbar-hide">
+          {reorderStores.map((store) => (
+            <button
+              key={store.name}
+              className="flex flex-col items-center gap-2 rounded-2xl bg-card border border-border p-4 min-w-[120px] transition-colors hover:border-primary/40"
+            >
+              <div className="h-12 w-12 rounded-full bg-secondary flex items-center justify-center text-2xl">
+                {store.emoji}
+              </div>
+              <span className="text-xs font-medium text-foreground text-center leading-tight font-body">
+                {store.name}
+              </span>
+              <span className="text-[10px] text-muted-foreground">{store.lastOrder}</span>
+            </button>
+          ))}
+        </div>
+      </div>
 
-      {/* Motivational message */}
-      <div className="px-4 py-4">
-        <div className="flex items-center gap-2 rounded-xl bg-secondary border border-border px-4 py-3">
-          <Sprout className="h-4 w-4 text-primary flex-shrink-0" />
-          <p className="text-xs text-muted-foreground font-body italic">
+      {/* Motivational Bubble */}
+      <div className="px-4 py-3">
+        <div className="flex items-center gap-3 rounded-2xl bg-secondary border border-border px-5 py-4">
+          <Sprout className="h-5 w-5 text-primary flex-shrink-0" />
+          <p className="text-xs text-muted-foreground font-body italic leading-relaxed">
             {t("motivationalMsg")}
           </p>
         </div>
