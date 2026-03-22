@@ -15,6 +15,7 @@ interface AuthContextType {
   user: UserProfile | null;
   login: (email: string, password: string) => boolean;
   signup: (profile: UserProfile) => void;
+  updateProfile: (updates: Partial<UserProfile>) => void;
   logout: () => void;
 }
 
@@ -69,12 +70,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(profile);
   }, []);
 
+  const updateProfile = useCallback((updates: Partial<UserProfile>) => {
+    setUser((prev) => prev ? { ...prev, ...updates } : prev);
+  }, []);
+
   const logout = useCallback(() => {
     setUser(null);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!user, user, login, signup, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated: !!user, user, login, signup, updateProfile, logout }}>
       {children}
     </AuthContext.Provider>
   );
