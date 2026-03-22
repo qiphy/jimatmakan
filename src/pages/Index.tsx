@@ -12,6 +12,7 @@ const reorderStores = [
 
 const Index = () => {
   const { t } = useLanguage();
+  const { metrics } = useImpactMetrics();
 
   return (
     <div className="min-h-screen bg-background pb-24">
