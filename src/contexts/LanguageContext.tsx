@@ -51,6 +51,7 @@ const translations = {
     impactTitle: "Your Impact",
     foodSaved: "kg food saved",
     co2Reduced: "kg CO₂ reduced",
+    motivationalMsg: "Every meal saved is a step towards a greener Malaysia. Reduce waste, feed communities.",
     // Auth
     loginBtn: "Log In",
     signupBtn: "Sign Up",
