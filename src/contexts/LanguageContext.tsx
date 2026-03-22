@@ -53,6 +53,12 @@ const translations = {
     co2Reduced: "kg CO₂ reduced",
     motivationalMsg: "Every meal saved is a step towards a greener Malaysia. Reduce waste, feed communities.",
     reorderTitle: "Order from these stores again?",
+    foodSavedChart: "Food Waste Saved (kg)",
+    co2ReducedChart: "CO₂ Emissions Reduced (kg)",
+    esgReportTitle: "ESG Sustainability Report",
+    esgReportDesc: "Generate a detailed Environmental, Social & Governance report with your food waste reduction data, carbon offset metrics, and sustainability impact analysis.",
+    esgReportBtn: "Generate ESG Report",
+    esgReportGenerated: "ESG report generated! Check your email.",
     // Auth
     loginBtn: "Log In",
     signupBtn: "Sign Up",
