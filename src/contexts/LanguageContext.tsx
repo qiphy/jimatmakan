@@ -164,6 +164,12 @@ const translations = {
     co2Reduced: "kg CO₂ dikurangkan",
     motivationalMsg: "Setiap hidangan yang diselamatkan adalah langkah ke arah Malaysia yang lebih hijau. Kurangkan pembaziran, beri makan komuniti.",
     reorderTitle: "Pesan dari kedai ini lagi?",
+    foodSavedChart: "Sisa Makanan Diselamatkan (kg)",
+    co2ReducedChart: "Pelepasan CO₂ Dikurangkan (kg)",
+    esgReportTitle: "Laporan Kelestarian ESG",
+    esgReportDesc: "Jana laporan terperinci Alam Sekitar, Sosial & Tadbir Urus dengan data pengurangan sisa makanan, metrik pengimbangan karbon, dan analisis impak kelestarian anda.",
+    esgReportBtn: "Jana Laporan ESG",
+    esgReportGenerated: "Laporan ESG dijana! Semak e-mel anda.",
     // Auth
     loginBtn: "Log Masuk",
     signupBtn: "Daftar",
