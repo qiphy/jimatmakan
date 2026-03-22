@@ -104,6 +104,7 @@ const translations = {
     paymentRemoved: "Payment method removed",
     noPayments: "No payment methods yet",
     remove: "Remove",
+    noResults: "No results found. Try a different search.",
   },
   ms: {
     appName: "JimatMakan",
