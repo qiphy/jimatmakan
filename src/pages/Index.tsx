@@ -1,5 +1,6 @@
 import { MapPin, Bell, Leaf, Sprout, RotateCcw } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useImpactMetrics } from "@/hooks/useImpactMetrics";
 import BottomNav from "@/components/BottomNav";
 import LanguageToggle from "@/components/LanguageToggle";
 
