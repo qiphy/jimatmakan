@@ -184,7 +184,7 @@ const ActivityPage = () => {
       {/* No data message when no orders exist */}
       {!hasMonthlyData && (
         <div className="px-4 py-6 text-center">
-          <p className="text-sm text-muted-foreground">{t("noActivityYet") || "No activity yet — charts will appear once you start ordering or selling."}</p>
+          <p className="text-sm text-muted-foreground">{t("noActivityYet")}</p>
         </div>
       )}
 
