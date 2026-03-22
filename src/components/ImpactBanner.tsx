@@ -1,8 +1,10 @@
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useImpactMetrics } from "@/hooks/useImpactMetrics";
 import { Leaf } from "lucide-react";
 
 const ImpactBanner = () => {
   const { t } = useLanguage();
+  const { metrics } = useImpactMetrics();
 
   return (
     <div className="px-4 py-2">
@@ -15,11 +17,11 @@ const ImpactBanner = () => {
         </div>
         <div className="flex gap-4">
           <div>
-            <span className="text-xl font-bold font-display text-primary">127</span>
+            <span className="text-xl font-bold font-display text-primary">{metrics.foodSavedKg}</span>
             <p className="text-[11px] text-muted-foreground">{t("foodSaved")}</p>
           </div>
           <div>
-            <span className="text-xl font-bold font-display text-primary">89</span>
+            <span className="text-xl font-bold font-display text-primary">{metrics.co2ReducedKg}</span>
             <p className="text-[11px] text-muted-foreground">{t("co2Reduced")}</p>
           </div>
         </div>
