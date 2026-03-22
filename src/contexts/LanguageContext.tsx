@@ -155,6 +155,7 @@ const translations = {
     impactTitle: "Impak Anda",
     foodSaved: "kg makanan diselamatkan",
     co2Reduced: "kg CO₂ dikurangkan",
+    motivationalMsg: "Setiap hidangan yang diselamatkan adalah langkah ke arah Malaysia yang lebih hijau. Kurangkan pembaziran, beri makan komuniti.",
     // Auth
     loginBtn: "Log Masuk",
     signupBtn: "Daftar",
