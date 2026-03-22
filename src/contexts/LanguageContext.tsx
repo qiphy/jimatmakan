@@ -207,6 +207,7 @@ const translations = {
     paymentRemoved: "Kaedah pembayaran dikeluarkan",
     noPayments: "Tiada kaedah pembayaran lagi",
     remove: "Keluarkan",
+    noResults: "Tiada hasil dijumpai. Cuba carian lain.",
   },
 } as const;
 
