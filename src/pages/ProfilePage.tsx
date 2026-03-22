@@ -72,8 +72,8 @@ const ProfilePage = () => {
     setEditing(true);
   };
 
-  const saveEdit = () => {
-    updateProfile({
+  const saveEdit = async () => {
+    await updateProfile({
       fullName: editName,
       email: editEmail,
       phone: editPhone,
