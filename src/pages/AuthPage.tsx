@@ -7,10 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import LanguageToggle from "@/components/LanguageToggle";
-import OTPVerification from "@/components/OTPVerification";
 import { Leaf, ArrowLeft, Store, User, Recycle } from "lucide-react";
 
-type AuthStep = "choose" | "login" | "signup" | "otp";
+type AuthStep = "choose" | "login" | "signup";
 
 const AuthPage = () => {
   const { t } = useLanguage();
@@ -19,6 +18,7 @@ const AuthPage = () => {
 
   const [step, setStep] = useState<AuthStep>("choose");
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   // Login state
   const [loginEmail, setLoginEmail] = useState("");
@@ -32,18 +32,20 @@ const AuthPage = () => {
   const [businessName, setBusinessName] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    const success = login(loginEmail, loginPassword);
-    if (success) {
-      navigate("/");
+    setSubmitting(true);
+    const { error: err } = await login(loginEmail, loginPassword);
+    setSubmitting(false);
+    if (err) {
+      setError(err);
     } else {
-      setError(t("loginError"));
+      navigate("/");
     }
   };
 
-  const handleSignupSubmit = (e: React.FormEvent) => {
+  const handleSignupSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     if (!fullName || !email || !phone || !password) {
@@ -54,18 +56,19 @@ const AuthPage = () => {
       setError(t("businessNameRequired"));
       return;
     }
-    setStep("otp");
-  };
-
-  const handleOTPVerified = () => {
-    signup({
+    setSubmitting(true);
+    const { error: err } = await signup(email, password, {
       fullName,
-      email,
       phone,
       role,
       businessName: role !== "user" ? businessName : undefined,
     });
-    navigate("/");
+    setSubmitting(false);
+    if (err) {
+      setError(err);
+    } else {
+      navigate("/");
+    }
   };
 
   const needsBusinessName = role === "vendor" || role === "composter";
@@ -81,7 +84,7 @@ const AuthPage = () => {
       {/* Header */}
       <header className="flex items-center justify-between px-4 pt-[env(safe-area-inset-top,12px)] pb-2">
         {step !== "choose" ? (
-          <button onClick={() => setStep(step === "otp" ? "signup" : "choose")} className="p-2 -ml-2">
+          <button onClick={() => setStep("choose")} className="p-2 -ml-2">
             <ArrowLeft className="h-5 w-5 text-foreground" />
           </button>
         ) : (
@@ -111,26 +114,6 @@ const AuthPage = () => {
             <Button variant="outline" className="w-full h-12 text-base font-display" onClick={() => setStep("signup")}>
               {t("signupBtn")}
             </Button>
-
-            <div className="pt-4 border-t border-border mt-6">
-              <p className="text-xs text-muted-foreground text-center mb-3">{t("demoAccounts")}</p>
-              <div className="space-y-1.5">
-                {[
-                  { email: "vendor@demo.com", label: t("roleVendor") },
-                  { email: "student@demo.com", label: t("roleUser") },
-                  { email: "compost@demo.com", label: t("roleComposter") },
-                ].map((acc) => (
-                  <button
-                    key={acc.email}
-                    onClick={() => { login(acc.email, "demo123"); navigate("/"); }}
-                    className="w-full text-left px-3 py-2 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
-                  >
-                    <span className="text-xs font-medium text-foreground">{acc.label}</span>
-                    <span className="text-[11px] text-muted-foreground ml-2">{acc.email}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
         )}
 
@@ -147,7 +130,9 @@ const AuthPage = () => {
               <Input id="login-password" type="password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} placeholder="••••••••" />
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
-            <Button type="submit" className="w-full h-11">{t("loginBtn")}</Button>
+            <Button type="submit" className="w-full h-11" disabled={submitting}>
+              {submitting ? "..." : t("loginBtn")}
+            </Button>
             <p className="text-center text-sm text-muted-foreground">
               {t("noAccount")}{" "}
               <button type="button" onClick={() => { setStep("signup"); setError(""); }} className="text-primary font-medium">
@@ -215,7 +200,9 @@ const AuthPage = () => {
             </div>
 
             {error && <p className="text-sm text-destructive">{error}</p>}
-            <Button type="submit" className="w-full h-11">{t("continueBtn")}</Button>
+            <Button type="submit" className="w-full h-11" disabled={submitting}>
+              {submitting ? "..." : t("signupBtn")}
+            </Button>
             <p className="text-center text-sm text-muted-foreground">
               {t("haveAccount")}{" "}
               <button type="button" onClick={() => { setStep("login"); setError(""); }} className="text-primary font-medium">
@@ -223,11 +210,6 @@ const AuthPage = () => {
               </button>
             </p>
           </form>
-        )}
-
-        {/* OTP */}
-        {step === "otp" && (
-          <OTPVerification phone={phone} onVerified={handleOTPVerified} onBack={() => setStep("signup")} />
         )}
       </div>
     </div>
