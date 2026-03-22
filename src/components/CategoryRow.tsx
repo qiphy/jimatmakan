@@ -1,39 +1,33 @@
-import { Utensils, Pizza, Salad, Coffee, Cake, Fish, Sandwich, Soup } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const categories = [
-  { icon: Utensils, label: "All", active: true },
-  { icon: Pizza, label: "Pizza" },
-  { icon: Sandwich, label: "Burgers" },
-  { icon: Salad, label: "Salads" },
-  { icon: Fish, label: "Sushi" },
-  { icon: Coffee, label: "Drinks" },
-  { icon: Cake, label: "Desserts" },
-  { icon: Soup, label: "Soups" },
+  { key: "allCategories" as const, emoji: "🍽️" },
+  { key: "rice" as const, emoji: "🍚" },
+  { key: "bread" as const, emoji: "🫓" },
+  { key: "vegetables" as const, emoji: "🥬" },
+  { key: "fruits" as const, emoji: "🍎" },
+  { key: "meat" as const, emoji: "🍗" },
+  { key: "seafood" as const, emoji: "🦐" },
+  { key: "pastries" as const, emoji: "🍡" },
 ];
 
 const CategoryRow = () => {
+  const { t } = useLanguage();
+
   return (
-    <div className="px-4 py-3">
-      <div className="flex gap-3 overflow-x-auto pb-1 scrollbar-hide">
-        {categories.map((cat) => (
+    <div className="px-4 py-2">
+      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+        {categories.map((cat, i) => (
           <button
-            key={cat.label}
-            className={`flex flex-col items-center gap-1.5 min-w-[64px] ${
-              cat.active
-                ? "text-primary"
-                : "text-muted-foreground"
+            key={cat.key}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+              i === 0
+                ? "bg-primary text-primary-foreground"
+                : "bg-card border border-border text-foreground"
             }`}
           >
-            <div
-              className={`flex h-14 w-14 items-center justify-center rounded-2xl transition-colors ${
-                cat.active
-                  ? "bg-primary text-primary-foreground shadow-elevated"
-                  : "bg-card shadow-card"
-              }`}
-            >
-              <cat.icon className="h-6 w-6" />
-            </div>
-            <span className="text-xs font-medium font-body">{cat.label}</span>
+            <span>{cat.emoji}</span>
+            {t(cat.key)}
           </button>
         ))}
       </div>
