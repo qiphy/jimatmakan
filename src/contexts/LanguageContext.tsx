@@ -104,6 +104,7 @@ const translations = {
     paymentRemoved: "Payment method removed",
     noPayments: "No payment methods yet",
     remove: "Remove",
+    noResults: "No results found. Try a different search.",
   },
   ms: {
     appName: "JimatMakan",
@@ -206,6 +207,7 @@ const translations = {
     paymentRemoved: "Kaedah pembayaran dikeluarkan",
     noPayments: "Tiada kaedah pembayaran lagi",
     remove: "Keluarkan",
+    noResults: "Tiada hasil dijumpai. Cuba carian lain.",
   },
 } as const;
 

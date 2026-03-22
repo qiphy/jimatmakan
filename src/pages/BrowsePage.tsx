@@ -1,0 +1,172 @@
+import { useState, useMemo } from "react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import FoodListingCard from "@/components/FoodListingCard";
+import BottomNav from "@/components/BottomNav";
+import { getListings, type FoodListing } from "@/data/listings";
+
+const categories = [
+  { key: "allCategories" as const, emoji: "🍽️", value: "all" },
+  { key: "rice" as const, emoji: "🍚", value: "rice" },
+  { key: "bread" as const, emoji: "🫓", value: "bread" },
+  { key: "vegetables" as const, emoji: "🥬", value: "vegetables" },
+  { key: "fruits" as const, emoji: "🍎", value: "fruits" },
+  { key: "meat" as const, emoji: "🍗", value: "meat" },
+  { key: "seafood" as const, emoji: "🦐", value: "seafood" },
+  { key: "pastries" as const, emoji: "🍡", value: "pastries" },
+];
+
+// Simple fuzzy match: checks if all characters of the query appear in order
+const fuzzyMatch = (text: string, query: string): number => {
+  const t = text.toLowerCase();
+  const q = query.toLowerCase();
+
+  // Exact substring match gets highest score
+  if (t.includes(q)) return 3;
+
+  // Word-start match
+  const words = t.split(/\s+/);
+  if (words.some((w) => w.startsWith(q))) return 2;
+
+  // Character-sequence match (fuzzy)
+  let qi = 0;
+  for (let i = 0; i < t.length && qi < q.length; i++) {
+    if (t[i] === q[qi]) qi++;
+  }
+  if (qi === q.length) return 1;
+
+  return 0;
+};
+
+const getRelevance = (listing: FoodListing, query: string, lang: "en" | "ms"): number => {
+  if (!query) return 1;
+  const name = lang === "ms" ? listing.nameMy : listing.name;
+  const nameScore = fuzzyMatch(name, query);
+  const restaurantScore = fuzzyMatch(listing.restaurant, query);
+  const categoryScore = fuzzyMatch(listing.category, query);
+  return Math.max(nameScore, restaurantScore * 0.8, categoryScore * 0.6);
+};
+
+const BrowsePage = () => {
+  const { t, lang } = useLanguage();
+  const [query, setQuery] = useState("");
+  const [activeCategory, setActiveCategory] = useState("all");
+
+  const listings = useMemo(() => getListings(), []);
+
+  const filtered = useMemo(() => {
+    let results = listings;
+
+    // Category filter
+    if (activeCategory !== "all") {
+      results = results.filter((l) => l.category === activeCategory);
+    }
+
+    // Search with fuzzy matching
+    if (query.trim()) {
+      const scored = results
+        .map((l) => ({ listing: l, score: getRelevance(l, query.trim(), lang) }))
+        .filter((r) => r.score > 0)
+        .sort((a, b) => b.score - a.score);
+      results = scored.map((r) => r.listing);
+    }
+
+    return results;
+  }, [listings, query, activeCategory, lang]);
+
+  const available = filtered.filter((l) => l.expiresAt.getTime() > Date.now());
+  const expired = filtered.filter((l) => l.expiresAt.getTime() <= Date.now());
+
+  return (
+    <div className="min-h-screen bg-background pb-24">
+      {/* Header */}
+      <header className="px-4 pt-[env(safe-area-inset-top,12px)] pb-2">
+        <h1 className="text-lg font-bold font-display text-foreground">{t("browse")}</h1>
+      </header>
+
+      {/* Search */}
+      <div className="px-4 py-2">
+        <div className="flex items-center gap-2 rounded-xl bg-card border border-border px-3 py-2.5">
+          <Search className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={t("searchPlaceholder")}
+            className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none font-body"
+          />
+          {query && (
+            <button onClick={() => setQuery("")} className="p-0.5">
+              <X className="h-3.5 w-3.5 text-muted-foreground" />
+            </button>
+          )}
+          <button className="rounded-lg bg-secondary p-1.5">
+            <SlidersHorizontal className="h-3.5 w-3.5 text-foreground" />
+          </button>
+        </div>
+      </div>
+
+      {/* Categories */}
+      <div className="px-4 py-2">
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+          {categories.map((cat) => (
+            <button
+              key={cat.value}
+              onClick={() => setActiveCategory(cat.value)}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+                activeCategory === cat.value
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-card border border-border text-foreground"
+              }`}
+            >
+              <span>{cat.emoji}</span>
+              {t(cat.key)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Results */}
+      <div className="px-4 py-3 space-y-4">
+        {filtered.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-3xl mb-2">🔍</p>
+            <p className="text-sm text-muted-foreground font-body">{t("noResults")}</p>
+          </div>
+        ) : (
+          <>
+            {available.length > 0 && (
+              <div>
+                <h2 className="font-display font-bold text-base text-foreground mb-3">
+                  {t("availableNow")} ({available.length})
+                </h2>
+                <div className="space-y-3">
+                  {available.map((listing) => (
+                    <FoodListingCard key={listing.id} listing={listing} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {expired.length > 0 && (
+              <div>
+                <h2 className="font-display font-bold text-base text-foreground mb-3">
+                  {t("forComposting")} ({expired.length})
+                </h2>
+                <div className="space-y-3">
+                  {expired.map((listing) => (
+                    <FoodListingCard key={listing.id} listing={listing} />
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      <BottomNav />
+    </div>
+  );
+};
+
+export default BrowsePage;
