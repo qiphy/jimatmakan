@@ -52,6 +52,7 @@ const translations = {
     foodSaved: "kg food saved",
     co2Reduced: "kg CO₂ reduced",
     motivationalMsg: "Every meal saved is a step towards a greener Malaysia. Reduce waste, feed communities.",
+    reorderTitle: "Order from these stores again?",
     // Auth
     loginBtn: "Log In",
     signupBtn: "Sign Up",
