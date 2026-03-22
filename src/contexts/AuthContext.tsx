@@ -15,6 +15,7 @@ interface AuthContextType {
   user: UserProfile | null;
   login: (email: string, password: string) => boolean;
   signup: (profile: UserProfile) => void;
+  updateProfile: (updates: Partial<UserProfile>) => void;
   logout: () => void;
 }
 
