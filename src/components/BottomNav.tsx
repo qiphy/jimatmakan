@@ -10,7 +10,7 @@ const BottomNav = () => {
   const tabs = [
     { icon: Home, label: t("home"), path: "/" },
     { icon: Search, label: t("browse"), path: "/browse" },
-    { icon: PlusCircle, label: t("addListing"), path: "/", accent: true },
+    { icon: PlusCircle, label: t("addListing"), path: "/list", accent: true },
     { icon: Activity, label: t("activity"), path: "/activity" },
     { icon: User, label: t("profile"), path: "/profile" },
   ];
