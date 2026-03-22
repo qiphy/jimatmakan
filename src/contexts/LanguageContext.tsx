@@ -62,6 +62,7 @@ const translations = {
     totalRevenue: "Total Revenue",
     totalOrders: "Total Orders",
     revenueChart: "Revenue (RM)",
+    noActivityYet: "No activity yet — charts will appear once you start ordering or selling.",
     recentSales: "Recent Sales",
     itemName: "Item Name",
     itemNamePlaceholder: "e.g. Nasi Lemak Batch",
