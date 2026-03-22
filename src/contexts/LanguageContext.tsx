@@ -51,6 +51,7 @@ const translations = {
     impactTitle: "Your Impact",
     foodSaved: "kg food saved",
     co2Reduced: "kg CO₂ reduced",
+    motivationalMsg: "Every meal saved is a step towards a greener Malaysia. Reduce waste, feed communities.",
     // Auth
     loginBtn: "Log In",
     signupBtn: "Sign Up",
@@ -154,6 +155,7 @@ const translations = {
     impactTitle: "Impak Anda",
     foodSaved: "kg makanan diselamatkan",
     co2Reduced: "kg CO₂ dikurangkan",
+    motivationalMsg: "Setiap hidangan yang diselamatkan adalah langkah ke arah Malaysia yang lebih hijau. Kurangkan pembaziran, beri makan komuniti.",
     // Auth
     loginBtn: "Log Masuk",
     signupBtn: "Daftar",
