@@ -45,11 +45,11 @@ const Index = () => {
           </h2>
           <div className="flex justify-center gap-6">
             <div className="rounded-2xl bg-card border border-border px-5 py-3 min-w-[100px]">
-              <span className="text-2xl font-bold font-display text-primary block">127</span>
+              <span className="text-2xl font-bold font-display text-primary block">{metrics.foodSavedKg}</span>
               <p className="text-[10px] text-muted-foreground mt-0.5">{t("foodSaved")}</p>
             </div>
             <div className="rounded-2xl bg-card border border-border px-5 py-3 min-w-[100px]">
-              <span className="text-2xl font-bold font-display text-primary block">89</span>
+              <span className="text-2xl font-bold font-display text-primary block">{metrics.co2ReducedKg}</span>
               <p className="text-[10px] text-muted-foreground mt-0.5">{t("co2Reduced")}</p>
             </div>
           </div>
