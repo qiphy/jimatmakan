@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import { Plus, Clock, Package, Trash2 } from "lucide-react";
+import { useState, useRef } from "react";
+import { Plus, Clock, Trash2, Camera, Sparkles, Loader2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { useListings, type SupabaseListing } from "@/hooks/useListings";
+import { useListings } from "@/hooks/useListings";
 import BottomNav from "@/components/BottomNav";
 import { toast } from "sonner";
 
@@ -28,6 +28,49 @@ const ListItemPage = () => {
   const [reducedPrice, setReducedPrice] = useState("");
   const [weightKg, setWeightKg] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [analyzing, setAnalyzing] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleCapture = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Show preview
+    const objectUrl = URL.createObjectURL(file);
+    setPreviewUrl(objectUrl);
+
+    // Convert to base64
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const base64 = reader.result as string;
+      setAnalyzing(true);
+      toast.info(t("aiAnalyzing"));
+
+      try {
+        const { data, error } = await supabase.functions.invoke("analyze-food", {
+          body: { imageBase64: base64 },
+        });
+
+        if (error) throw error;
+
+        if (data) {
+          if (data.title) setName(data.title);
+          if (data.category) setCategory(data.category);
+          if (data.estimatedOriginalPrice) setOriginalPrice(String(data.estimatedOriginalPrice));
+          if (data.estimatedReducedPrice) setReducedPrice(String(data.estimatedReducedPrice));
+          if (data.estimatedWeightKg) setWeightKg(String(data.estimatedWeightKg));
+          toast.success(t("aiAutofilled"));
+        }
+      } catch (err: any) {
+        console.error("AI analysis error:", err);
+        toast.error(err?.message || "Failed to analyze image.");
+      } finally {
+        setAnalyzing(false);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleSubmit = async () => {
     if (!name || !category || !originalPrice || !reducedPrice || !weightKg) {
@@ -66,6 +109,7 @@ const ListItemPage = () => {
       setOriginalPrice("");
       setReducedPrice("");
       setWeightKg("");
+      setPreviewUrl(null);
       toast.success(t("listingCreated"));
       refetch();
     }
@@ -89,9 +133,58 @@ const ListItemPage = () => {
         </p>
       </header>
 
-      {/* Form */}
       <div className="px-4 py-3 space-y-3">
         <div className="rounded-2xl bg-card border border-border p-4 space-y-3">
+
+          {/* AI Camera Capture */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            onChange={handleCapture}
+            className="hidden"
+          />
+
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={analyzing}
+            className="w-full flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-primary/40 bg-primary/5 py-5 text-sm font-medium text-primary transition-colors hover:bg-primary/10 disabled:opacity-50"
+          >
+            {analyzing ? (
+              <>
+                <Loader2 className="h-5 w-5 animate-spin" />
+                {t("aiAnalyzing")}
+              </>
+            ) : (
+              <>
+                <Camera className="h-5 w-5" />
+                <Sparkles className="h-4 w-4" />
+                {t("snapToAutofill")}
+              </>
+            )}
+          </button>
+
+          {/* Image Preview */}
+          {previewUrl && (
+            <div className="relative rounded-xl overflow-hidden border border-border">
+              <img
+                src={previewUrl}
+                alt="Captured food"
+                className="w-full h-40 object-cover"
+              />
+              {analyzing && (
+                <div className="absolute inset-0 bg-background/60 flex items-center justify-center">
+                  <div className="flex items-center gap-2 text-primary">
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <span className="text-xs font-medium">{t("aiAnalyzing")}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Item name */}
           <div>
             <label className="text-xs font-medium text-foreground font-body block mb-1">
               {t("itemName")}
@@ -104,6 +197,7 @@ const ListItemPage = () => {
             />
           </div>
 
+          {/* Category */}
           <div>
             <label className="text-xs font-medium text-foreground font-body block mb-1.5">
               {t("categories")}
@@ -126,6 +220,7 @@ const ListItemPage = () => {
             </div>
           </div>
 
+          {/* Prices */}
           <div className="flex gap-3">
             <div className="flex-1">
               <label className="text-xs font-medium text-foreground font-body block mb-1">
@@ -153,6 +248,7 @@ const ListItemPage = () => {
             </div>
           </div>
 
+          {/* Weight */}
           <div>
             <label className="text-xs font-medium text-foreground font-body block mb-1">
               {t("quantityLabel")} (kg)
@@ -182,7 +278,7 @@ const ListItemPage = () => {
         </div>
       </div>
 
-      {/* Listed items from Supabase */}
+      {/* Listed items */}
       {loading ? (
         <div className="px-4 py-4 text-center">
           <p className="text-sm text-muted-foreground">Loading...</p>

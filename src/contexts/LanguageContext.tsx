@@ -128,6 +128,9 @@ const translations = {
     noResults: "No results found. Try a different search.",
     noReorderHistory: "No order history yet. Browse listings to get started!",
     storeUnavailable: "Unavailable",
+    snapToAutofill: "📸 Snap photo to autofill",
+    aiAnalyzing: "AI is analyzing your food...",
+    aiAutofilled: "Form autofilled by AI!",
   },
   ms: {
     appName: "JimatMakan",
@@ -254,6 +257,9 @@ const translations = {
     noResults: "Tiada hasil dijumpai. Cuba carian lain.",
     noReorderHistory: "Tiada sejarah pesanan lagi. Layari senarai untuk bermula!",
     storeUnavailable: "Tidak tersedia",
+    snapToAutofill: "📸 Tangkap gambar untuk isi auto",
+    aiAnalyzing: "AI sedang menganalisis makanan anda...",
+    aiAutofilled: "Borang diisi automatik oleh AI!",
   },
 } as const;
 
