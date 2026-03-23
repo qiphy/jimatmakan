@@ -131,6 +131,9 @@ const translations = {
     snapToAutofill: "📸 Snap photo to autofill",
     aiAnalyzing: "AI is analyzing your food...",
     aiAutofilled: "Form autofilled by AI!",
+    chooseLocation: "Choose Location",
+    tapToSelect: "Tap anywhere on the map to move the pin",
+    confirmLocation: "Confirm Location",
   },
   ms: {
     appName: "JimatMakan",
