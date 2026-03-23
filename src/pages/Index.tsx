@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MapPin, Bell, Leaf, Sprout, RotateCcw, StorefrontIcon } from "lucide-react";
+import { MapPin, Bell, Leaf, Sprout, RotateCcw } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useImpactMetrics } from "@/hooks/useImpactMetrics";
 import { useAuth } from "@/contexts/AuthContext";

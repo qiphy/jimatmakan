@@ -252,6 +252,8 @@ const translations = {
     noPayments: "Tiada kaedah pembayaran lagi",
     remove: "Keluarkan",
     noResults: "Tiada hasil dijumpai. Cuba carian lain.",
+    noReorderHistory: "Tiada sejarah pesanan lagi. Layari senarai untuk bermula!",
+    storeUnavailable: "Tidak tersedia",
   },
 } as const;
 
