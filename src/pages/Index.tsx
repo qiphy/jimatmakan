@@ -29,6 +29,8 @@ const Index = () => {
   const { listings, loading: listingsLoading } = useListings();
   const [reorderStores, setReorderStores] = useState<ReorderStore[]>([]);
   const [reorderLoading, setReorderLoading] = useState(true);
+  const [locationOpen, setLocationOpen] = useState(false);
+  const [location, setLocation] = useState({ lat: DEFAULT_CENTER[0], lng: DEFAULT_CENTER[1], name: "Kuala Lumpur" });
 
   // Fetch reorder stores from past orders
   useEffect(() => {
