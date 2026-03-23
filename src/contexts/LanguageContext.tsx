@@ -128,6 +128,9 @@ const translations = {
     noResults: "No results found. Try a different search.",
     noReorderHistory: "No order history yet. Browse listings to get started!",
     storeUnavailable: "Unavailable",
+    snapToAutofill: "📸 Snap photo to autofill",
+    aiAnalyzing: "AI is analyzing your food...",
+    aiAutofilled: "Form autofilled by AI!",
   },
   ms: {
     appName: "JimatMakan",
