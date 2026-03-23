@@ -126,6 +126,8 @@ const translations = {
     noPayments: "No payment methods yet",
     remove: "Remove",
     noResults: "No results found. Try a different search.",
+    noReorderHistory: "No order history yet. Browse listings to get started!",
+    storeUnavailable: "Unavailable",
   },
   ms: {
     appName: "JimatMakan",
