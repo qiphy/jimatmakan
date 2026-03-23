@@ -126,6 +126,8 @@ const translations = {
     noPayments: "No payment methods yet",
     remove: "Remove",
     noResults: "No results found. Try a different search.",
+    noReorderHistory: "No order history yet. Browse listings to get started!",
+    storeUnavailable: "Unavailable",
   },
   ms: {
     appName: "JimatMakan",
@@ -250,6 +252,8 @@ const translations = {
     noPayments: "Tiada kaedah pembayaran lagi",
     remove: "Keluarkan",
     noResults: "Tiada hasil dijumpai. Cuba carian lain.",
+    noReorderHistory: "Tiada sejarah pesanan lagi. Layari senarai untuk bermula!",
+    storeUnavailable: "Tidak tersedia",
   },
 } as const;
 
