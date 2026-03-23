@@ -8,6 +8,7 @@ import FoodListingCard from "@/components/FoodListingCard";
 import { useListings } from "@/hooks/useListings";
 import BottomNav from "@/components/BottomNav";
 import LanguageToggle from "@/components/LanguageToggle";
+import LocationPicker, { DEFAULT_CENTER } from "@/components/LocationPicker";
 
 interface ReorderStore {
   vendorId: string;
