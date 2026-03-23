@@ -101,15 +101,16 @@ const Index = () => {
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
       <header className="flex items-center justify-between px-4 pt-[env(safe-area-inset-top,12px)] pb-1">
-        <div>
+        <button onClick={() => setLocationOpen(true)} className="text-left">
           <p className="text-[11px] text-muted-foreground font-body flex items-center gap-1">
             <MapPin className="h-3 w-3 text-primary" />
             {t("deliverTo")}
           </p>
-          <h1 className="text-lg font-bold font-display text-foreground">
-            {t("appName")}
+          <h1 className="text-lg font-bold font-display text-foreground flex items-center gap-1">
+            {location.name}
+            <span className="text-xs text-primary">▼</span>
           </h1>
-        </div>
+        </button>
         <div className="flex items-center gap-2">
           <LanguageToggle />
           <button className="relative rounded-xl bg-card border border-border p-2">
@@ -118,6 +119,13 @@ const Index = () => {
           </button>
         </div>
       </header>
+
+      <LocationPicker
+        open={locationOpen}
+        onClose={() => setLocationOpen(false)}
+        location={location}
+        onLocationChange={setLocation}
+      />
 
       {/* Impact Bubble */}
       <div className="px-4 py-3">
