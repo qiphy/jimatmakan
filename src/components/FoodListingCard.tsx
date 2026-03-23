@@ -1,14 +1,29 @@
-import { Clock, Timer, Recycle } from "lucide-react";
+import { Timer, Recycle } from "lucide-react";
 import { useCountdown } from "@/hooks/useCountdown";
 import { useLanguage } from "@/contexts/LanguageContext";
-import type { FoodListing } from "@/data/listings";
+import type { SupabaseListing } from "@/hooks/useListings";
 
-const FoodListingCard = ({ listing }: { listing: FoodListing }) => {
-  const { lang, t } = useLanguage();
-  const { isExpired, isUrgent, formatted } = useCountdown(listing.expiresAt);
+const CATEGORY_EMOJI: Record<string, string> = {
+  rice: "🍚",
+  bread: "🫓",
+  vegetables: "🥬",
+  fruits: "🍎",
+  meat: "🍗",
+  seafood: "🦐",
+  pastries: "🍡",
+  other: "📦",
+};
 
-  const name = lang === "ms" ? listing.nameMy : listing.name;
-  const discount = Math.round((1 - listing.reducedPrice / listing.originalPrice) * 100);
+const FoodListingCard = ({ listing }: { listing: SupabaseListing }) => {
+  const { t } = useLanguage();
+  const expiresAt = listing.pickup_end ? new Date(listing.pickup_end) : new Date(new Date(listing.created_at).getTime() + 2 * 60 * 60000);
+  const { isExpired, isUrgent, formatted } = useCountdown(expiresAt);
+
+  const discount = listing.original_price > 0
+    ? Math.round((1 - listing.discounted_price / listing.original_price) * 100)
+    : 0;
+
+  const emoji = CATEGORY_EMOJI[listing.category] || "📦";
 
   return (
     <div
@@ -18,31 +33,37 @@ const FoodListingCard = ({ listing }: { listing: FoodListing }) => {
     >
       <div className="flex gap-3">
         <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-secondary text-2xl flex-shrink-0">
-          {listing.image}
+          {listing.image_url ? (
+            <img src={listing.image_url} alt={listing.title} className="h-full w-full object-cover rounded-lg" />
+          ) : (
+            emoji
+          )}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
             <h3 className="font-display font-semibold text-sm text-card-foreground truncate">
-              {name}
+              {listing.title}
             </h3>
-            <span className="text-xs font-semibold text-primary bg-secondary px-2 py-0.5 rounded-full flex-shrink-0">
-              -{discount}%
-            </span>
+            {discount > 0 && (
+              <span className="text-xs font-semibold text-primary bg-secondary px-2 py-0.5 rounded-full flex-shrink-0">
+                -{discount}%
+              </span>
+            )}
           </div>
           <p className="text-xs text-muted-foreground mt-0.5">
-            {t("listedBy")} {listing.restaurant}
+            {t("listedBy")} {listing.vendor_name || "Vendor"}
           </p>
           <div className="flex items-center justify-between mt-2">
             <div className="flex items-center gap-2">
               <span className="text-sm font-semibold text-card-foreground">
-                RM{listing.reducedPrice}
+                RM{listing.discounted_price}
               </span>
               <span className="text-xs text-muted-foreground line-through">
-                RM{listing.originalPrice}
+                RM{listing.original_price}
               </span>
             </div>
             <span className="text-xs text-muted-foreground">
-              {lang === "ms" ? listing.quantityMy : listing.quantity}
+              {listing.weight_kg} kg
             </span>
           </div>
         </div>
