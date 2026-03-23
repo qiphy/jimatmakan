@@ -1,7 +1,9 @@
-import { useState } from "react";
-import { Plus, Clock, Package } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Plus, Clock, Package, Trash2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useListings, type SupabaseListing } from "@/hooks/useListings";
 import BottomNav from "@/components/BottomNav";
 import { toast } from "sonner";
 
@@ -15,51 +17,68 @@ const categories = [
   { key: "pastries" as const, emoji: "🍡", value: "pastries" },
 ];
 
-interface ListedItem {
-  id: string;
-  name: string;
-  category: string;
-  originalPrice: number;
-  reducedPrice: number;
-  quantity: string;
-  listedAt: Date;
-}
-
 const ListItemPage = () => {
   const { t } = useLanguage();
-  const { user } = useAuth();
+  const { user, session } = useAuth();
+  const { listings: myListings, loading, refetch } = useListings(true);
 
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [originalPrice, setOriginalPrice] = useState("");
   const [reducedPrice, setReducedPrice] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [listedItems, setListedItems] = useState<ListedItem[]>([]);
+  const [weightKg, setWeightKg] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = () => {
-    if (!name || !category || !originalPrice || !reducedPrice || !quantity) {
+  const handleSubmit = async () => {
+    if (!name || !category || !originalPrice || !reducedPrice || !weightKg) {
       toast.error(t("fillAllFields"));
       return;
     }
-    const newItem: ListedItem = {
-      id: Date.now().toString(),
-      name,
+    if (!session?.user) {
+      toast.error("Please log in first.");
+      return;
+    }
+
+    setSubmitting(true);
+    const now = new Date();
+    const pickupEnd = new Date(now.getTime() + 2 * 60 * 60000);
+
+    const { error } = await supabase.from("listings").insert({
+      title: name,
       category,
-      originalPrice: parseFloat(originalPrice),
-      reducedPrice: parseFloat(reducedPrice),
-      quantity,
-      listedAt: new Date(),
-    };
-    setListedItems((prev) => [newItem, ...prev]);
-    setName("");
-    setCategory("");
-    setOriginalPrice("");
-    setReducedPrice("");
-    setQuantity("");
-    toast.success(t("listingCreated"));
+      original_price: parseFloat(originalPrice),
+      discounted_price: parseFloat(reducedPrice),
+      weight_kg: parseFloat(weightKg),
+      vendor_id: session.user.id,
+      pickup_start: now.toISOString(),
+      pickup_end: pickupEnd.toISOString(),
+      status: "active",
+    });
+
+    setSubmitting(false);
+
+    if (error) {
+      console.error("Insert error:", error);
+      toast.error("Failed to create listing.");
+    } else {
+      setName("");
+      setCategory("");
+      setOriginalPrice("");
+      setReducedPrice("");
+      setWeightKg("");
+      toast.success(t("listingCreated"));
+      refetch();
+    }
   };
 
-  const categoryEmoji = categories.find((c) => c.value === category)?.emoji ?? "📦";
+  const handleDelete = async (id: string) => {
+    const { error } = await supabase.from("listings").delete().eq("id", id);
+    if (error) {
+      toast.error("Failed to delete listing.");
+    } else {
+      refetch();
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -73,7 +92,6 @@ const ListItemPage = () => {
       {/* Form */}
       <div className="px-4 py-3 space-y-3">
         <div className="rounded-2xl bg-card border border-border p-4 space-y-3">
-          {/* Item name */}
           <div>
             <label className="text-xs font-medium text-foreground font-body block mb-1">
               {t("itemName")}
@@ -86,7 +104,6 @@ const ListItemPage = () => {
             />
           </div>
 
-          {/* Category */}
           <div>
             <label className="text-xs font-medium text-foreground font-body block mb-1.5">
               {t("categories")}
@@ -109,7 +126,6 @@ const ListItemPage = () => {
             </div>
           </div>
 
-          {/* Prices */}
           <div className="flex gap-3">
             <div className="flex-1">
               <label className="text-xs font-medium text-foreground font-body block mb-1">
@@ -137,20 +153,19 @@ const ListItemPage = () => {
             </div>
           </div>
 
-          {/* Quantity */}
           <div>
             <label className="text-xs font-medium text-foreground font-body block mb-1">
-              {t("quantityLabel")}
+              {t("quantityLabel")} (kg)
             </label>
             <input
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
+              type="number"
+              value={weightKg}
+              onChange={(e) => setWeightKg(e.target.value)}
               placeholder={t("quantityPlaceholder")}
               className="w-full rounded-xl bg-secondary border border-border px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none font-body"
             />
           </div>
 
-          {/* 2-hour notice */}
           <div className="flex items-center gap-2 rounded-xl bg-primary/10 border border-primary/20 px-3 py-2.5">
             <Clock className="h-4 w-4 text-primary flex-shrink-0" />
             <p className="text-[11px] text-muted-foreground font-body">{t("twoHourNotice")}</p>
@@ -158,44 +173,66 @@ const ListItemPage = () => {
 
           <button
             onClick={handleSubmit}
-            className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-3 text-sm font-medium font-body"
+            disabled={submitting}
+            className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-3 text-sm font-medium font-body disabled:opacity-50"
           >
             <Plus className="h-4 w-4" />
-            {t("publishListing")}
+            {submitting ? "..." : t("publishListing")}
           </button>
         </div>
       </div>
 
-      {/* Listed items */}
-      {listedItems.length > 0 && (
+      {/* Listed items from Supabase */}
+      {loading ? (
+        <div className="px-4 py-4 text-center">
+          <p className="text-sm text-muted-foreground">Loading...</p>
+        </div>
+      ) : myListings.length > 0 && (
         <div className="px-4 py-2">
           <h2 className="font-display font-bold text-sm text-foreground mb-3">
             {t("yourListings")}
           </h2>
           <div className="space-y-2">
-            {listedItems.map((item) => (
-              <div
-                key={item.id}
-                className="rounded-2xl bg-card border border-border p-3 flex items-center gap-3"
-              >
-                <div className="h-10 w-10 rounded-xl bg-secondary flex items-center justify-center text-lg flex-shrink-0">
-                  {categories.find((c) => c.value === item.category)?.emoji ?? "📦"}
+            {myListings.map((item) => {
+              const emoji = categories.find((c) => c.value === item.category)?.emoji ?? "📦";
+              const end = item.pickup_end ? new Date(item.pickup_end) : new Date(new Date(item.created_at).getTime() + 2 * 3600000);
+              const remaining = Math.max(0, end.getTime() - Date.now());
+              const hours = Math.floor(remaining / 3600000);
+              const mins = Math.floor((remaining % 3600000) / 60000);
+
+              return (
+                <div
+                  key={item.id}
+                  className="rounded-2xl bg-card border border-border p-3 flex items-center gap-3"
+                >
+                  <div className="h-10 w-10 rounded-xl bg-secondary flex items-center justify-center text-lg flex-shrink-0">
+                    {emoji}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-foreground truncate font-body">
+                      {item.title}
+                    </p>
+                    <p className="text-[11px] text-muted-foreground">
+                      RM{item.discounted_price}{" "}
+                      <span className="line-through">RM{item.original_price}</span> · {item.weight_kg} kg
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {remaining > 0 ? (
+                      <div className="flex items-center gap-1 text-primary">
+                        <Clock className="h-3 w-3" />
+                        <span className="text-[10px] font-medium">{hours}h {mins}m</span>
+                      </div>
+                    ) : (
+                      <span className="text-[10px] text-muted-foreground">Expired</span>
+                    )}
+                    <button onClick={() => handleDelete(item.id)} className="p-1 text-muted-foreground hover:text-destructive">
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground truncate font-body">
-                    {item.name}
-                  </p>
-                  <p className="text-[11px] text-muted-foreground">
-                    RM{item.reducedPrice}{" "}
-                    <span className="line-through">RM{item.originalPrice}</span> · {item.quantity}
-                  </p>
-                </div>
-                <div className="flex items-center gap-1 text-primary">
-                  <Clock className="h-3 w-3" />
-                  <span className="text-[10px] font-medium">2h</span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
