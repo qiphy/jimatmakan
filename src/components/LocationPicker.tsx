@@ -1,20 +1,21 @@
-import { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import { useEffect, useRef, useState } from "react";
 import { X, MapPin } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
-// Fix default marker icon
 const icon = L.icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
   iconSize: [25, 41],
   iconAnchor: [12, 41],
 });
 
-const DEFAULT_CENTER: [number, number] = [3.1390, 101.6869]; // Kuala Lumpur
+const DEFAULT_CENTER: [number, number] = [3.139, 101.6869]; // Kuala Lumpur
 
 interface LocationPickerProps {
   open: boolean;
@@ -22,21 +23,6 @@ interface LocationPickerProps {
   location: { lat: number; lng: number; name: string };
   onLocationChange: (loc: { lat: number; lng: number; name: string }) => void;
 }
-
-const DraggableMarker = ({
-  position,
-  onMove,
-}: {
-  position: [number, number];
-  onMove: (lat: number, lng: number) => void;
-}) => {
-  useMapEvents({
-    click(e) {
-      onMove(e.latlng.lat, e.latlng.lng);
-    },
-  });
-  return <Marker position={position} icon={icon} />;
-};
 
 const reverseGeocode = async (lat: number, lng: number): Promise<string> => {
   try {
@@ -61,9 +47,45 @@ const LocationPicker = ({ open, onClose, location, onLocationChange }: LocationP
   const { t } = useLanguage();
   const [tempPos, setTempPos] = useState<[number, number]>([location.lat, location.lng]);
   const [resolving, setResolving] = useState(false);
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (open) setTempPos([location.lat, location.lng]);
+  }, [open, location.lat, location.lng]);
+
+  useEffect(() => {
+    if (!open || !mapContainerRef.current) return;
+
+    const map = L.map(mapContainerRef.current, { zoomControl: true }).setView(
+      [location.lat, location.lng],
+      13
+    );
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
+
+    const marker = L.marker([location.lat, location.lng], {
+      icon,
+      draggable: true,
+    }).addTo(map);
+
+    map.on("click", (e) => {
+      marker.setLatLng(e.latlng);
+      setTempPos([e.latlng.lat, e.latlng.lng]);
+    });
+
+    marker.on("dragend", () => {
+      const p = marker.getLatLng();
+      setTempPos([p.lat, p.lng]);
+    });
+
+    const timer = window.setTimeout(() => map.invalidateSize(), 100);
+
+    return () => {
+      window.clearTimeout(timer);
+      map.remove();
+    };
   }, [open, location.lat, location.lng]);
 
   if (!open) return null;
@@ -88,23 +110,9 @@ const LocationPicker = ({ open, onClose, location, onLocationChange }: LocationP
             <X className="h-4 w-4 text-muted-foreground" />
           </button>
         </div>
-        <div className="h-[350px] w-full">
-          <MapContainer
-            center={tempPos}
-            zoom={13}
-            className="h-full w-full"
-            zoomControl={false}
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <DraggableMarker
-              position={tempPos}
-              onMove={(lat, lng) => setTempPos([lat, lng])}
-            />
-          </MapContainer>
-        </div>
+
+        <div ref={mapContainerRef} className="h-[350px] w-full" />
+
         <div className="p-4">
           <p className="text-xs text-muted-foreground mb-3 text-center">{t("tapToSelect")}</p>
           <button
