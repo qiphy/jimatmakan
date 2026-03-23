@@ -257,6 +257,9 @@ const translations = {
     noResults: "Tiada hasil dijumpai. Cuba carian lain.",
     noReorderHistory: "Tiada sejarah pesanan lagi. Layari senarai untuk bermula!",
     storeUnavailable: "Tidak tersedia",
+    snapToAutofill: "📸 Tangkap gambar untuk isi auto",
+    aiAnalyzing: "AI sedang menganalisis makanan anda...",
+    aiAutofilled: "Borang diisi automatik oleh AI!",
   },
 } as const;
 
