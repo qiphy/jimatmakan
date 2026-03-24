@@ -295,6 +295,13 @@ const translations = {
     orderConfirmation: "Pesanan anda telah berjaya dibuat. Peniaga akan menyediakan item anda untuk pengambilan.",
     backToBrowse: "Kembali ke Carian",
     itemUnavailable: "Item ini tidak lagi tersedia.",
+    myOrders: "Pesanan Saya",
+    noOrdersYet: "Tiada pesanan lagi. Layari senarai untuk mencari makanan!",
+    pickupLocation: "Lokasi Pengambilan",
+    contactVendor: "Hubungi peniaga untuk butiran pengambilan",
+    pending: "Menunggu",
+    completed: "Selesai",
+    cancelled: "Dibatalkan",
   },
 } as const;
 
