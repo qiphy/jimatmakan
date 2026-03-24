@@ -304,6 +304,8 @@ const translations = {
     pending: "Menunggu",
     completed: "Selesai",
     cancelled: "Dibatalkan",
+    yourOrders: "Pesanan Anda",
+    viewAllOrders: "Lihat Semua",
   },
 } as const;
 
