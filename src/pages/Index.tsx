@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MapPin, Bell, Leaf, Sprout, RotateCcw } from "lucide-react";
+import { MapPin, Leaf, Sprout, RotateCcw } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useImpactMetrics } from "@/hooks/useImpactMetrics";
 import { useAuth } from "@/contexts/AuthContext";
@@ -9,6 +9,7 @@ import { useListings } from "@/hooks/useListings";
 import BottomNav from "@/components/BottomNav";
 import LanguageToggle from "@/components/LanguageToggle";
 import LocationPicker, { DEFAULT_CENTER } from "@/components/LocationPicker";
+import NotificationBell from "@/components/NotificationBell";
 
 interface ReorderStore {
   vendorId: string;
@@ -113,10 +114,7 @@ const Index = () => {
         </button>
         <div className="flex items-center gap-2">
           <LanguageToggle />
-          <button className="relative rounded-xl bg-card border border-border p-2">
-            <Bell className="h-4 w-4 text-foreground" />
-            <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-primary" />
-          </button>
+          <NotificationBell />
         </div>
       </header>
 
