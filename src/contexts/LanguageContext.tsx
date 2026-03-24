@@ -363,6 +363,7 @@ const translations = {
     esgMonthlyBreakdown: "Termasuk data pecahan bulanan",
     esgTotal: "Jumlah",
     esgPayAndDownload: "Bayar & Muat Turun Laporan",
+    sellerPhone: "Telefon Penjual",
   },
 } as const;
 
