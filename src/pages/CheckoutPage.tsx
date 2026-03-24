@@ -98,7 +98,8 @@ const CheckoutPage = () => {
         <CheckCircle2 className="h-16 w-16 text-primary" />
         <h2 className="text-xl font-display font-bold text-foreground">{t("orderPlaced")}</h2>
         <p className="text-muted-foreground text-sm max-w-xs">{t("orderConfirmation")}</p>
-        <Button onClick={() => navigate("/browse")} className="mt-4">{t("backToBrowse")}</Button>
+        <Button onClick={() => navigate("/orders")} className="mt-4">{t("myOrders")}</Button>
+        <Button onClick={() => navigate("/browse")} variant="outline">{t("backToBrowse")}</Button>
         <BottomNav />
       </div>
     );

@@ -145,6 +145,13 @@ const translations = {
     orderConfirmation: "Your order has been placed successfully. The vendor will prepare your items for pickup.",
     backToBrowse: "Back to Browse",
     itemUnavailable: "This item is no longer available.",
+    myOrders: "My Orders",
+    noOrdersYet: "No orders yet. Browse listings to find food!",
+    pickupLocation: "Pickup Location",
+    contactVendor: "Contact vendor for pickup details",
+    pending: "Pending",
+    completed: "Completed",
+    cancelled: "Cancelled",
   },
   ms: {
     appName: "JimatMakan",
@@ -288,6 +295,13 @@ const translations = {
     orderConfirmation: "Pesanan anda telah berjaya dibuat. Peniaga akan menyediakan item anda untuk pengambilan.",
     backToBrowse: "Kembali ke Carian",
     itemUnavailable: "Item ini tidak lagi tersedia.",
+    myOrders: "Pesanan Saya",
+    noOrdersYet: "Tiada pesanan lagi. Layari senarai untuk mencari makanan!",
+    pickupLocation: "Lokasi Pengambilan",
+    contactVendor: "Hubungi peniaga untuk butiran pengambilan",
+    pending: "Menunggu",
+    completed: "Selesai",
+    cancelled: "Dibatalkan",
   },
 } as const;
 
