@@ -45,6 +45,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         role: data.role as UserRole,
         businessName: data.business_name ?? undefined,
         email: data.email,
+        halalVerified: data.halal_verified ?? false,
       });
     }
   }, []);
