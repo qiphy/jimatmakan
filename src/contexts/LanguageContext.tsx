@@ -190,6 +190,10 @@ const translations = {
     halalDisabled: "Halal status removed",
     stockAvailable: "available",
     totalWeight: "Total weight",
+    selectAmount: "Select Amount",
+    maxAvailable: "Max available",
+    allStock: "All",
+    estimatedPrice: "Estimated price",
   },
   ms: {
     appName: "JimatMakan",
@@ -378,6 +382,10 @@ const translations = {
     halalDisabled: "Status Halal dikeluarkan",
     stockAvailable: "tersedia",
     totalWeight: "Jumlah berat",
+    selectAmount: "Pilih Jumlah",
+    maxAvailable: "Maksimum tersedia",
+    allStock: "Semua",
+    estimatedPrice: "Anggaran harga",
   },
 } as const;
 

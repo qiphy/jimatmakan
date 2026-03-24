@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Minus, Plus, CheckCircle2, Wallet, CreditCard, Building2 } from "lucide-react";
+import { ArrowLeft, Minus, Plus, CheckCircle2, Wallet, CreditCard, Building2, Scale } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
 import BottomNav from "@/components/BottomNav";
 
@@ -25,6 +27,7 @@ const CheckoutPage = () => {
   const [listing, setListing] = useState<any>(null);
   const [vendorName, setVendorName] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [customWeight, setCustomWeight] = useState<number | null>(null);
   const [payment, setPayment] = useState<PaymentMethod>("tng");
   const [loading, setLoading] = useState(true);
   const [placing, setPlacing] = useState(false);
@@ -51,9 +54,12 @@ const CheckoutPage = () => {
     })();
   }, [listingId]);
 
-  const subtotal = listing ? listing.discounted_price * quantity : 0;
-  const savings = listing ? (listing.original_price - listing.discounted_price) * quantity : 0;
-  const weightTotal = listing ? listing.weight_kg * quantity : 0;
+  const maxWeight = listing ? listing.weight_kg * listing.quantity : 0;
+  const selectedWeight = customWeight !== null ? customWeight : (listing ? listing.weight_kg * quantity : 0);
+  const pricePerKg = listing && listing.weight_kg > 0 ? listing.discounted_price / listing.weight_kg : 0;
+  const originalPricePerKg = listing && listing.weight_kg > 0 ? listing.original_price / listing.weight_kg : 0;
+  const subtotal = pricePerKg * selectedWeight;
+  const savings = (originalPricePerKg - pricePerKg) * selectedWeight;
 
   const placeOrder = async () => {
     if (!session?.user || !listing) return;
@@ -62,8 +68,8 @@ const CheckoutPage = () => {
       buyer_id: session.user.id,
       vendor_id: listing.vendor_id,
       listing_id: listing.id,
-      quantity,
-      weight_kg: weightTotal,
+      quantity: Math.ceil(selectedWeight / listing.weight_kg),
+      weight_kg: selectedWeight,
       total_price: subtotal,
       status: "pending",
     });
@@ -153,32 +159,79 @@ const CheckoutPage = () => {
           </div>
         </div>
 
-        {/* Quantity selector */}
+        {/* Amount selector */}
         <div className="rounded-xl border border-border bg-card p-4">
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-medium text-card-foreground">{t("quantity")}</p>
-            <span className="text-xs text-muted-foreground">{listing.quantity} {t("stockAvailable")}</span>
+          <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center gap-2">
+              <Scale className="h-4 w-4 text-primary" />
+              <p className="text-sm font-medium text-card-foreground">{t("selectAmount")}</p>
+            </div>
+            <span className="text-xs text-muted-foreground">{t("maxAvailable")}: {maxWeight.toFixed(1)} kg</span>
           </div>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setQuantity(q => Math.max(1, q - 1))}
-              className="h-9 w-9 rounded-lg border border-border flex items-center justify-center text-foreground disabled:opacity-40"
-              disabled={quantity <= 1}
-            >
-              <Minus className="h-4 w-4" />
-            </button>
-            <span className="text-lg font-semibold text-foreground w-8 text-center">{quantity}</span>
-            <button
-              onClick={() => setQuantity(q => Math.min(listing.quantity, q + 1))}
-              className="h-9 w-9 rounded-lg border border-border flex items-center justify-center text-foreground disabled:opacity-40"
-              disabled={quantity >= listing.quantity}
-            >
-              <Plus className="h-4 w-4" />
-            </button>
+
+          {/* Slider */}
+          <div className="mt-4 px-1">
+            <Slider
+              value={[selectedWeight]}
+              min={0.1}
+              max={maxWeight}
+              step={0.1}
+              onValueChange={([val]) => setCustomWeight(Math.round(val * 10) / 10)}
+            />
           </div>
-          <p className="text-xs text-muted-foreground mt-2">
-            {t("totalWeight")}: {weightTotal.toFixed(1)} kg
-          </p>
+
+          {/* Weight input + quick picks */}
+          <div className="flex items-center gap-3 mt-4">
+            <div className="flex items-center gap-1.5 flex-1">
+              <Input
+                type="number"
+                min={0.1}
+                max={maxWeight}
+                step={0.1}
+                value={selectedWeight}
+                onChange={(e) => {
+                  const v = Math.min(maxWeight, Math.max(0.1, parseFloat(e.target.value) || 0.1));
+                  setCustomWeight(Math.round(v * 10) / 10);
+                }}
+                className="h-9 text-center font-semibold"
+              />
+              <span className="text-sm text-muted-foreground font-medium">kg</span>
+            </div>
+          </div>
+
+          {/* Quick select buttons */}
+          {maxWeight >= 0.5 && (
+            <div className="flex gap-2 mt-3 flex-wrap">
+              {[0.5, 1, 2, 5].filter(w => w <= maxWeight).map(w => (
+                <button
+                  key={w}
+                  onClick={() => setCustomWeight(w)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                    selectedWeight === w
+                      ? "border-primary bg-secondary text-foreground"
+                      : "border-border text-muted-foreground hover:border-primary/40"
+                  }`}
+                >
+                  {w} kg
+                </button>
+              ))}
+              <button
+                onClick={() => setCustomWeight(maxWeight)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                  selectedWeight === maxWeight
+                    ? "border-primary bg-secondary text-foreground"
+                    : "border-border text-muted-foreground hover:border-primary/40"
+                }`}
+              >
+                {t("allStock")}
+              </button>
+            </div>
+          )}
+
+          <div className="flex justify-between mt-3 pt-2 border-t border-border">
+            <span className="text-xs text-muted-foreground">{t("estimatedPrice")}</span>
+            <span className="text-sm font-semibold text-primary">RM{subtotal.toFixed(2)}</span>
+          </div>
         </div>
 
         {/* Payment */}
@@ -206,7 +259,7 @@ const CheckoutPage = () => {
         <div className="rounded-xl border border-border bg-card p-4 space-y-2">
           <p className="text-sm font-medium text-card-foreground">{t("orderSummary")}</p>
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">{t("subtotal")} ({quantity}×)</span>
+            <span className="text-muted-foreground">{selectedWeight.toFixed(1)} kg × RM{pricePerKg.toFixed(2)}/kg</span>
             <span className="text-foreground font-semibold">RM{subtotal.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-sm">
@@ -214,8 +267,8 @@ const CheckoutPage = () => {
             <span className="text-primary font-semibold">-RM{savings.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-sm pt-1 border-t border-border">
-            <span className="text-muted-foreground">{t("quantityLabel")}</span>
-            <span className="text-foreground">{weightTotal.toFixed(1)} kg</span>
+            <span className="text-muted-foreground">{t("totalWeight")}</span>
+            <span className="text-foreground font-semibold">{selectedWeight.toFixed(1)} kg</span>
           </div>
         </div>
 
