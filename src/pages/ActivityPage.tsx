@@ -136,6 +136,9 @@ const ActivityPage = () => {
         </div>
       </div>
 
+      {/* User Order Status */}
+      {!isVendor && <ActivityOrderStatus />}
+
       {/* Food Waste Saved Chart */}
       {hasMonthlyData && (
         <div className="px-4 py-3">
