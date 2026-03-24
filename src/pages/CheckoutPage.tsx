@@ -139,11 +139,15 @@ const CheckoutPage = () => {
               <h3 className="font-display font-semibold text-card-foreground truncate">{listing.title}</h3>
               <p className="text-xs text-muted-foreground">{t("listedBy")} {vendorName}</p>
               <div className="flex items-center gap-2 mt-1">
-                <span className="text-sm font-semibold text-card-foreground">RM{listing.discounted_price}</span>
+                <span className="text-sm font-semibold text-card-foreground">RM{listing.discounted_price}/{listing.unit}</span>
                 <span className="text-xs text-muted-foreground line-through">RM{listing.original_price}</span>
                 {discount > 0 && (
                   <span className="text-xs font-semibold text-primary bg-secondary px-2 py-0.5 rounded-full">-{discount}%</span>
                 )}
+              </div>
+              <div className="flex items-center gap-3 mt-1.5">
+                <span className="text-xs text-muted-foreground">{listing.weight_kg} kg/{listing.unit}</span>
+                <span className="text-xs font-medium text-primary">{listing.quantity} {t("stockAvailable")}</span>
               </div>
             </div>
           </div>
