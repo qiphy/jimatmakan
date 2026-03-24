@@ -64,9 +64,10 @@ const FoodListingCard = ({ listing }: { listing: SupabaseListing }) => {
                 RM{listing.original_price}
               </span>
             </div>
-            <span className="text-xs text-muted-foreground">
-              {listing.weight_kg} kg
-            </span>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <span>{listing.weight_kg} kg</span>
+              <span className="text-primary font-medium">{listing.quantity} {t("availableNow").toLowerCase()}</span>
+            </div>
           </div>
         </div>
       </div>
