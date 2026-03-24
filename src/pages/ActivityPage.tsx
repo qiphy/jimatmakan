@@ -15,8 +15,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useActivityData } from "@/hooks/useActivityData";
 import BottomNav from "@/components/BottomNav";
-import { toast } from "sonner";
-import { generateESGReport } from "@/utils/generateESGReport";
+import { useNavigate } from "react-router-dom";
 
 const ActivityPage = () => {
   const { t } = useLanguage();
@@ -24,18 +23,7 @@ const ActivityPage = () => {
   const { monthly, recentSales, totalRevenue, totalOrders, totalFood, totalCO2, loading } = useActivityData();
   const isVendor = user?.role === "vendor";
   const showESG = user?.role === "vendor" || user?.role === "composter";
-
-  const handleGenerateESG = () => {
-    generateESGReport({
-      userName: user?.fullName || "User",
-      totalFood,
-      totalCO2,
-      totalOrders,
-      totalRevenue,
-      monthly,
-    });
-    toast.success(t("esgReportGenerated"));
-  };
+  const navigate = useNavigate();
 
   if (loading) {
     return (
@@ -214,7 +202,7 @@ const ActivityPage = () => {
                 <p className="text-xs text-muted-foreground mt-1 font-body leading-relaxed">{t("esgReportDesc")}</p>
               </div>
             </div>
-            <button onClick={handleGenerateESG} className="mt-4 w-full rounded-xl bg-primary text-primary-foreground py-3 text-sm font-medium font-body">
+            <button onClick={() => navigate("/esg-checkout")} className="mt-4 w-full rounded-xl bg-primary text-primary-foreground py-3 text-sm font-medium font-body">
               {t("esgReportBtn")} — RM30
             </button>
           </div>

@@ -13,6 +13,7 @@ import ActivityPage from "./pages/ActivityPage.tsx";
 import ListItemPage from "./pages/ListItemPage.tsx";
 import CheckoutPage from "./pages/CheckoutPage.tsx";
 import MyOrdersPage from "./pages/MyOrdersPage.tsx";
+import ESGCheckoutPage from "./pages/ESGCheckoutPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -48,6 +49,7 @@ const App = () => (
               <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
               <Route path="/checkout/:listingId" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
               <Route path="/orders" element={<ProtectedRoute><MyOrdersPage /></ProtectedRoute>} />
+              <Route path="/esg-checkout" element={<ProtectedRoute><ESGCheckoutPage /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
