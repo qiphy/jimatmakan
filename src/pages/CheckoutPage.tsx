@@ -27,6 +27,7 @@ const CheckoutPage = () => {
   const [listing, setListing] = useState<any>(null);
   const [vendorName, setVendorName] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [customWeight, setCustomWeight] = useState<number | null>(null);
   const [payment, setPayment] = useState<PaymentMethod>("tng");
   const [loading, setLoading] = useState(true);
   const [placing, setPlacing] = useState(false);
