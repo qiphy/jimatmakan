@@ -198,6 +198,18 @@ const MyOrdersPage = () => {
                     {order.pickup_lat && order.pickup_lng && (
                       <PickupMap lat={order.pickup_lat} lng={order.pickup_lng} />
                     )}
+                    {order.status === "pending" && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setConfirmOrderId(order.id);
+                        }}
+                        className="w-full rounded-xl bg-primary text-primary-foreground py-2.5 text-sm font-medium font-body flex items-center justify-center gap-2"
+                      >
+                        <CheckCircle2 className="h-4 w-4" />
+                        {t("confirmPickup")}
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
