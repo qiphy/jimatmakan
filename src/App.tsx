@@ -13,6 +13,7 @@ import ActivityPage from "./pages/ActivityPage.tsx";
 import ListItemPage from "./pages/ListItemPage.tsx";
 import CheckoutPage from "./pages/CheckoutPage.tsx";
 import MyOrdersPage from "./pages/MyOrdersPage.tsx";
+import ESGCheckoutPage from "./pages/ESGCheckoutPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
