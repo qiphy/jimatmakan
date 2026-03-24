@@ -4,6 +4,8 @@ import type { User, Session } from "@supabase/supabase-js";
 
 export type UserRole = "vendor" | "user" | "composter";
 
+export type HalalStatus = "none" | "pending" | "approved" | "rejected";
+
 export interface UserProfile {
   fullName: string;
   phone: string;
@@ -12,6 +14,7 @@ export interface UserProfile {
   email: string;
   halalVerified?: boolean;
   halalCertUrl?: string;
+  halalStatus?: HalalStatus;
 }
 
 interface AuthContextType {
@@ -47,7 +50,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         businessName: data.business_name ?? undefined,
         email: data.email,
         halalVerified: data.halal_verified ?? false,
-        halalCertUrl: data.halal_cert_url ?? undefined,
+        halalCertUrl: (data as any).halal_cert_url ?? undefined,
+        halalStatus: ((data as any).halal_status ?? "none") as HalalStatus,
       });
     }
   }, []);
@@ -110,6 +114,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (updates.email !== undefined) dbUpdates.email = updates.email;
     if (updates.halalVerified !== undefined) dbUpdates.halal_verified = updates.halalVerified;
     if (updates.halalCertUrl !== undefined) dbUpdates.halal_cert_url = updates.halalCertUrl;
+    if (updates.halalStatus !== undefined) dbUpdates.halal_status = updates.halalStatus;
     dbUpdates.updated_at = new Date().toISOString();
 
     await supabase.from("profiles").update(dbUpdates).eq("id", session.user.id);
