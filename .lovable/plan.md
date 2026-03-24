@@ -1,35 +1,33 @@
 
 
-## Checkout Page Plan
+## Generate ESG Report as PDF
 
 ### What we're building
-A checkout page (`/checkout/:listingId`) where users can review a listing, select quantity, choose a payment method, and place an order that gets saved to the `orders` table in Supabase.
+Replace the toast-only ESG button with actual PDF generation using `jspdf` library. The PDF will contain the user's environmental impact data (food saved, CO2 reduced, monthly trends) formatted as a professional ESG report, and download directly to their device.
 
 ### Changes
 
-**1. New page: `src/pages/CheckoutPage.tsx`**
-- Receives listing ID from URL params
-- Fetches listing details + vendor name from Supabase
-- Shows: item image/emoji, title, vendor, price breakdown (original vs discounted), weight
-- Quantity selector (capped at listing's available quantity)
-- Order summary: subtotal, savings amount
-- Payment method selection (Touch 'n Go, Credit/Debit Card, Bank Transfer) — UI-only selection matching existing profile payment patterns
-- "Place Order" button that inserts into `orders` table with `buyer_id`, `vendor_id`, `listing_id`, `quantity`, `weight_kg`, `total_price`, `status: 'pending'`
-- Success state with confirmation message and navigation back to browse
-- Back button to return to previous page
+**1. Install dependency**
+- Add `jspdf` package for client-side PDF generation
 
-**2. Update `src/components/FoodListingCard.tsx`**
-- Wire the "Buy Now" button to navigate to `/checkout/{listing.id}` using `useNavigate`
+**2. New utility: `src/utils/generateESGReport.ts`**
+- Function that takes activity data (totalFood, totalCO2, totalOrders, totalRevenue, monthly array) and user name
+- Generates a branded PDF with:
+  - Title: "ESG Impact Report"
+  - Date of generation
+  - Summary metrics table (food saved, CO2 reduced, orders, revenue)
+  - Monthly breakdown table (month, food saved, CO2 reduced)
+  - Footer with app branding
+- Triggers browser download via `doc.save()`
 
-**3. Update `src/App.tsx`**
-- Add `/checkout/:listingId` route wrapped in `ProtectedRoute`
-
-**4. Update `src/contexts/LanguageContext.tsx`**
-- Add translation keys: `checkout`, `orderSummary`, `quantity`, `subtotal`, `youSave`, `selectPayment`, `placeOrder`, `orderPlaced`, `orderConfirmation`, `backToBrowse`, `itemUnavailable`
+**3. Update `src/pages/ActivityPage.tsx`**
+- Import the generate function
+- Pass activity data + user profile name to the generator on button click
+- Keep the toast as a success confirmation after download
 
 ### Technical details
-- No database changes needed — the `orders` table already has the right schema
-- The existing `update_impact_on_order` trigger will handle impact metrics when orders are marked completed
-- Payment is UI-only (no real payment processing) — just records the selected method
-- Uses existing Supabase client and auth context patterns
+- `jspdf` works entirely client-side, no server needed
+- Uses `doc.save("esg-report.pdf")` which triggers a native browser download
+- No changes to Supabase or backend required
+- Monthly data table only included if data exists
 
