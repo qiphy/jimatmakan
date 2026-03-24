@@ -17,6 +17,7 @@ const CATEGORY_EMOJI: Record<string, string> = {
 
 const FoodListingCard = ({ listing }: { listing: SupabaseListing }) => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const expiresAt = listing.pickup_end ? new Date(listing.pickup_end) : new Date(new Date(listing.created_at).getTime() + 2 * 60 * 60000);
   const { isExpired, isUrgent, formatted } = useCountdown(expiresAt);
 
