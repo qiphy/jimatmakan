@@ -11,6 +11,7 @@ import ProfilePage from "./pages/ProfilePage.tsx";
 import BrowsePage from "./pages/BrowsePage.tsx";
 import ActivityPage from "./pages/ActivityPage.tsx";
 import ListItemPage from "./pages/ListItemPage.tsx";
+import CheckoutPage from "./pages/CheckoutPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
