@@ -6,13 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import BottomNav from "@/components/BottomNav";
+import HalalVerificationSection from "@/components/HalalVerificationSection";
 import LanguageToggle from "@/components/LanguageToggle";
 import { toast } from "sonner";
 import {
   ArrowLeft, Mail, Phone, Store, User, Recycle, LogOut, Shield,
-  Pencil, X, CreditCard, Landmark, Wallet, Plus, Trash2, BadgeCheck,
+  Pencil, X, CreditCard, Landmark, Wallet, Plus, Trash2,
 } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
 
 const roleConfig = {
   vendor: { icon: Store, color: "bg-primary" },
@@ -319,29 +319,7 @@ const ProfilePage = () => {
 
       {/* Halal Verification (Vendors only) */}
       {user.role === "vendor" && (
-        <div className="mx-4 mt-8">
-          <h3 className="text-sm font-display font-bold text-foreground mb-3">{t("halalVerification")}</h3>
-          <div className="rounded-2xl border border-border bg-card shadow-card p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                  <BadgeCheck className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-foreground">{t("halalCertified")}</p>
-                  <p className="text-xs text-muted-foreground">{t("halalDesc")}</p>
-                </div>
-              </div>
-              <Switch
-                checked={user.halalVerified ?? false}
-                onCheckedChange={async (checked) => {
-                  await updateProfile({ halalVerified: checked });
-                  toast.success(checked ? t("halalEnabled") : t("halalDisabled"));
-                }}
-              />
-            </div>
-          </div>
-        </div>
+        <HalalVerificationSection />
       )}
 
       {/* Logout */}
