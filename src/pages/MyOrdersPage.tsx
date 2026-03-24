@@ -67,7 +67,7 @@ const PickupMap = ({ lat, lng }: { lat: number; lng: number }) => {
     return () => { map.remove(); };
   }, [lat, lng]);
 
-  return <div ref={mapRef} className="h-32 w-full rounded-lg overflow-hidden" />;
+  return <div ref={mapRef} className="h-32 w-full rounded-lg overflow-hidden relative z-0" />;
 };
 
 const MyOrdersPage = () => {
