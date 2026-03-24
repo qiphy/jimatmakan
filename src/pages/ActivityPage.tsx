@@ -16,6 +16,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useActivityData } from "@/hooks/useActivityData";
 import BottomNav from "@/components/BottomNav";
 import { toast } from "sonner";
+import { generateESGReport } from "@/utils/generateESGReport";
 
 const ActivityPage = () => {
   const { t } = useLanguage();
@@ -25,6 +26,14 @@ const ActivityPage = () => {
   const showESG = user?.role === "vendor" || user?.role === "composter";
 
   const handleGenerateESG = () => {
+    generateESGReport({
+      userName: user?.fullName || "User",
+      totalFood,
+      totalCO2,
+      totalOrders,
+      totalRevenue,
+      monthly,
+    });
     toast.success(t("esgReportGenerated"));
   };
 
