@@ -1,4 +1,5 @@
 import { Timer, Recycle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useCountdown } from "@/hooks/useCountdown";
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { SupabaseListing } from "@/hooks/useListings";
@@ -16,6 +17,7 @@ const CATEGORY_EMOJI: Record<string, string> = {
 
 const FoodListingCard = ({ listing }: { listing: SupabaseListing }) => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const expiresAt = listing.pickup_end ? new Date(listing.pickup_end) : new Date(new Date(listing.created_at).getTime() + 2 * 60 * 60000);
   const { isExpired, isUrgent, formatted } = useCountdown(expiresAt);
 
@@ -94,7 +96,10 @@ const FoodListingCard = ({ listing }: { listing: SupabaseListing }) => {
             {t("compostClaim")}
           </button>
         ) : (
-          <button className="text-xs font-medium px-3 py-1.5 rounded-lg bg-primary text-primary-foreground">
+          <button
+            onClick={() => navigate(`/checkout/${listing.id}`)}
+            className="text-xs font-medium px-3 py-1.5 rounded-lg bg-primary text-primary-foreground"
+          >
             {t("buyNow")}
           </button>
         )}

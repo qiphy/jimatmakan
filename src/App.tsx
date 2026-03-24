@@ -11,6 +11,7 @@ import ProfilePage from "./pages/ProfilePage.tsx";
 import BrowsePage from "./pages/BrowsePage.tsx";
 import ActivityPage from "./pages/ActivityPage.tsx";
 import ListItemPage from "./pages/ListItemPage.tsx";
+import CheckoutPage from "./pages/CheckoutPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -44,6 +45,7 @@ const App = () => (
               <Route path="/list" element={<ProtectedRoute><ListItemPage /></ProtectedRoute>} />
               <Route path="/activity" element={<ProtectedRoute><ActivityPage /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+              <Route path="/checkout/:listingId" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
