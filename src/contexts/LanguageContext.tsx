@@ -382,6 +382,10 @@ const translations = {
     halalDisabled: "Status Halal dikeluarkan",
     stockAvailable: "tersedia",
     totalWeight: "Jumlah berat",
+    selectAmount: "Pilih Jumlah",
+    maxAvailable: "Maksimum tersedia",
+    allStock: "Semua",
+    estimatedPrice: "Anggaran harga",
   },
 } as const;
 
