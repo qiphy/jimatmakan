@@ -28,6 +28,7 @@ interface OrderWithDetails {
   created_at: string;
   listing_title: string;
   vendor_name: string;
+  vendor_phone: string;
   pickup_address: string | null;
   pickup_lat: number | null;
   pickup_lng: number | null;
