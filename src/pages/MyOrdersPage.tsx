@@ -100,7 +100,7 @@ const MyOrdersPage = () => {
 
       const [{ data: listings }, { data: vendors }] = await Promise.all([
         supabase.from("listings").select("id, title, pickup_address").in("id", listingIds),
-        supabase.from("profiles").select("id, business_name, full_name").in("id", vendorIds),
+        supabase.from("profiles").select("id, business_name, full_name, phone").in("id", vendorIds),
       ]);
 
       const listingMap = Object.fromEntries((listings || []).map((l) => [l.id, l]));
