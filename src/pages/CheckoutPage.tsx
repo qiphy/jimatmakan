@@ -18,7 +18,7 @@ type PaymentMethod = "tng" | "card" | "fpx";
 const CheckoutPage = () => {
   const { listingId } = useParams<{ listingId: string }>();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { session } = useAuth();
   const { t } = useLanguage();
   const { toast } = useToast();
 
