@@ -145,6 +145,13 @@ const translations = {
     orderConfirmation: "Your order has been placed successfully. The vendor will prepare your items for pickup.",
     backToBrowse: "Back to Browse",
     itemUnavailable: "This item is no longer available.",
+    myOrders: "My Orders",
+    noOrdersYet: "No orders yet. Browse listings to find food!",
+    pickupLocation: "Pickup Location",
+    contactVendor: "Contact vendor for pickup details",
+    pending: "Pending",
+    completed: "Completed",
+    cancelled: "Cancelled",
   },
   ms: {
     appName: "JimatMakan",
