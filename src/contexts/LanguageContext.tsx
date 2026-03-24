@@ -312,6 +312,12 @@ const translations = {
     cancelled: "Dibatalkan",
     yourOrders: "Pesanan Anda",
     viewAllOrders: "Lihat Semua",
+    confirmPickup: "Sahkan Pengambilan",
+    confirmPickupTitle: "Sahkan Pengambilan Pesanan",
+    confirmPickupDesc: "Adakah anda sudah mengambil pesanan ini?",
+    yes: "Ya, saya sudah ambil",
+    no: "Belum lagi",
+    orderCompleted: "Pesanan ditandakan selesai!",
   },
 } as const;
 

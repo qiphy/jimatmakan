@@ -218,6 +218,37 @@ const MyOrdersPage = () => {
         )}
       </div>
 
+      <AlertDialog open={!!confirmOrderId} onOpenChange={(open) => !open && setConfirmOrderId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("confirmPickupTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("confirmPickupDesc")}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={confirming}>{t("no")}</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={confirming}
+              onClick={async () => {
+                if (!confirmOrderId) return;
+                setConfirming(true);
+                await supabase
+                  .from("orders")
+                  .update({ status: "completed" })
+                  .eq("id", confirmOrderId);
+                setOrders((prev) =>
+                  prev.map((o) => o.id === confirmOrderId ? { ...o, status: "completed" } : o)
+                );
+                toast.success(t("orderCompleted"));
+                setConfirmOrderId(null);
+                setConfirming(false);
+              }}
+            >
+              {t("yes")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <BottomNav />
     </div>
   );
