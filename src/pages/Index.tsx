@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MapPin, Bell, Leaf, Sprout, RotateCcw } from "lucide-react";
+import { MapPin, Leaf, Sprout, RotateCcw } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useImpactMetrics } from "@/hooks/useImpactMetrics";
 import { useAuth } from "@/contexts/AuthContext";
@@ -9,6 +9,7 @@ import { useListings } from "@/hooks/useListings";
 import BottomNav from "@/components/BottomNav";
 import LanguageToggle from "@/components/LanguageToggle";
 import LocationPicker, { DEFAULT_CENTER } from "@/components/LocationPicker";
+import NotificationBell from "@/components/NotificationBell";
 
 interface ReorderStore {
   vendorId: string;
