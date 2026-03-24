@@ -56,10 +56,10 @@ const CheckoutPage = () => {
   const weightTotal = listing ? listing.weight_kg * quantity : 0;
 
   const placeOrder = async () => {
-    if (!user || !listing) return;
+    if (!session?.user || !listing) return;
     setPlacing(true);
     const { error } = await supabase.from("orders").insert({
-      buyer_id: user.id,
+      buyer_id: session.user.id,
       vendor_id: listing.vendor_id,
       listing_id: listing.id,
       quantity,

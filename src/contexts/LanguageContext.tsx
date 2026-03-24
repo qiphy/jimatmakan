@@ -277,6 +277,17 @@ const translations = {
     chooseLocation: "Pilih Lokasi",
     tapToSelect: "Ketik mana-mana pada peta untuk alihkan pin",
     confirmLocation: "Sahkan Lokasi",
+    checkout: "Pembayaran",
+    orderSummary: "Ringkasan Pesanan",
+    quantity: "Kuantiti",
+    subtotal: "Jumlah kecil",
+    youSave: "Anda jimat",
+    selectPayment: "Pilih Pembayaran",
+    placeOrder: "Buat Pesanan",
+    orderPlaced: "Pesanan Dibuat!",
+    orderConfirmation: "Pesanan anda telah berjaya dibuat. Peniaga akan menyediakan item anda untuk pengambilan.",
+    backToBrowse: "Kembali ke Carian",
+    itemUnavailable: "Item ini tidak lagi tersedia.",
   },
 } as const;
 
