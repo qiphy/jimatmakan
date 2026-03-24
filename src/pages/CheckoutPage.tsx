@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Minus, Plus, CheckCircle2, Wallet, CreditCard, Building2 } from "lucide-react";
+import { ArrowLeft, Minus, Plus, CheckCircle2, Wallet, CreditCard, Building2, Scale } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
