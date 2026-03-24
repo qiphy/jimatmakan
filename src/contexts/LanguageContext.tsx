@@ -190,6 +190,10 @@ const translations = {
     halalDisabled: "Halal status removed",
     stockAvailable: "available",
     totalWeight: "Total weight",
+    selectAmount: "Select Amount",
+    maxAvailable: "Max available",
+    allStock: "All",
+    estimatedPrice: "Estimated price",
   },
   ms: {
     appName: "JimatMakan",
