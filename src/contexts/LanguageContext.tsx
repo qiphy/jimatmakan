@@ -188,6 +188,8 @@ const translations = {
     halalDesc: "Verify that your business is Halal certified",
     halalEnabled: "Halal status verified",
     halalDisabled: "Halal status removed",
+    stockAvailable: "available",
+    totalWeight: "Total weight",
   },
   ms: {
     appName: "JimatMakan",
@@ -374,6 +376,8 @@ const translations = {
     halalDesc: "Sahkan perniagaan anda mempunyai sijil Halal",
     halalEnabled: "Status Halal disahkan",
     halalDisabled: "Status Halal dikeluarkan",
+    stockAvailable: "tersedia",
+    totalWeight: "Jumlah berat",
   },
 } as const;
 
