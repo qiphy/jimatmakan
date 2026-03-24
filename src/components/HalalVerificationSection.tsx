@@ -93,7 +93,7 @@ const HalalVerificationSection = () => {
             <StatusIcon className={`h-5 w-5 ${status === "approved" ? "text-green-600" : status === "pending" ? "text-amber-600" : status === "rejected" ? "text-destructive" : "text-muted-foreground"}`} />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-medium text-foreground">{t(cfg.labelKey)}</p>
+            <p className="text-sm font-medium text-foreground">{t(cfg.labelKey as any)}</p>
             <p className="text-xs text-muted-foreground">
               {status === "pending" ? t("halalPendingDesc") : status === "rejected" ? t("halalRejectedDesc") : t("halalCertDesc")}
             </p>
