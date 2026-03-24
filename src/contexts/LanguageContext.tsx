@@ -369,6 +369,11 @@ const translations = {
     esgTotal: "Jumlah",
     esgPayAndDownload: "Bayar & Muat Turun Laporan",
     sellerPhone: "Telefon Penjual",
+    halalVerification: "Pengesahan Halal",
+    halalCertified: "Sijil Halal",
+    halalDesc: "Sahkan perniagaan anda mempunyai sijil Halal",
+    halalEnabled: "Status Halal disahkan",
+    halalDisabled: "Status Halal dikeluarkan",
   },
 } as const;
 
