@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
@@ -11,8 +11,10 @@ import { toast } from "sonner";
 import {
   ArrowLeft, Mail, Phone, Store, User, Recycle, LogOut, Shield,
   Pencil, X, CreditCard, Landmark, Wallet, Plus, Trash2, BadgeCheck,
+  Upload, Image, CheckCircle2, Loader2,
 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import { supabase } from "@/integrations/supabase/client";
 
 const roleConfig = {
   vendor: { icon: Store, color: "bg-primary" },
