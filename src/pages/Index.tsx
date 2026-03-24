@@ -114,10 +114,7 @@ const Index = () => {
         </button>
         <div className="flex items-center gap-2">
           <LanguageToggle />
-          <button className="relative rounded-xl bg-card border border-border p-2">
-            <Bell className="h-4 w-4 text-foreground" />
-            <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-primary" />
-          </button>
+          <NotificationBell />
         </div>
       </header>
 
