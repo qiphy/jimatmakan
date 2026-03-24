@@ -114,6 +114,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (updates.email !== undefined) dbUpdates.email = updates.email;
     if (updates.halalVerified !== undefined) dbUpdates.halal_verified = updates.halalVerified;
     if (updates.halalCertUrl !== undefined) dbUpdates.halal_cert_url = updates.halalCertUrl;
+    if (updates.halalStatus !== undefined) dbUpdates.halal_status = updates.halalStatus;
     dbUpdates.updated_at = new Date().toISOString();
 
     await supabase.from("profiles").update(dbUpdates).eq("id", session.user.id);
