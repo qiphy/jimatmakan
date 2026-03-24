@@ -96,7 +96,10 @@ const FoodListingCard = ({ listing }: { listing: SupabaseListing }) => {
             {t("compostClaim")}
           </button>
         ) : (
-          <button className="text-xs font-medium px-3 py-1.5 rounded-lg bg-primary text-primary-foreground">
+          <button
+            onClick={() => navigate(`/checkout/${listing.id}`)}
+            className="text-xs font-medium px-3 py-1.5 rounded-lg bg-primary text-primary-foreground"
+          >
             {t("buyNow")}
           </button>
         )}
