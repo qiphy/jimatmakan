@@ -133,8 +133,8 @@ const ActivityPage = () => {
         </div>
       </div>
 
-      {/* User Order Status */}
-      {!isVendor && <ActivityOrderStatus />}
+      {/* Order Status */}
+      <ActivityOrderStatus />
 
       {/* Food Waste Saved Chart */}
       {hasMonthlyData && (
