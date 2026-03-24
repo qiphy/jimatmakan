@@ -68,8 +68,8 @@ const CheckoutPage = () => {
       buyer_id: session.user.id,
       vendor_id: listing.vendor_id,
       listing_id: listing.id,
-      quantity,
-      weight_kg: weightTotal,
+      quantity: Math.ceil(selectedWeight / listing.weight_kg),
+      weight_kg: selectedWeight,
       total_price: subtotal,
       status: "pending",
     });
