@@ -183,6 +183,11 @@ const translations = {
     esgTotal: "Total",
     esgPayAndDownload: "Pay & Download Report",
     sellerPhone: "Seller's Phone",
+    halalVerification: "Halal Verification",
+    halalCertified: "Halal Certified",
+    halalDesc: "Verify that your business is Halal certified",
+    halalEnabled: "Halal status verified",
+    halalDisabled: "Halal status removed",
   },
   ms: {
     appName: "JimatMakan",
