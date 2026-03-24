@@ -14,6 +14,7 @@ import ListItemPage from "./pages/ListItemPage.tsx";
 import CheckoutPage from "./pages/CheckoutPage.tsx";
 import MyOrdersPage from "./pages/MyOrdersPage.tsx";
 import ESGCheckoutPage from "./pages/ESGCheckoutPage.tsx";
+import AdminHalalPage from "./pages/AdminHalalPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
