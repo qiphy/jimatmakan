@@ -115,7 +115,7 @@ const ESGCheckoutPage = () => {
           </div>
           {monthly.length > 0 && (
             <p className="text-xs text-muted-foreground mt-3 border-t border-border pt-2">
-              {t("esgMonthlyBreakdown", monthly.length)}
+              {t("esgMonthlyBreakdown")}
             </p>
           )}
         </div>

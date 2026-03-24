@@ -354,6 +354,14 @@ const translations = {
     notifOrdersCompleted: "pesanan selesai",
     notifSaved: "dijimatkan setakat ini",
     notifKeepSaving: "Terus jimat dengan JimatMakan!",
+    esgCheckout: "Pembayaran Laporan ESG",
+    esgPurchaseSuccess: "Laporan Dimuat Turun!",
+    esgPurchaseSuccessDesc: "Laporan Impak ESG anda telah dijana dan dimuat turun ke peranti anda.",
+    backToActivity: "Kembali ke Aktiviti",
+    esgReportIncludes: "Laporan termasuk",
+    esgMonthlyBreakdown: "Termasuk data pecahan bulanan",
+    esgTotal: "Jumlah",
+    esgPayAndDownload: "Bayar & Muat Turun Laporan",
   },
 } as const;
 

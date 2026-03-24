@@ -202,7 +202,7 @@ const ActivityPage = () => {
                 <p className="text-xs text-muted-foreground mt-1 font-body leading-relaxed">{t("esgReportDesc")}</p>
               </div>
             </div>
-            <button onClick={handleGenerateESG} className="mt-4 w-full rounded-xl bg-primary text-primary-foreground py-3 text-sm font-medium font-body">
+            <button onClick={() => navigate("/esg-checkout")} className="mt-4 w-full rounded-xl bg-primary text-primary-foreground py-3 text-sm font-medium font-body">
               {t("esgReportBtn")} — RM30
             </button>
           </div>
