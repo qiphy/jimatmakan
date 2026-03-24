@@ -188,6 +188,8 @@ const translations = {
     halalDesc: "Verify that your business is Halal certified",
     halalEnabled: "Halal status verified",
     halalDisabled: "Halal status removed",
+    stockAvailable: "available",
+    totalWeight: "Total weight",
   },
   ms: {
     appName: "JimatMakan",
