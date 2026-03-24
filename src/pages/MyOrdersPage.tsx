@@ -116,6 +116,7 @@ const MyOrdersPage = () => {
           created_at: o.created_at,
           listing_title: listingMap[o.listing_id]?.title || "Unknown Item",
           vendor_name: vendorMap[o.vendor_id]?.business_name || vendorMap[o.vendor_id]?.full_name || "Vendor",
+          vendor_phone: vendorMap[o.vendor_id]?.phone || "",
           pickup_address: listingMap[o.listing_id]?.pickup_address || null,
           pickup_lat: KL_CENTER.lat + (Math.random() - 0.5) * 0.01,
           pickup_lng: KL_CENTER.lng + (Math.random() - 0.5) * 0.01,
