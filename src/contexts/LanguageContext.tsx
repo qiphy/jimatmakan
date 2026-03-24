@@ -152,6 +152,8 @@ const translations = {
     pending: "Pending",
     completed: "Completed",
     cancelled: "Cancelled",
+    yourOrders: "Your Orders",
+    viewAllOrders: "View All",
   },
   ms: {
     appName: "JimatMakan",
@@ -302,6 +304,8 @@ const translations = {
     pending: "Menunggu",
     completed: "Selesai",
     cancelled: "Dibatalkan",
+    yourOrders: "Pesanan Anda",
+    viewAllOrders: "Lihat Semua",
   },
 } as const;
 

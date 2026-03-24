@@ -1,4 +1,5 @@
 import { FileText, TrendingDown, Leaf, ShoppingBag, DollarSign, Package } from "lucide-react";
+import ActivityOrderStatus from "@/components/ActivityOrderStatus";
 import {
   AreaChart,
   Area,
@@ -134,6 +135,9 @@ const ActivityPage = () => {
           <p className="text-[10px] text-muted-foreground">{t("co2Reduced")}</p>
         </div>
       </div>
+
+      {/* User Order Status */}
+      {!isVendor && <ActivityOrderStatus />}
 
       {/* Food Waste Saved Chart */}
       {hasMonthlyData && (
