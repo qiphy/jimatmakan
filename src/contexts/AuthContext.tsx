@@ -11,6 +11,7 @@ export interface UserProfile {
   businessName?: string;
   email: string;
   halalVerified?: boolean;
+  halalCertUrl?: string;
 }
 
 interface AuthContextType {
