@@ -57,6 +57,9 @@ const ActivityPage = () => {
             </div>
           </div>
 
+          {/* Order Status - right after summary */}
+          <ActivityOrderStatus />
+
           {/* Revenue Chart */}
           {hasMonthlyData && (
             <div className="px-4 py-3">
@@ -119,22 +122,8 @@ const ActivityPage = () => {
         </>
       )}
 
-      {/* Impact Summary */}
-      <div className="px-4 py-2 flex gap-3">
-        <div className="flex-1 rounded-2xl bg-primary/10 border border-primary/20 p-4 text-center">
-          <Leaf className="h-5 w-5 text-primary mx-auto mb-1" />
-          <span className="text-2xl font-bold font-display text-primary block">{totalFood}</span>
-          <p className="text-[10px] text-muted-foreground">{t("foodSaved")}</p>
-        </div>
-        <div className="flex-1 rounded-2xl bg-secondary border border-border p-4 text-center">
-          <TrendingDown className="h-5 w-5 text-primary mx-auto mb-1" />
-          <span className="text-2xl font-bold font-display text-primary block">{totalCO2}</span>
-          <p className="text-[10px] text-muted-foreground">{t("co2Reduced")}</p>
-        </div>
-      </div>
-
-      {/* Order Status */}
-      <ActivityOrderStatus />
+      {/* Non-vendor: show orders after impact */}
+      {!isVendor && <ActivityOrderStatus />}
 
       {/* Food Waste Saved Chart */}
       {hasMonthlyData && (
