@@ -152,6 +152,8 @@ const translations = {
     pending: "Pending",
     completed: "Completed",
     cancelled: "Cancelled",
+    yourOrders: "Your Orders",
+    viewAllOrders: "View All",
   },
   ms: {
     appName: "JimatMakan",
