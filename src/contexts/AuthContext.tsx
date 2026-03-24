@@ -50,7 +50,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         businessName: data.business_name ?? undefined,
         email: data.email,
         halalVerified: data.halal_verified ?? false,
-        halalCertUrl: data.halal_cert_url ?? undefined,
+        halalCertUrl: (data as any).halal_cert_url ?? undefined,
+        halalStatus: ((data as any).halal_status ?? "none") as HalalStatus,
       });
     }
   }, []);
