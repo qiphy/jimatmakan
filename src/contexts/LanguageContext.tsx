@@ -154,6 +154,12 @@ const translations = {
     cancelled: "Cancelled",
     yourOrders: "Your Orders",
     viewAllOrders: "View All",
+    confirmPickup: "Confirm Pickup",
+    confirmPickupTitle: "Confirm Order Pickup",
+    confirmPickupDesc: "Have you picked up this order?",
+    yes: "Yes, I've picked it up",
+    no: "Not yet",
+    orderCompleted: "Order marked as completed!",
   },
   ms: {
     appName: "JimatMakan",
