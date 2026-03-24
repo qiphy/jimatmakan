@@ -376,6 +376,8 @@ const translations = {
     halalDesc: "Sahkan perniagaan anda mempunyai sijil Halal",
     halalEnabled: "Status Halal disahkan",
     halalDisabled: "Status Halal dikeluarkan",
+    stockAvailable: "tersedia",
+    totalWeight: "Jumlah berat",
   },
 } as const;
 
