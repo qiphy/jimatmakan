@@ -197,6 +197,17 @@ const MyOrdersPage = () => {
                         </p>
                       </div>
                     </div>
+                    {order.vendor_phone && (
+                      <div className="flex items-start gap-2">
+                        <Phone className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                        <div>
+                          <p className="text-xs font-medium text-card-foreground">{t("sellerPhone")}</p>
+                          <a href={`tel:${order.vendor_phone}`} className="text-xs text-primary underline">
+                            {order.vendor_phone}
+                          </a>
+                        </div>
+                      </div>
+                    )}
                     {order.pickup_lat && order.pickup_lng && (
                       <PickupMap lat={order.pickup_lat} lng={order.pickup_lng} />
                     )}
