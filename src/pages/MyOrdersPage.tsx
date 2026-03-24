@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Package, MapPin, Clock, CheckCircle2, XCircle } from "lucide-react";
+import { ArrowLeft, Package, MapPin, Clock, CheckCircle2, XCircle, Phone } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -28,6 +28,7 @@ interface OrderWithDetails {
   created_at: string;
   listing_title: string;
   vendor_name: string;
+  vendor_phone: string;
   pickup_address: string | null;
   pickup_lat: number | null;
   pickup_lng: number | null;
@@ -99,7 +100,7 @@ const MyOrdersPage = () => {
 
       const [{ data: listings }, { data: vendors }] = await Promise.all([
         supabase.from("listings").select("id, title, pickup_address").in("id", listingIds),
-        supabase.from("profiles").select("id, business_name, full_name").in("id", vendorIds),
+        supabase.from("profiles").select("id, business_name, full_name, phone").in("id", vendorIds),
       ]);
 
       const listingMap = Object.fromEntries((listings || []).map((l) => [l.id, l]));
@@ -115,6 +116,7 @@ const MyOrdersPage = () => {
           created_at: o.created_at,
           listing_title: listingMap[o.listing_id]?.title || "Unknown Item",
           vendor_name: vendorMap[o.vendor_id]?.business_name || vendorMap[o.vendor_id]?.full_name || "Vendor",
+          vendor_phone: vendorMap[o.vendor_id]?.phone || "",
           pickup_address: listingMap[o.listing_id]?.pickup_address || null,
           pickup_lat: KL_CENTER.lat + (Math.random() - 0.5) * 0.01,
           pickup_lng: KL_CENTER.lng + (Math.random() - 0.5) * 0.01,
@@ -195,6 +197,17 @@ const MyOrdersPage = () => {
                         </p>
                       </div>
                     </div>
+                    {order.vendor_phone && (
+                      <div className="flex items-start gap-2">
+                        <Phone className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                        <div>
+                          <p className="text-xs font-medium text-card-foreground">{t("sellerPhone")}</p>
+                          <a href={`tel:${order.vendor_phone}`} className="text-xs text-primary underline">
+                            {order.vendor_phone}
+                          </a>
+                        </div>
+                      </div>
+                    )}
                     {order.pickup_lat && order.pickup_lng && (
                       <PickupMap lat={order.pickup_lat} lng={order.pickup_lng} />
                     )}
