@@ -1,4 +1,5 @@
 import { Timer, Recycle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useCountdown } from "@/hooks/useCountdown";
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { SupabaseListing } from "@/hooks/useListings";
