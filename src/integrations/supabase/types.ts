@@ -157,6 +157,7 @@ export type Database = {
           created_at: string
           email: string
           full_name: string
+          halal_verified: boolean
           id: string
           phone: string
           role: Database["public"]["Enums"]["app_role"]
@@ -167,6 +168,7 @@ export type Database = {
           created_at?: string
           email?: string
           full_name?: string
+          halal_verified?: boolean
           id: string
           phone?: string
           role?: Database["public"]["Enums"]["app_role"]
@@ -177,6 +179,7 @@ export type Database = {
           created_at?: string
           email?: string
           full_name?: string
+          halal_verified?: boolean
           id?: string
           phone?: string
           role?: Database["public"]["Enums"]["app_role"]

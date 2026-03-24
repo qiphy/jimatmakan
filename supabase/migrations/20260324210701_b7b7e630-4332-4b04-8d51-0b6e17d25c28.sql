@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN halal_verified boolean NOT NULL DEFAULT false;

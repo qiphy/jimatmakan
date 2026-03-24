@@ -10,6 +10,7 @@ export interface UserProfile {
   role: UserRole;
   businessName?: string;
   email: string;
+  halalVerified?: boolean;
 }
 
 interface AuthContextType {
@@ -44,6 +45,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         role: data.role as UserRole,
         businessName: data.business_name ?? undefined,
         email: data.email,
+        halalVerified: data.halal_verified ?? false,
       });
     }
   }, []);
@@ -104,6 +106,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (updates.role !== undefined) dbUpdates.role = updates.role;
     if (updates.businessName !== undefined) dbUpdates.business_name = updates.businessName;
     if (updates.email !== undefined) dbUpdates.email = updates.email;
+    if (updates.halalVerified !== undefined) dbUpdates.halal_verified = updates.halalVerified;
     dbUpdates.updated_at = new Date().toISOString();
 
     await supabase.from("profiles").update(dbUpdates).eq("id", session.user.id);
