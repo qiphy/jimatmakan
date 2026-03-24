@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import BottomNav from "@/components/BottomNav";
+import HalalVerificationSection from "@/components/HalalVerificationSection";
 import LanguageToggle from "@/components/LanguageToggle";
 import { toast } from "sonner";
 import {
