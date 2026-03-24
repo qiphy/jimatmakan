@@ -4,6 +4,8 @@ import type { User, Session } from "@supabase/supabase-js";
 
 export type UserRole = "vendor" | "user" | "composter";
 
+export type HalalStatus = "none" | "pending" | "approved" | "rejected";
+
 export interface UserProfile {
   fullName: string;
   phone: string;
@@ -12,6 +14,7 @@ export interface UserProfile {
   email: string;
   halalVerified?: boolean;
   halalCertUrl?: string;
+  halalStatus?: HalalStatus;
 }
 
 interface AuthContextType {
