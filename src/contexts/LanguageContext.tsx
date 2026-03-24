@@ -182,6 +182,7 @@ const translations = {
     esgMonthlyBreakdown: "Includes monthly breakdown data",
     esgTotal: "Total",
     esgPayAndDownload: "Pay & Download Report",
+    sellerPhone: "Seller's Phone",
   },
   ms: {
     appName: "JimatMakan",
