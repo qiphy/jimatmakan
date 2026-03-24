@@ -10,6 +10,7 @@ export interface UserProfile {
   role: UserRole;
   businessName?: string;
   email: string;
+  halalVerified?: boolean;
 }
 
 interface AuthContextType {
