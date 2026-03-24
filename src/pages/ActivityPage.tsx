@@ -23,18 +23,7 @@ const ActivityPage = () => {
   const { monthly, recentSales, totalRevenue, totalOrders, totalFood, totalCO2, loading } = useActivityData();
   const isVendor = user?.role === "vendor";
   const showESG = user?.role === "vendor" || user?.role === "composter";
-
-  const handleGenerateESG = () => {
-    generateESGReport({
-      userName: user?.fullName || "User",
-      totalFood,
-      totalCO2,
-      totalOrders,
-      totalRevenue,
-      monthly,
-    });
-    toast.success(t("esgReportGenerated"));
-  };
+  const navigate = useNavigate();
 
   if (loading) {
     return (
