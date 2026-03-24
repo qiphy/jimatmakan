@@ -159,32 +159,79 @@ const CheckoutPage = () => {
           </div>
         </div>
 
-        {/* Quantity selector */}
+        {/* Amount selector */}
         <div className="rounded-xl border border-border bg-card p-4">
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-medium text-card-foreground">{t("quantity")}</p>
-            <span className="text-xs text-muted-foreground">{listing.quantity} {t("stockAvailable")}</span>
+          <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center gap-2">
+              <Scale className="h-4 w-4 text-primary" />
+              <p className="text-sm font-medium text-card-foreground">{t("selectAmount")}</p>
+            </div>
+            <span className="text-xs text-muted-foreground">{t("maxAvailable")}: {maxWeight.toFixed(1)} kg</span>
           </div>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setQuantity(q => Math.max(1, q - 1))}
-              className="h-9 w-9 rounded-lg border border-border flex items-center justify-center text-foreground disabled:opacity-40"
-              disabled={quantity <= 1}
-            >
-              <Minus className="h-4 w-4" />
-            </button>
-            <span className="text-lg font-semibold text-foreground w-8 text-center">{quantity}</span>
-            <button
-              onClick={() => setQuantity(q => Math.min(listing.quantity, q + 1))}
-              className="h-9 w-9 rounded-lg border border-border flex items-center justify-center text-foreground disabled:opacity-40"
-              disabled={quantity >= listing.quantity}
-            >
-              <Plus className="h-4 w-4" />
-            </button>
+
+          {/* Slider */}
+          <div className="mt-4 px-1">
+            <Slider
+              value={[selectedWeight]}
+              min={0.1}
+              max={maxWeight}
+              step={0.1}
+              onValueChange={([val]) => setCustomWeight(Math.round(val * 10) / 10)}
+            />
           </div>
-          <p className="text-xs text-muted-foreground mt-2">
-            {t("totalWeight")}: {weightTotal.toFixed(1)} kg
-          </p>
+
+          {/* Weight input + quick picks */}
+          <div className="flex items-center gap-3 mt-4">
+            <div className="flex items-center gap-1.5 flex-1">
+              <Input
+                type="number"
+                min={0.1}
+                max={maxWeight}
+                step={0.1}
+                value={selectedWeight}
+                onChange={(e) => {
+                  const v = Math.min(maxWeight, Math.max(0.1, parseFloat(e.target.value) || 0.1));
+                  setCustomWeight(Math.round(v * 10) / 10);
+                }}
+                className="h-9 text-center font-semibold"
+              />
+              <span className="text-sm text-muted-foreground font-medium">kg</span>
+            </div>
+          </div>
+
+          {/* Quick select buttons */}
+          {maxWeight >= 0.5 && (
+            <div className="flex gap-2 mt-3 flex-wrap">
+              {[0.5, 1, 2, 5].filter(w => w <= maxWeight).map(w => (
+                <button
+                  key={w}
+                  onClick={() => setCustomWeight(w)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                    selectedWeight === w
+                      ? "border-primary bg-secondary text-foreground"
+                      : "border-border text-muted-foreground hover:border-primary/40"
+                  }`}
+                >
+                  {w} kg
+                </button>
+              ))}
+              <button
+                onClick={() => setCustomWeight(maxWeight)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                  selectedWeight === maxWeight
+                    ? "border-primary bg-secondary text-foreground"
+                    : "border-border text-muted-foreground hover:border-primary/40"
+                }`}
+              >
+                {t("allStock")}
+              </button>
+            </div>
+          )}
+
+          <div className="flex justify-between mt-3 pt-2 border-t border-border">
+            <span className="text-xs text-muted-foreground">{t("estimatedPrice")}</span>
+            <span className="text-sm font-semibold text-primary">RM{subtotal.toFixed(2)}</span>
+          </div>
         </div>
 
         {/* Payment */}
