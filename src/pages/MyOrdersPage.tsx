@@ -5,6 +5,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import BottomNav from "@/components/BottomNav";
+import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -66,6 +77,8 @@ const MyOrdersPage = () => {
   const [orders, setOrders] = useState<OrderWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [confirmOrderId, setConfirmOrderId] = useState<string | null>(null);
+  const [confirming, setConfirming] = useState(false);
 
   useEffect(() => {
     if (!session?.user) return;
@@ -185,6 +198,18 @@ const MyOrdersPage = () => {
                     {order.pickup_lat && order.pickup_lng && (
                       <PickupMap lat={order.pickup_lat} lng={order.pickup_lng} />
                     )}
+                    {order.status === "pending" && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setConfirmOrderId(order.id);
+                        }}
+                        className="w-full rounded-xl bg-primary text-primary-foreground py-2.5 text-sm font-medium font-body flex items-center justify-center gap-2"
+                      >
+                        <CheckCircle2 className="h-4 w-4" />
+                        {t("confirmPickup")}
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
@@ -192,6 +217,37 @@ const MyOrdersPage = () => {
           })
         )}
       </div>
+
+      <AlertDialog open={!!confirmOrderId} onOpenChange={(open) => !open && setConfirmOrderId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("confirmPickupTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("confirmPickupDesc")}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={confirming}>{t("no")}</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={confirming}
+              onClick={async () => {
+                if (!confirmOrderId) return;
+                setConfirming(true);
+                await supabase
+                  .from("orders")
+                  .update({ status: "completed" })
+                  .eq("id", confirmOrderId);
+                setOrders((prev) =>
+                  prev.map((o) => o.id === confirmOrderId ? { ...o, status: "completed" } : o)
+                );
+                toast.success(t("orderCompleted"));
+                setConfirmOrderId(null);
+                setConfirming(false);
+              }}
+            >
+              {t("yes")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <BottomNav />
     </div>

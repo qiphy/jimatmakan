@@ -154,6 +154,12 @@ const translations = {
     cancelled: "Cancelled",
     yourOrders: "Your Orders",
     viewAllOrders: "View All",
+    confirmPickup: "Confirm Pickup",
+    confirmPickupTitle: "Confirm Order Pickup",
+    confirmPickupDesc: "Have you picked up this order?",
+    yes: "Yes, I've picked it up",
+    no: "Not yet",
+    orderCompleted: "Order marked as completed!",
   },
   ms: {
     appName: "JimatMakan",
@@ -306,6 +312,12 @@ const translations = {
     cancelled: "Dibatalkan",
     yourOrders: "Pesanan Anda",
     viewAllOrders: "Lihat Semua",
+    confirmPickup: "Sahkan Pengambilan",
+    confirmPickupTitle: "Sahkan Pengambilan Pesanan",
+    confirmPickupDesc: "Adakah anda sudah mengambil pesanan ini?",
+    yes: "Ya, saya sudah ambil",
+    no: "Belum lagi",
+    orderCompleted: "Pesanan ditandakan selesai!",
   },
 } as const;
 
