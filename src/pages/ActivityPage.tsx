@@ -15,8 +15,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useActivityData } from "@/hooks/useActivityData";
 import BottomNav from "@/components/BottomNav";
-import { toast } from "sonner";
-import { generateESGReport } from "@/utils/generateESGReport";
+import { useNavigate } from "react-router-dom";
 
 const ActivityPage = () => {
   const { t } = useLanguage();
