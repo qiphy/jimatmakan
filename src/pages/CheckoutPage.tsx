@@ -54,9 +54,12 @@ const CheckoutPage = () => {
     })();
   }, [listingId]);
 
-  const subtotal = listing ? listing.discounted_price * quantity : 0;
-  const savings = listing ? (listing.original_price - listing.discounted_price) * quantity : 0;
-  const weightTotal = listing ? listing.weight_kg * quantity : 0;
+  const maxWeight = listing ? listing.weight_kg * listing.quantity : 0;
+  const selectedWeight = customWeight !== null ? customWeight : (listing ? listing.weight_kg * quantity : 0);
+  const pricePerKg = listing && listing.weight_kg > 0 ? listing.discounted_price / listing.weight_kg : 0;
+  const originalPricePerKg = listing && listing.weight_kg > 0 ? listing.original_price / listing.weight_kg : 0;
+  const subtotal = pricePerKg * selectedWeight;
+  const savings = (originalPricePerKg - pricePerKg) * selectedWeight;
 
   const placeOrder = async () => {
     if (!session?.user || !listing) return;
