@@ -158,6 +158,7 @@ export type Database = {
           email: string
           full_name: string
           halal_cert_url: string | null
+          halal_status: string
           halal_verified: boolean
           id: string
           phone: string
@@ -170,6 +171,7 @@ export type Database = {
           email?: string
           full_name?: string
           halal_cert_url?: string | null
+          halal_status?: string
           halal_verified?: boolean
           id: string
           phone?: string
@@ -182,6 +184,7 @@ export type Database = {
           email?: string
           full_name?: string
           halal_cert_url?: string | null
+          halal_status?: string
           halal_verified?: boolean
           id?: string
           phone?: string
