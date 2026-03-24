@@ -259,7 +259,7 @@ const CheckoutPage = () => {
         <div className="rounded-xl border border-border bg-card p-4 space-y-2">
           <p className="text-sm font-medium text-card-foreground">{t("orderSummary")}</p>
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">{t("subtotal")} ({quantity}×)</span>
+            <span className="text-muted-foreground">{selectedWeight.toFixed(1)} kg × RM{pricePerKg.toFixed(2)}/kg</span>
             <span className="text-foreground font-semibold">RM{subtotal.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-sm">
@@ -267,8 +267,8 @@ const CheckoutPage = () => {
             <span className="text-primary font-semibold">-RM{savings.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-sm pt-1 border-t border-border">
-            <span className="text-muted-foreground">{t("quantityLabel")}</span>
-            <span className="text-foreground">{weightTotal.toFixed(1)} kg</span>
+            <span className="text-muted-foreground">{t("totalWeight")}</span>
+            <span className="text-foreground font-semibold">{selectedWeight.toFixed(1)} kg</span>
           </div>
         </div>
 
