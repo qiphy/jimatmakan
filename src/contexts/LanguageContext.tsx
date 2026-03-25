@@ -104,6 +104,7 @@ const translations = {
     locationRequired: "Location is required for vendors and composters.",
     locationLabel: "Location",
     locationPlaceholder: "e.g. Petaling Jaya, Selangor",
+    searchLocation: "Search road, business, area...",
     demoAccounts: "Quick demo access",
     otpTitle: "Verify your phone",
     otpSentTo: "OTP sent to",
