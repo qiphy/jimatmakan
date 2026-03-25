@@ -57,7 +57,7 @@ const ActivityPage = () => {
 
         <Tile
           icon={<ShoppingBag className="h-6 w-6 text-primary" />}
-          label={t("browseListing")}
+          label={t("browse")}
           onClick={() => navigate("/browse")}
         />
       </div>
