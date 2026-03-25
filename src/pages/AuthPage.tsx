@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import LanguageToggle from "@/components/LanguageToggle";
 import { Leaf, ArrowLeft, Store, User, Recycle, MapPin } from "lucide-react";
+import LocationPicker, { DEFAULT_CENTER } from "@/components/LocationPicker";
 
 type AuthStep = "choose" | "login" | "signup";
 
@@ -32,6 +33,8 @@ const AuthPage = () => {
   const [businessName, setBusinessName] = useState("");
   const [location, setLocation] = useState("");
   const [password, setPassword] = useState("");
+  const [locationPickerOpen, setLocationPickerOpen] = useState(false);
+  const [mapLocation, setMapLocation] = useState({ lat: DEFAULT_CENTER[0], lng: DEFAULT_CENTER[1], name: "" });
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -218,7 +221,22 @@ const AuthPage = () => {
                 <Label htmlFor="location">
                   <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{t("locationLabel")}</span>
                 </Label>
-                <Input id="location" value={location} onChange={(e) => setLocation(e.target.value)} placeholder={t("locationPlaceholder")} />
+                <div className="flex gap-2">
+                  <Input id="location" className="flex-1" value={location} onChange={(e) => setLocation(e.target.value)} placeholder={t("locationPlaceholder")} />
+                  <Button type="button" variant="outline" size="icon" className="shrink-0" onClick={() => setLocationPickerOpen(true)}>
+                    <MapPin className="h-4 w-4" />
+                  </Button>
+                </div>
+                <LocationPicker
+                  open={locationPickerOpen}
+                  onClose={() => setLocationPickerOpen(false)}
+                  location={mapLocation}
+                  onLocationChange={(loc) => {
+                    setMapLocation(loc);
+                    setLocation(loc.name);
+                    setLocationPickerOpen(false);
+                  }}
+                />
               </div>
             )}
 
