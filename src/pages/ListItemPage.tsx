@@ -116,6 +116,7 @@ const ListItemPage = () => {
       setReducedPrice("");
       setWeightKg("");
       setPreviewUrl(null);
+      setPickupLocation({ lat: DEFAULT_CENTER[0], lng: DEFAULT_CENTER[1], name: "" });
       toast.success(t("listingCreated"));
       refetch();
     }
