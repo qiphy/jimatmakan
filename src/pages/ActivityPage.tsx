@@ -171,6 +171,26 @@ const ActivityPage = () => {
             </div>
           )}
 
+          {/* Sustainability Statistics Bubble */}
+          <div className="px-4 py-2">
+            <button
+              onClick={() => setShowSustainability(!showSustainability)}
+              className="w-full flex items-center gap-3 rounded-2xl bg-primary/10 border border-primary/20 px-4 py-3 transition-colors hover:bg-primary/15"
+            >
+              <Leaf className="h-4 w-4 text-primary flex-shrink-0" />
+              <span className="text-xs font-bold font-display text-primary">Sustainability Statistics</span>
+              <span className="text-[10px] text-muted-foreground ml-auto mr-1">{totalFood.toFixed(1)} kg · {totalCO2.toFixed(1)} kg CO2</span>
+              {showSustainability ? (
+                <ChevronUp className="h-4 w-4 text-primary flex-shrink-0" />
+              ) : (
+                <ChevronDown className="h-4 w-4 text-primary flex-shrink-0" />
+              )}
+            </button>
+          </div>
+
+          {/* Sustainability Content (collapsible) */}
+          {showSustainability && sustainabilityContent}
+
           {/* Recent Sales */}
           {recentSales.length > 0 && (
             <div className="px-4 py-2">
@@ -199,31 +219,27 @@ const ActivityPage = () => {
         </>
       )}
 
-      {/* Sustainability Statistics Toggle Button */}
-      <div className="px-4 py-3">
-        <button
-          onClick={() => setShowSustainability(!showSustainability)}
-          className="w-full flex items-center justify-between rounded-2xl bg-card border border-border p-4 transition-colors hover:bg-secondary/50"
-        >
-          <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-primary/10 p-2.5">
-              <BarChart3 className="h-5 w-5 text-primary" />
-            </div>
-            <div className="text-left">
-              <h3 className="font-display font-bold text-sm text-foreground">Sustainability Statistics</h3>
-              <p className="text-xs text-muted-foreground mt-0.5">{t("foodSaved")}: {totalFood.toFixed(1)} kg · {t("co2Reduced")}: {totalCO2.toFixed(1)} kg</p>
-            </div>
+      {/* Non-vendor: sustainability bubble */}
+      {!isVendor && (
+        <>
+          <div className="px-4 py-2">
+            <button
+              onClick={() => setShowSustainability(!showSustainability)}
+              className="w-full flex items-center gap-3 rounded-2xl bg-primary/10 border border-primary/20 px-4 py-3 transition-colors hover:bg-primary/15"
+            >
+              <Leaf className="h-4 w-4 text-primary flex-shrink-0" />
+              <span className="text-xs font-bold font-display text-primary">Sustainability Statistics</span>
+              <span className="text-[10px] text-muted-foreground ml-auto mr-1">{totalFood.toFixed(1)} kg · {totalCO2.toFixed(1)} kg CO2</span>
+              {showSustainability ? (
+                <ChevronUp className="h-4 w-4 text-primary flex-shrink-0" />
+              ) : (
+                <ChevronDown className="h-4 w-4 text-primary flex-shrink-0" />
+              )}
+            </button>
           </div>
-          {showSustainability ? (
-            <ChevronUp className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-          ) : (
-            <ChevronDown className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-          )}
-        </button>
-      </div>
-
-      {/* Sustainability Content (collapsible) */}
-      {showSustainability && sustainabilityContent}
+          {showSustainability && sustainabilityContent}
+        </>
+      )}
 
       {/* Your Orders */}
       <ActivityOrderStatus />
