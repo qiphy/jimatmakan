@@ -322,6 +322,7 @@ const translations = {
     locationRequired: "Lokasi diperlukan untuk peniaga dan pengkompos.",
     locationLabel: "Lokasi",
     locationPlaceholder: "cth. Petaling Jaya, Selangor",
+    searchLocation: "Cari jalan, perniagaan, kawasan...",
     demoAccounts: "Akses demo pantas",
     otpTitle: "Sahkan telefon anda",
     otpSentTo: "OTP dihantar ke",
