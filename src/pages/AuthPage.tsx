@@ -220,7 +220,7 @@ const AuthPage = () => {
                 </Label>
                 <Input id="location" value={location} onChange={(e) => setLocation(e.target.value)} placeholder={t("locationPlaceholder")} />
               </div>
-            )
+            )}
 
             <div className="space-y-2">
               <Label htmlFor="signup-email">{t("emailLabel")}</Label>
