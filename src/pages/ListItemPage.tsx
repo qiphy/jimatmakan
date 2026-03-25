@@ -27,7 +27,8 @@ const ListItemPage = () => {
   const [category, setCategory] = useState("");
   const [originalPrice, setOriginalPrice] = useState("");
   const [reducedPrice, setReducedPrice] = useState("");
-  const [weightKg, setWeightKg] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [unitWeightKg, setUnitWeightKg] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
