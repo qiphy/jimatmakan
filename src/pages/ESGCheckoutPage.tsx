@@ -124,23 +124,37 @@ const ESGCheckoutPage = () => {
 
         {/* Payment */}
         <div className="rounded-xl border border-border bg-card p-4">
-          <p className="text-sm font-medium text-card-foreground mb-3">{t("selectPayment")}</p>
-          <div className="space-y-2">
-            {paymentOptions.map(opt => (
-              <button
-                key={opt.id}
-                onClick={() => setPayment(opt.id)}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border text-sm transition-colors ${
-                  payment === opt.id
-                    ? "border-primary bg-secondary text-foreground"
-                    : "border-border text-muted-foreground"
-                }`}
-              >
-                {opt.icon}
-                <span>{opt.label}</span>
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-sm font-medium text-card-foreground">{t("selectPayment")}</p>
+            {!hasPaymentMethods && (
+              <button onClick={() => navigate("/profile")} className="text-xs text-primary font-medium">
+                {t("addPayment")}
               </button>
-            ))}
+            )}
           </div>
+          {hasPaymentMethods ? (
+            <div className="space-y-2">
+              {savedPayments.map(pm => (
+                <button
+                  key={pm.id}
+                  onClick={() => setPayment(pm.id)}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border text-sm transition-colors ${
+                    payment === pm.id
+                      ? "border-primary bg-secondary text-foreground"
+                      : "border-border text-muted-foreground"
+                  }`}
+                >
+                  {PAYMENT_ICON[pm.type] || <Wallet className="h-4 w-4" />}
+                  <div className="text-left">
+                    <span className="block">{pm.nickname}</span>
+                    <span className="text-xs text-muted-foreground">{pm.detail}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">{t("noPayments")}</p>
+          )}
         </div>
 
         {/* Order summary */}
