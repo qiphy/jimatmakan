@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
 
-export type UserRole = "vendor" | "user" | "composter";
+export type UserRole = "vendor" | "user" | "composter" | "admin";
 
 export type HalalStatus = "none" | "pending" | "approved" | "rejected";
 
