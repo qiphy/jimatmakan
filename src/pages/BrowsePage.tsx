@@ -65,7 +65,7 @@ const BrowsePage = () => {
   const now = Date.now();
   const available = filtered.filter((l) => {
     const end = l.pickup_end ? new Date(l.pickup_end).getTime() : new Date(l.created_at).getTime() + 2 * 3600000;
-    return end > now && l.status === "active";
+    return end > now && l.status === "active" && l.quantity > 0;
   });
   const expired = filtered.filter((l) => {
     const end = l.pickup_end ? new Date(l.pickup_end).getTime() : new Date(l.created_at).getTime() + 2 * 3600000;
