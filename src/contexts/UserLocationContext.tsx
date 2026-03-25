@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState } from "react";
-import { DEFAULT_CENTER } from "@/components/LocationPicker";
 
 interface UserLocation {
   lat: number;
