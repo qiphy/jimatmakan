@@ -1,4 +1,5 @@
-import { FileText, TrendingDown, Leaf, ShoppingBag, DollarSign, Package } from "lucide-react";
+import { useState } from "react";
+import { FileText, TrendingDown, Leaf, ShoppingBag, DollarSign, Package, ChevronDown, ChevronUp, BarChart3 } from "lucide-react";
 import ActivityOrderStatus from "@/components/ActivityOrderStatus";
 import {
   AreaChart,
@@ -24,6 +25,7 @@ const ActivityPage = () => {
   const isVendor = user?.role === "vendor";
   const showESG = user?.role === "vendor" || user?.role === "composter";
   const navigate = useNavigate();
+  const [showSustainability, setShowSustainability] = useState(false);
 
   if (loading) {
     return (
@@ -34,6 +36,84 @@ const ActivityPage = () => {
   }
 
   const hasMonthlyData = monthly.length > 0;
+
+  // Sustainability content (shared between vendor and non-vendor)
+  const sustainabilityContent = (
+    <>
+      {/* Food Waste Saved Chart */}
+      {hasMonthlyData && (
+        <div className="px-4 py-3">
+          <div className="rounded-2xl bg-card border border-border p-4">
+            <h2 className="font-display font-bold text-sm text-foreground mb-3">
+              {t("foodSavedChart")}
+            </h2>
+            <ResponsiveContainer width="100%" height={180}>
+              <AreaChart data={monthly}>
+                <defs>
+                  <linearGradient id="foodGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="month" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} />
+                <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} width={30} />
+                <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
+                <Area type="monotone" dataKey="foodSaved" stroke="hsl(var(--primary))" fill="url(#foodGrad)" strokeWidth={2} name={t("foodSaved")} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
+
+      {/* CO2 Reduced Chart */}
+      {hasMonthlyData && (
+        <div className="px-4 py-2">
+          <div className="rounded-2xl bg-card border border-border p-4">
+            <h2 className="font-display font-bold text-sm text-foreground mb-3">
+              {t("co2ReducedChart")}
+            </h2>
+            <ResponsiveContainer width="100%" height={180}>
+              <BarChart data={monthly}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="month" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} />
+                <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} width={30} />
+                <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
+                <Bar dataKey="co2Reduced" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} name={t("co2Reduced")} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
+
+      {/* No data message */}
+      {!hasMonthlyData && (
+        <div className="px-4 py-6 text-center">
+          <p className="text-sm text-muted-foreground">{t("noActivityYet")}</p>
+        </div>
+      )}
+
+      {/* ESG Report */}
+      {showESG && (
+        <div className="px-4 py-3">
+          <div className="rounded-2xl bg-card border border-border p-5">
+            <div className="flex items-start gap-3">
+              <div className="rounded-xl bg-primary/10 p-2.5">
+                <FileText className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-display font-bold text-sm text-foreground">{t("esgReportTitle")}</h3>
+                <p className="text-xs text-muted-foreground mt-1 font-body leading-relaxed">{t("esgReportDesc")}</p>
+              </div>
+            </div>
+            <button onClick={() => navigate("/esg-checkout")} className="mt-4 w-full rounded-xl bg-primary text-primary-foreground py-3 text-sm font-medium font-body">
+              {t("esgReportBtn")} — RM30
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -56,9 +136,6 @@ const ActivityPage = () => {
               <p className="text-[10px] text-muted-foreground">{t("totalOrders")}</p>
             </div>
           </div>
-
-          {/* Order Status - right after summary */}
-          <ActivityOrderStatus />
 
           {/* Revenue Chart */}
           {hasMonthlyData && (
@@ -122,85 +199,37 @@ const ActivityPage = () => {
         </>
       )}
 
-      {/* Non-vendor: show orders after impact */}
-      {!isVendor && <ActivityOrderStatus />}
-
-      {/* Food Waste Saved Chart */}
-      {hasMonthlyData && (
-        <div className="px-4 py-3">
-          <div className="rounded-2xl bg-card border border-border p-4">
-            <h2 className="font-display font-bold text-sm text-foreground mb-3">
-              {t("foodSavedChart")}
-            </h2>
-            <ResponsiveContainer width="100%" height={180}>
-              <AreaChart data={monthly}>
-                <defs>
-                  <linearGradient id="foodGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="month" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} />
-                <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} width={30} />
-                <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
-                <Area type="monotone" dataKey="foodSaved" stroke="hsl(var(--primary))" fill="url(#foodGrad)" strokeWidth={2} name={t("foodSaved")} />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      )}
-
-      {/* CO2 Reduced Chart */}
-      {hasMonthlyData && (
-        <div className="px-4 py-2">
-          <div className="rounded-2xl bg-card border border-border p-4">
-            <h2 className="font-display font-bold text-sm text-foreground mb-3">
-              {t("co2ReducedChart")}
-            </h2>
-            <ResponsiveContainer width="100%" height={180}>
-              <BarChart data={monthly}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="month" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} />
-                <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} width={30} />
-                <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
-                <Bar dataKey="co2Reduced" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} name={t("co2Reduced")} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      )}
-
-      {/* No data message when no orders exist */}
-      {!hasMonthlyData && (
-        <div className="px-4 py-6 text-center">
-          <p className="text-sm text-muted-foreground">{t("noActivityYet")}</p>
-        </div>
-      )}
-
-      {/* ESG Report */}
-      {showESG && (
-        <div className="px-4 py-3">
-          <div className="rounded-2xl bg-card border border-border p-5">
-            <div className="flex items-start gap-3">
-              <div className="rounded-xl bg-primary/10 p-2.5">
-                <FileText className="h-5 w-5 text-primary" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-display font-bold text-sm text-foreground">{t("esgReportTitle")}</h3>
-                <p className="text-xs text-muted-foreground mt-1 font-body leading-relaxed">{t("esgReportDesc")}</p>
-              </div>
+      {/* Sustainability Statistics Toggle Button */}
+      <div className="px-4 py-3">
+        <button
+          onClick={() => setShowSustainability(!showSustainability)}
+          className="w-full flex items-center justify-between rounded-2xl bg-card border border-border p-4 transition-colors hover:bg-secondary/50"
+        >
+          <div className="flex items-center gap-3">
+            <div className="rounded-xl bg-primary/10 p-2.5">
+              <BarChart3 className="h-5 w-5 text-primary" />
             </div>
-            <button onClick={() => navigate("/esg-checkout")} className="mt-4 w-full rounded-xl bg-primary text-primary-foreground py-3 text-sm font-medium font-body">
-              {t("esgReportBtn")} — RM30
-            </button>
+            <div className="text-left">
+              <h3 className="font-display font-bold text-sm text-foreground">Sustainability Statistics</h3>
+              <p className="text-xs text-muted-foreground mt-0.5">{t("foodSaved")}: {totalFood.toFixed(1)} kg · {t("co2Reduced")}: {totalCO2.toFixed(1)} kg</p>
+            </div>
           </div>
-        </div>
-      )}
+          {showSustainability ? (
+            <ChevronUp className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+          ) : (
+            <ChevronDown className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+          )}
+        </button>
+      </div>
+
+      {/* Sustainability Content (collapsible) */}
+      {showSustainability && sustainabilityContent}
+
+      {/* Your Orders */}
+      <ActivityOrderStatus />
 
       <BottomNav />
     </div>
   );
 };
-
 export default ActivityPage;
