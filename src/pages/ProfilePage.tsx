@@ -36,7 +36,6 @@ const ProfilePage = () => {
   const [editBiz, setEditBiz] = useState("");
 
   // Payment state
-  const [payments, setPayments] = useState<PaymentMethod[]>([]);
   const [addingPayment, setAddingPayment] = useState<PaymentType | null>(null);
 
   // Payment form state
