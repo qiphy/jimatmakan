@@ -125,6 +125,9 @@ const ProfilePage = () => {
     ...(user.businessName
       ? [{ icon: Store, label: t("businessNameLabel"), value: user.businessName }]
       : []),
+    ...(needsBiz && user.location
+      ? [{ icon: MapPin, label: t("locationLabel"), value: user.location }]
+      : []),
     { icon: Shield, label: t("selectRole"), value: t(user.role === "vendor" ? "roleVendor" : user.role === "composter" ? "roleComposter" : "roleUser") },
   ];
 
