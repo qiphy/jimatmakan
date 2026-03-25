@@ -15,8 +15,8 @@ const UserLocationContext = createContext<UserLocationContextType | undefined>(u
 
 export const UserLocationProvider = ({ children }: { children: React.ReactNode }) => {
   const [location, setLocation] = useState<UserLocation>({
-    lat: DEFAULT_CENTER[0],
-    lng: DEFAULT_CENTER[1],
+    lat: 3.139,
+    lng: 101.6869,
     name: "Kuala Lumpur",
   });
 
