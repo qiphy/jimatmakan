@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import FoodListingCard from "@/components/FoodListingCard";
 import BottomNav from "@/components/BottomNav";
 import { useListings, type SupabaseListing } from "@/hooks/useListings";
