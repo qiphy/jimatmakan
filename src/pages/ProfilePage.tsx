@@ -35,6 +35,7 @@ const ProfilePage = () => {
   const [editEmail, setEditEmail] = useState("");
   const [editPhone, setEditPhone] = useState("");
   const [editBiz, setEditBiz] = useState("");
+  const [editLocation, setEditLocation] = useState("");
 
   // Payment state
   const [addingPayment, setAddingPayment] = useState<PaymentType | null>(null);
