@@ -274,7 +274,7 @@ const CheckoutPage = () => {
 
         {/* Place order */}
         {!payment && (
-          <p className="text-xs text-destructive text-center">{t("selectPaymentFirst") || "Please select a payment method to continue"}</p>
+          <p className="text-xs text-destructive text-center">Please select a payment method to continue</p>
         )}
         <Button onClick={placeOrder} disabled={placing || !payment} className="w-full h-12 text-base font-semibold">
           {placing ? (
