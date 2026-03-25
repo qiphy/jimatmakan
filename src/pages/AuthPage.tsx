@@ -30,6 +30,7 @@ const AuthPage = () => {
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState<UserRole>("user");
   const [businessName, setBusinessName] = useState("");
+  const [location, setLocation] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
