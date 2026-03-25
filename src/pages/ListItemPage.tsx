@@ -77,7 +77,7 @@ const ListItemPage = () => {
   };
 
   const handleSubmit = async () => {
-    if (!name || !category || !originalPrice || !reducedPrice || !weightKg) {
+    if (!name || !category || !originalPrice || !reducedPrice || !quantity || !unitWeightKg) {
       toast.error(t("fillAllFields"));
       return;
     }
