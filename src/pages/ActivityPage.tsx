@@ -1,4 +1,5 @@
-import { FileText, TrendingDown, Leaf, ShoppingBag, DollarSign, Package } from "lucide-react";
+import { useState } from "react";
+import { FileText, TrendingDown, Leaf, ShoppingBag, DollarSign, Package, ChevronDown, ChevronUp, BarChart3 } from "lucide-react";
 import ActivityOrderStatus from "@/components/ActivityOrderStatus";
 import {
   AreaChart,
