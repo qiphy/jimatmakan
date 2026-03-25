@@ -1,10 +1,13 @@
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import FoodListingCard from "@/components/FoodListingCard";
 import { useListings } from "@/hooks/useListings";
 
 const FoodListings = () => {
   const { t } = useLanguage();
+  const { user } = useAuth();
   const { listings, loading } = useListings();
+  const showComposting = user?.role === "vendor" || user?.role === "composter";
 
   if (loading) {
     return (
