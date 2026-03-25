@@ -124,11 +124,7 @@ const CheckoutPage = () => {
     ? Math.round((1 - listing.discounted_price / listing.original_price) * 100)
     : 0;
 
-  const paymentOptions: { id: PaymentMethod; label: string; icon: React.ReactNode }[] = [
-    { id: "tng", label: t("tngWallet"), icon: <Wallet className="h-4 w-4" /> },
-    { id: "card", label: t("creditDebit"), icon: <CreditCard className="h-4 w-4" /> },
-    { id: "fpx", label: t("bankTransfer"), icon: <Building2 className="h-4 w-4" /> },
-  ];
+  const hasPaymentMethods = savedPayments.length > 0;
 
   return (
     <div className="min-h-screen bg-background pb-24">
