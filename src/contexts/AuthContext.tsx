@@ -114,6 +114,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (updates.phone !== undefined) dbUpdates.phone = updates.phone;
     // Role changes are not allowed via client-side updates (enforced by RLS)
     if (updates.businessName !== undefined) dbUpdates.business_name = updates.businessName;
+    if (updates.location !== undefined) dbUpdates.location = updates.location;
     if (updates.email !== undefined) dbUpdates.email = updates.email;
     if (updates.halalVerified !== undefined) dbUpdates.halal_verified = updates.halalVerified;
     if (updates.halalCertUrl !== undefined) dbUpdates.halal_cert_url = updates.halalCertUrl;
