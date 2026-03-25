@@ -12,7 +12,7 @@ import LanguageToggle from "@/components/LanguageToggle";
 import { toast } from "sonner";
 import {
   ArrowLeft, Mail, Phone, Store, User, Recycle, LogOut, Shield,
-  Pencil, X, CreditCard, Landmark, Wallet, Plus, Trash2,
+  Pencil, X, CreditCard, Landmark, Wallet, Plus, Trash2, MapPin,
 } from "lucide-react";
 
 const roleConfig = {
