@@ -24,9 +24,14 @@ const CATEGORY_EMOJI: Record<string, string> = {
 const FoodListingCard = ({ listing }: { listing: SupabaseListing }) => {
   const { t } = useLanguage();
   const { user, session } = useAuth();
+  const { location: userLocation } = useUserLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [claiming, setClaiming] = useState(false);
+
+  const distance = listing.pickup_lat != null && listing.pickup_lng != null
+    ? haversineDistance(userLocation.lat, userLocation.lng, listing.pickup_lat, listing.pickup_lng)
+    : null;
   const expiresAt = listing.pickup_end ? new Date(listing.pickup_end) : new Date(new Date(listing.created_at).getTime() + 2 * 60 * 60000);
   const { isExpired, isUrgent, formatted } = useCountdown(expiresAt);
 
