@@ -99,8 +99,6 @@ const FoodListingCard = ({ listing }: { listing: SupabaseListing }) => {
               </span>
             )}
           </p>
-            {t("listedBy")} {listing.vendor_name || "Vendor"}
-          </p>
           <div className="flex items-center justify-between mt-2">
             <div className="flex items-center gap-2">
               <span className="text-sm font-semibold text-card-foreground">
