@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import LanguageToggle from "@/components/LanguageToggle";
-import { Leaf, ArrowLeft, Store, User, Recycle } from "lucide-react";
+import { Leaf, ArrowLeft, Store, User, Recycle, MapPin } from "lucide-react";
 
 type AuthStep = "choose" | "login" | "signup";
 
