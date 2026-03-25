@@ -4,12 +4,17 @@ import { ArrowLeft, FileText, CheckCircle2, Wallet, CreditCard, Building2, Leaf,
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useActivityData } from "@/hooks/useActivityData";
+import { usePaymentMethods } from "@/hooks/usePaymentMethods";
 import { generateESGReport } from "@/utils/generateESGReport";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import BottomNav from "@/components/BottomNav";
 
-type PaymentMethod = "tng" | "card" | "fpx";
+const PAYMENT_ICON: Record<string, React.ReactNode> = {
+  tng: <Wallet className="h-4 w-4" />,
+  card: <CreditCard className="h-4 w-4" />,
+  fpx: <Building2 className="h-4 w-4" />,
+};
 
 const ESGCheckoutPage = () => {
   const navigate = useNavigate();
