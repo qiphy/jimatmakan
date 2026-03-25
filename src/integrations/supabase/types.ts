@@ -55,6 +55,8 @@ export type Database = {
           original_price: number
           pickup_address: string | null
           pickup_end: string | null
+          pickup_lat: number | null
+          pickup_lng: number | null
           pickup_start: string | null
           quantity: number
           status: string
@@ -74,6 +76,8 @@ export type Database = {
           original_price?: number
           pickup_address?: string | null
           pickup_end?: string | null
+          pickup_lat?: number | null
+          pickup_lng?: number | null
           pickup_start?: string | null
           quantity?: number
           status?: string
@@ -93,6 +97,8 @@ export type Database = {
           original_price?: number
           pickup_address?: string | null
           pickup_end?: string | null
+          pickup_lat?: number | null
+          pickup_lng?: number | null
           pickup_start?: string | null
           quantity?: number
           status?: string

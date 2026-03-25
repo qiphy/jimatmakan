@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Timer, Recycle, Loader2 } from "lucide-react";
+import { Timer, Recycle, Loader2, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useCountdown } from "@/hooks/useCountdown";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserLocation } from "@/contexts/UserLocationContext";
+import { haversineDistance, formatDistance } from "@/utils/haversine";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import type { SupabaseListing } from "@/hooks/useListings";
@@ -22,9 +24,14 @@ const CATEGORY_EMOJI: Record<string, string> = {
 const FoodListingCard = ({ listing }: { listing: SupabaseListing }) => {
   const { t } = useLanguage();
   const { user, session } = useAuth();
+  const { location: userLocation } = useUserLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [claiming, setClaiming] = useState(false);
+
+  const distance = listing.pickup_lat != null && listing.pickup_lng != null
+    ? haversineDistance(userLocation.lat, userLocation.lng, listing.pickup_lat, listing.pickup_lng)
+    : null;
   const expiresAt = listing.pickup_end ? new Date(listing.pickup_end) : new Date(new Date(listing.created_at).getTime() + 2 * 60 * 60000);
   const { isExpired, isUrgent, formatted } = useCountdown(expiresAt);
 
@@ -83,8 +90,14 @@ const FoodListingCard = ({ listing }: { listing: SupabaseListing }) => {
               </span>
             )}
           </div>
-          <p className="text-xs text-muted-foreground mt-0.5">
+          <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
             {t("listedBy")} {listing.vendor_name || "Vendor"}
+            {distance != null && (
+              <span className="inline-flex items-center gap-0.5 text-primary font-medium ml-1">
+                <MapPin className="h-3 w-3" />
+                {formatDistance(distance)}
+              </span>
+            )}
           </p>
           <div className="flex items-center justify-between mt-2">
             <div className="flex items-center gap-2">

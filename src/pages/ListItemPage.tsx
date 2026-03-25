@@ -1,10 +1,11 @@
-import { useState, useRef } from "react";
-import { Plus, Clock, Trash2, Camera, Sparkles, Loader2 } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Plus, Clock, Trash2, Camera, Sparkles, Loader2, MapPin } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useListings } from "@/hooks/useListings";
 import BottomNav from "@/components/BottomNav";
+import LocationPicker, { DEFAULT_CENTER } from "@/components/LocationPicker";
 import { toast } from "sonner";
 
 const categories = [
@@ -30,6 +31,8 @@ const ListItemPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [pickupLocation, setPickupLocation] = useState({ lat: DEFAULT_CENTER[0], lng: DEFAULT_CENTER[1], name: "" });
+  const [locationPickerOpen, setLocationPickerOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleCapture = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,6 +98,9 @@ const ListItemPage = () => {
       vendor_id: session.user.id,
       pickup_start: now.toISOString(),
       pickup_end: pickupEnd.toISOString(),
+      pickup_address: pickupLocation.name || null,
+      pickup_lat: pickupLocation.name ? pickupLocation.lat : null,
+      pickup_lng: pickupLocation.name ? pickupLocation.lng : null,
       status: "active",
     });
 
@@ -110,6 +116,7 @@ const ListItemPage = () => {
       setReducedPrice("");
       setWeightKg("");
       setPreviewUrl(null);
+      setPickupLocation({ lat: DEFAULT_CENTER[0], lng: DEFAULT_CENTER[1], name: "" });
       toast.success(t("listingCreated"));
       refetch();
     }
@@ -261,6 +268,34 @@ const ListItemPage = () => {
               className="w-full rounded-xl bg-secondary border border-border px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none font-body"
             />
           </div>
+
+          {/* Pickup Location */}
+          <div>
+            <label className="text-xs font-medium text-foreground font-body block mb-1">
+              <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{t("locationLabel")}</span>
+            </label>
+            <button
+              type="button"
+              onClick={() => setLocationPickerOpen(true)}
+              className="w-full rounded-xl bg-secondary border border-border px-3 py-2.5 text-sm text-left font-body transition-colors hover:bg-secondary/80"
+            >
+              {pickupLocation.name ? (
+                <span className="text-foreground">{pickupLocation.name}</span>
+              ) : (
+                <span className="text-muted-foreground">{t("locationPlaceholder")}</span>
+              )}
+            </button>
+          </div>
+
+          <LocationPicker
+            open={locationPickerOpen}
+            onClose={() => setLocationPickerOpen(false)}
+            location={pickupLocation}
+            onLocationChange={(loc) => {
+              setPickupLocation(loc);
+              setLocationPickerOpen(false);
+            }}
+          />
 
           <div className="flex items-center gap-2 rounded-xl bg-primary/10 border border-primary/20 px-3 py-2.5">
             <Clock className="h-4 w-4 text-primary flex-shrink-0" />

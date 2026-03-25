@@ -4,6 +4,8 @@ import type { Tables } from "@/integrations/supabase/types";
 
 export type SupabaseListing = Tables<"listings"> & {
   vendor_name?: string;
+  pickup_lat?: number | null;
+  pickup_lng?: number | null;
 };
 
 export const useListings = (vendorOnly = false) => {

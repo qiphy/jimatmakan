@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { MapPin, Leaf, Sprout } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useUserLocation } from "@/contexts/UserLocationContext";
 import { useImpactMetrics } from "@/hooks/useImpactMetrics";
 import FoodListingCard from "@/components/FoodListingCard";
 import { useListings } from "@/hooks/useListings";
 import BottomNav from "@/components/BottomNav";
 import LanguageToggle from "@/components/LanguageToggle";
-import LocationPicker, { DEFAULT_CENTER } from "@/components/LocationPicker";
+import LocationPicker from "@/components/LocationPicker";
 import NotificationBell from "@/components/NotificationBell";
 import {
   Carousel,
@@ -23,8 +24,8 @@ const Index = () => {
   const { t } = useLanguage();
   const { metrics } = useImpactMetrics();
   const { listings, loading: listingsLoading } = useListings();
+  const { location, setLocation } = useUserLocation();
   const [locationOpen, setLocationOpen] = useState(false);
-  const [location, setLocation] = useState({ lat: DEFAULT_CENTER[0], lng: DEFAULT_CENTER[1], name: "Kuala Lumpur" });
 
   const now = Date.now();
   const availableListings = listings.filter((l) => {
