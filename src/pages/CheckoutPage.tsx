@@ -18,6 +18,12 @@ const CATEGORY_EMOJI: Record<string, string> = {
 
 type PaymentMethod = "tng" | "card" | "fpx";
 
+const PAYMENT_ICON: Record<string, React.ReactNode> = {
+  tng: <Wallet className="h-4 w-4" />,
+  card: <CreditCard className="h-4 w-4" />,
+  fpx: <Building2 className="h-4 w-4" />,
+};
+
 const CheckoutPage = () => {
   const { listingId } = useParams<{ listingId: string }>();
   const navigate = useNavigate();
