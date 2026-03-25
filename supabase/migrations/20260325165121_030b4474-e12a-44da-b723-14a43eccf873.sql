@@ -1,0 +1,1 @@
+UPDATE public.listings SET pickup_lat = 3.139 + (random() - 0.5) * 0.02, pickup_lng = 101.6869 + (random() - 0.5) * 0.02 WHERE pickup_lat IS NULL;
