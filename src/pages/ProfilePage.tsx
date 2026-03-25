@@ -210,8 +210,13 @@ const ProfilePage = () => {
             </Button>
           </div>
         </div>
-      )}
-
+            )}
+          {needsBiz && (
+            <div className="space-y-2">
+              <Label>{t("locationLabel")}</Label>
+              <Input value={editLocation} onChange={(e) => setEditLocation(e.target.value)} placeholder={t("locationPlaceholder")} />
+            </div>
+          )}
       {/* Payment Methods */}
       <div className="mx-4 mt-8">
         <h3 className="text-sm font-display font-bold text-foreground mb-3">{t("paymentMethods")}</h3>
