@@ -109,7 +109,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const dbUpdates: Record<string, unknown> = {};
     if (updates.fullName !== undefined) dbUpdates.full_name = updates.fullName;
     if (updates.phone !== undefined) dbUpdates.phone = updates.phone;
-    if (updates.role !== undefined) dbUpdates.role = updates.role;
+    // Role changes are not allowed via client-side updates (enforced by RLS)
     if (updates.businessName !== undefined) dbUpdates.business_name = updates.businessName;
     if (updates.email !== undefined) dbUpdates.email = updates.email;
     if (updates.halalVerified !== undefined) dbUpdates.halal_verified = updates.halalVerified;
