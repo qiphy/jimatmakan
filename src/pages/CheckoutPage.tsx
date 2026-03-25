@@ -4,6 +4,7 @@ import { ArrowLeft, Minus, Plus, CheckCircle2, Wallet, CreditCard, Building2, Sc
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { usePaymentMethods } from "@/hooks/usePaymentMethods";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
