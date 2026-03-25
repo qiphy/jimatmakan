@@ -63,7 +63,7 @@ const ListItemPage = () => {
           if (data.category) setCategory(data.category);
           if (data.estimatedOriginalPrice) setOriginalPrice(String(data.estimatedOriginalPrice));
           if (data.estimatedReducedPrice) setReducedPrice(String(data.estimatedReducedPrice));
-          if (data.estimatedWeightKg) setWeightKg(String(data.estimatedWeightKg));
+          if (data.estimatedWeightKg) setUnitWeightKg(String(data.estimatedWeightKg));
           toast.success(t("aiAutofilled"));
         }
       } catch (err: any) {
