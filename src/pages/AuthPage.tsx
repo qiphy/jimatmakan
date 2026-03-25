@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import LanguageToggle from "@/components/LanguageToggle";
 import { Leaf, ArrowLeft, Store, User, Recycle, MapPin } from "lucide-react";
+import LocationPicker, { DEFAULT_CENTER } from "@/components/LocationPicker";
 
 type AuthStep = "choose" | "login" | "signup";
 
