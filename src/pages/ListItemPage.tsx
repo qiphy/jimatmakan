@@ -1,10 +1,11 @@
-import { useState, useRef } from "react";
-import { Plus, Clock, Trash2, Camera, Sparkles, Loader2 } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Plus, Clock, Trash2, Camera, Sparkles, Loader2, MapPin } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useListings } from "@/hooks/useListings";
 import BottomNav from "@/components/BottomNav";
+import LocationPicker, { DEFAULT_CENTER } from "@/components/LocationPicker";
 import { toast } from "sonner";
 
 const categories = [
