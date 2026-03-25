@@ -225,12 +225,8 @@ const ActivityPage = () => {
       {/* Sustainability Content (collapsible) */}
       {showSustainability && sustainabilityContent}
 
-      {/* Your Orders - always after sustainability */}
-      {isVendor ? (
-        <ActivityOrderStatus />
-      ) : (
-        <ActivityOrderStatus />
-      )}
+      {/* Your Orders */}
+      <ActivityOrderStatus />
 
       <BottomNav />
     </div>
