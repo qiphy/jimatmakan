@@ -74,7 +74,7 @@ const ProfilePage = () => {
       fullName: editName,
       email: editEmail,
       phone: editPhone,
-      ...(needsBiz ? { businessName: editBiz } : {}),
+      ...(needsBiz ? { businessName: editBiz, location: editLocation } : {}),
     });
     setEditing(false);
     toast.success(t("profileUpdated"));
