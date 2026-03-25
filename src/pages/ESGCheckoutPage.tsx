@@ -155,7 +155,10 @@ const ESGCheckoutPage = () => {
         </div>
 
         {/* Purchase button */}
-        <Button onClick={handlePurchase} disabled={processing} className="w-full h-12 text-base font-semibold">
+        {!payment && (
+          <p className="text-xs text-destructive text-center">Please select a payment method to continue</p>
+        )}
+        <Button onClick={handlePurchase} disabled={processing || !payment} className="w-full h-12 text-base font-semibold">
           {processing ? (
             <div className="animate-spin h-5 w-5 border-2 border-primary-foreground border-t-transparent rounded-full" />
           ) : `${t("esgPayAndDownload")} — RM${price.toFixed(2)}`}
