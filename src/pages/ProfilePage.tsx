@@ -21,14 +21,7 @@ const roleConfig = {
   composter: { icon: Recycle, color: "bg-muted-foreground" },
 };
 
-type PaymentType = "tng" | "card" | "bank";
-
-interface PaymentMethod {
-  id: string;
-  type: PaymentType;
-  label: string;
-  detail: string;
-}
+type PaymentType = PaymentMethodType;
 
 const ProfilePage = () => {
   const { user, updateProfile, logout } = useAuth();
