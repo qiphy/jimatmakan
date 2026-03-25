@@ -269,6 +269,34 @@ const ListItemPage = () => {
             />
           </div>
 
+          {/* Pickup Location */}
+          <div>
+            <label className="text-xs font-medium text-foreground font-body block mb-1">
+              <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{t("locationLabel")}</span>
+            </label>
+            <button
+              type="button"
+              onClick={() => setLocationPickerOpen(true)}
+              className="w-full rounded-xl bg-secondary border border-border px-3 py-2.5 text-sm text-left font-body transition-colors hover:bg-secondary/80"
+            >
+              {pickupLocation.name ? (
+                <span className="text-foreground">{pickupLocation.name}</span>
+              ) : (
+                <span className="text-muted-foreground">{t("locationPlaceholder")}</span>
+              )}
+            </button>
+          </div>
+
+          <LocationPicker
+            open={locationPickerOpen}
+            onClose={() => setLocationPickerOpen(false)}
+            location={pickupLocation}
+            onLocationChange={(loc) => {
+              setPickupLocation(loc);
+              setLocationPickerOpen(false);
+            }}
+          />
+
           <div className="flex items-center gap-2 rounded-xl bg-primary/10 border border-primary/20 px-3 py-2.5">
             <Clock className="h-4 w-4 text-primary flex-shrink-0" />
             <p className="text-[11px] text-muted-foreground font-body">{t("twoHourNotice")}</p>
