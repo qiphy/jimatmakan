@@ -128,7 +128,7 @@ const ProfilePage = () => {
   const paymentTypeConfig: { type: PaymentType; icon: typeof Wallet; label: string }[] = [
     { type: "tng", icon: Wallet, label: t("tngWallet") },
     { type: "card", icon: CreditCard, label: t("creditDebit") },
-    { type: "bank", icon: Landmark, label: t("bankTransfer") },
+    { type: "fpx", icon: Landmark, label: t("bankTransfer") },
   ];
 
   return (
