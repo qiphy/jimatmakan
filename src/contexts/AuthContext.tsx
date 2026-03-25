@@ -11,6 +11,7 @@ export interface UserProfile {
   phone: string;
   role: UserRole;
   businessName?: string;
+  location?: string;
   email: string;
   halalVerified?: boolean;
   halalCertUrl?: string;
