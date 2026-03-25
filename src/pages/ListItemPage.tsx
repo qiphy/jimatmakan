@@ -98,6 +98,9 @@ const ListItemPage = () => {
       vendor_id: session.user.id,
       pickup_start: now.toISOString(),
       pickup_end: pickupEnd.toISOString(),
+      pickup_address: pickupLocation.name || null,
+      pickup_lat: pickupLocation.name ? pickupLocation.lat : null,
+      pickup_lng: pickupLocation.name ? pickupLocation.lng : null,
       status: "active",
     });
 
