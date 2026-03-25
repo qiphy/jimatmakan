@@ -145,7 +145,7 @@ const BrowsePage = () => {
                 </div>
               </div>
             )}
-            {expired.length > 0 && (
+            {showComposting && expired.length > 0 && (
               <div>
                 <h2 className="font-display font-bold text-base text-foreground mb-3">
                   {t("forComposting")} ({expired.length})
