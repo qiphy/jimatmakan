@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import FoodListingCard from "@/components/FoodListingCard";
 import BottomNav from "@/components/BottomNav";
 import { useListings, type SupabaseListing } from "@/hooks/useListings";
@@ -40,9 +41,11 @@ const getRelevance = (listing: SupabaseListing, query: string): number => {
 
 const BrowsePage = () => {
   const { t } = useLanguage();
+  const { user } = useAuth();
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const { listings, loading } = useListings();
+  const showComposting = user?.role === "vendor" || user?.role === "composter";
 
   const filtered = useMemo(() => {
     let results = listings;
@@ -142,7 +145,7 @@ const BrowsePage = () => {
                 </div>
               </div>
             )}
-            {expired.length > 0 && (
+            {showComposting && expired.length > 0 && (
               <div>
                 <h2 className="font-display font-bold text-base text-foreground mb-3">
                   {t("forComposting")} ({expired.length})
