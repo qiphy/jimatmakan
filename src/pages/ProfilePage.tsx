@@ -211,9 +211,24 @@ const ProfilePage = () => {
           {needsBiz && (
             <div className="space-y-2">
               <Label>{t("locationLabel")}</Label>
-              <Input value={editLocation} onChange={(e) => setEditLocation(e.target.value)} placeholder={t("locationPlaceholder")} />
+              <div className="flex gap-2">
+                <Input className="flex-1" value={editLocation} onChange={(e) => setEditLocation(e.target.value)} placeholder={t("locationPlaceholder")} />
+                <Button type="button" variant="outline" size="icon" className="shrink-0" onClick={() => setLocationPickerOpen(true)}>
+                  <MapPin className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           )}
+          <LocationPicker
+            open={locationPickerOpen}
+            onClose={() => setLocationPickerOpen(false)}
+            location={mapLocation}
+            onLocationChange={(loc) => {
+              setMapLocation(loc);
+              setEditLocation(loc.name);
+              setLocationPickerOpen(false);
+            }}
+          />
           <div className="flex gap-2">
             <Button className="flex-1 h-10" onClick={saveEdit}>{t("saveChanges")}</Button>
             <Button variant="outline" className="h-10" onClick={() => setEditing(false)}>

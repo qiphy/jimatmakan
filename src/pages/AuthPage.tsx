@@ -221,7 +221,22 @@ const AuthPage = () => {
                 <Label htmlFor="location">
                   <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{t("locationLabel")}</span>
                 </Label>
-                <Input id="location" value={location} onChange={(e) => setLocation(e.target.value)} placeholder={t("locationPlaceholder")} />
+                <div className="flex gap-2">
+                  <Input id="location" className="flex-1" value={location} onChange={(e) => setLocation(e.target.value)} placeholder={t("locationPlaceholder")} />
+                  <Button type="button" variant="outline" size="icon" className="shrink-0" onClick={() => setLocationPickerOpen(true)}>
+                    <MapPin className="h-4 w-4" />
+                  </Button>
+                </div>
+                <LocationPicker
+                  open={locationPickerOpen}
+                  onClose={() => setLocationPickerOpen(false)}
+                  location={mapLocation}
+                  onLocationChange={(loc) => {
+                    setMapLocation(loc);
+                    setLocation(loc.name);
+                    setLocationPickerOpen(false);
+                  }}
+                />
               </div>
             )}
 
