@@ -90,12 +90,16 @@ const ListItemPage = () => {
     const now = new Date();
     const pickupEnd = new Date(now.getTime() + 2 * 60 * 60000);
 
+    const qty = parseInt(quantity);
+    const unitWt = parseFloat(unitWeightKg);
+
     const { error } = await supabase.from("listings").insert({
       title: name,
       category,
       original_price: parseFloat(originalPrice),
       discounted_price: parseFloat(reducedPrice),
-      weight_kg: parseFloat(weightKg),
+      quantity: qty,
+      weight_kg: unitWt,
       vendor_id: session.user.id,
       pickup_start: now.toISOString(),
       pickup_end: pickupEnd.toISOString(),
