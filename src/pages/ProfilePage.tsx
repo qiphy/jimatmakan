@@ -203,6 +203,12 @@ const ProfilePage = () => {
               <Input value={editBiz} onChange={(e) => setEditBiz(e.target.value)} />
             </div>
           )}
+          {needsBiz && (
+            <div className="space-y-2">
+              <Label>{t("locationLabel")}</Label>
+              <Input value={editLocation} onChange={(e) => setEditLocation(e.target.value)} placeholder={t("locationPlaceholder")} />
+            </div>
+          )}
           <div className="flex gap-2">
             <Button className="flex-1 h-10" onClick={saveEdit}>{t("saveChanges")}</Button>
             <Button variant="outline" className="h-10" onClick={() => setEditing(false)}>
@@ -210,13 +216,7 @@ const ProfilePage = () => {
             </Button>
           </div>
         </div>
-            )}
-          {needsBiz && (
-            <div className="space-y-2">
-              <Label>{t("locationLabel")}</Label>
-              <Input value={editLocation} onChange={(e) => setEditLocation(e.target.value)} placeholder={t("locationPlaceholder")} />
-            </div>
-          )}
+      )}
       {/* Payment Methods */}
       <div className="mx-4 mt-8">
         <h3 className="text-sm font-display font-bold text-foreground mb-3">{t("paymentMethods")}</h3>
