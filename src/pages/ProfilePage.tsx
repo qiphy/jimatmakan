@@ -295,7 +295,7 @@ const ProfilePage = () => {
               </>
             )}
 
-            {addingPayment === "bank" && (
+            {addingPayment === "fpx" && (
               <>
                 <div className="space-y-2">
                   <Label>{t("bankName")}</Label>
