@@ -28,7 +28,7 @@ const CheckoutPage = () => {
   const [vendorName, setVendorName] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [customWeight, setCustomWeight] = useState<number | null>(null);
-  const [payment, setPayment] = useState<PaymentMethod>("tng");
+  const [payment, setPayment] = useState<PaymentMethod | null>(null);
   const [loading, setLoading] = useState(true);
   const [placing, setPlacing] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -273,7 +273,10 @@ const CheckoutPage = () => {
         </div>
 
         {/* Place order */}
-        <Button onClick={placeOrder} disabled={placing} className="w-full h-12 text-base font-semibold">
+        {!payment && (
+          <p className="text-xs text-destructive text-center">Please select a payment method to continue</p>
+        )}
+        <Button onClick={placeOrder} disabled={placing || !payment} className="w-full h-12 text-base font-semibold">
           {placing ? (
             <div className="animate-spin h-5 w-5 border-2 border-primary-foreground border-t-transparent rounded-full" />
           ) : t("placeOrder")}
