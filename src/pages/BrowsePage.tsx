@@ -41,9 +41,11 @@ const getRelevance = (listing: SupabaseListing, query: string): number => {
 
 const BrowsePage = () => {
   const { t } = useLanguage();
+  const { user } = useAuth();
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const { listings, loading } = useListings();
+  const showComposting = user?.role === "vendor" || user?.role === "composter";
 
   const filtered = useMemo(() => {
     let results = listings;
