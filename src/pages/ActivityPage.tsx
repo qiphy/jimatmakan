@@ -210,7 +210,7 @@ const ActivityPage = () => {
               <BarChart3 className="h-5 w-5 text-primary" />
             </div>
             <div className="text-left">
-              <h3 className="font-display font-bold text-sm text-foreground">{t("sustainabilityStats") || "Sustainability Statistics"}</h3>
+              <h3 className="font-display font-bold text-sm text-foreground">Sustainability Statistics</h3>
               <p className="text-xs text-muted-foreground mt-0.5">{t("foodSaved")}: {totalFood.toFixed(1)} kg · {t("co2Reduced")}: {totalCO2.toFixed(1)} kg</p>
             </div>
           </div>
