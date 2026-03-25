@@ -65,6 +65,7 @@ const ProfilePage = () => {
     setEditEmail(user.email);
     setEditPhone(user.phone);
     setEditBiz(user.businessName || "");
+    setEditLocation(user.location || "");
     setEditing(true);
   };
 
