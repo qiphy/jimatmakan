@@ -27,7 +27,8 @@ const ListItemPage = () => {
   const [category, setCategory] = useState("");
   const [originalPrice, setOriginalPrice] = useState("");
   const [reducedPrice, setReducedPrice] = useState("");
-  const [weightKg, setWeightKg] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [unitWeightKg, setUnitWeightKg] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -62,7 +63,7 @@ const ListItemPage = () => {
           if (data.category) setCategory(data.category);
           if (data.estimatedOriginalPrice) setOriginalPrice(String(data.estimatedOriginalPrice));
           if (data.estimatedReducedPrice) setReducedPrice(String(data.estimatedReducedPrice));
-          if (data.estimatedWeightKg) setWeightKg(String(data.estimatedWeightKg));
+          if (data.estimatedWeightKg) setUnitWeightKg(String(data.estimatedWeightKg));
           toast.success(t("aiAutofilled"));
         }
       } catch (err: any) {
@@ -76,7 +77,7 @@ const ListItemPage = () => {
   };
 
   const handleSubmit = async () => {
-    if (!name || !category || !originalPrice || !reducedPrice || !weightKg) {
+    if (!name || !category || !originalPrice || !reducedPrice || !quantity || !unitWeightKg) {
       toast.error(t("fillAllFields"));
       return;
     }
@@ -89,12 +90,16 @@ const ListItemPage = () => {
     const now = new Date();
     const pickupEnd = new Date(now.getTime() + 2 * 60 * 60000);
 
+    const qty = parseInt(quantity);
+    const unitWt = parseFloat(unitWeightKg);
+
     const { error } = await supabase.from("listings").insert({
       title: name,
       category,
       original_price: parseFloat(originalPrice),
       discounted_price: parseFloat(reducedPrice),
-      weight_kg: parseFloat(weightKg),
+      quantity: qty,
+      weight_kg: unitWt,
       vendor_id: session.user.id,
       pickup_start: now.toISOString(),
       pickup_end: pickupEnd.toISOString(),
@@ -114,7 +119,8 @@ const ListItemPage = () => {
       setCategory("");
       setOriginalPrice("");
       setReducedPrice("");
-      setWeightKg("");
+      setQuantity("");
+      setUnitWeightKg("");
       setPreviewUrl(null);
       setPickupLocation({ lat: DEFAULT_CENTER[0], lng: DEFAULT_CENTER[1], name: "" });
       toast.success(t("listingCreated"));
@@ -255,18 +261,34 @@ const ListItemPage = () => {
             </div>
           </div>
 
-          {/* Weight */}
-          <div>
-            <label className="text-xs font-medium text-foreground font-body block mb-1">
-              {t("quantityLabel")} (kg)
-            </label>
-            <input
-              type="number"
-              value={weightKg}
-              onChange={(e) => setWeightKg(e.target.value)}
-              placeholder={t("quantityPlaceholder")}
-              className="w-full rounded-xl bg-secondary border border-border px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none font-body"
-            />
+          {/* Quantity & Unit Weight */}
+          <div className="flex gap-3">
+            <div className="flex-1">
+              <label className="text-xs font-medium text-foreground font-body block mb-1">
+                {t("quantityLabel")}
+              </label>
+              <input
+                type="number"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                placeholder="e.g. 5"
+                min="1"
+                className="w-full rounded-xl bg-secondary border border-border px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none font-body"
+              />
+            </div>
+            <div className="flex-1">
+              <label className="text-xs font-medium text-foreground font-body block mb-1">
+                {t("weightPerUnit")} (kg)
+              </label>
+              <input
+                type="number"
+                value={unitWeightKg}
+                onChange={(e) => setUnitWeightKg(e.target.value)}
+                placeholder="e.g. 0.5"
+                step="0.1"
+                className="w-full rounded-xl bg-secondary border border-border px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none font-body"
+              />
+            </div>
           </div>
 
           {/* Pickup Location */}
