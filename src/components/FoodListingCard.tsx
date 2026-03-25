@@ -1,7 +1,11 @@
-import { Timer, Recycle } from "lucide-react";
+import { useState } from "react";
+import { Timer, Recycle, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useCountdown } from "@/hooks/useCountdown";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import type { SupabaseListing } from "@/hooks/useListings";
 
 const CATEGORY_EMOJI: Record<string, string> = {
@@ -17,7 +21,10 @@ const CATEGORY_EMOJI: Record<string, string> = {
 
 const FoodListingCard = ({ listing }: { listing: SupabaseListing }) => {
   const { t } = useLanguage();
+  const { user, session } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [claiming, setClaiming] = useState(false);
   const expiresAt = listing.pickup_end ? new Date(listing.pickup_end) : new Date(new Date(listing.created_at).getTime() + 2 * 60 * 60000);
   const { isExpired, isUrgent, formatted } = useCountdown(expiresAt);
 
@@ -26,6 +33,30 @@ const FoodListingCard = ({ listing }: { listing: SupabaseListing }) => {
     : 0;
 
   const emoji = CATEGORY_EMOJI[listing.category] || "📦";
+  const isComposter = user?.role === "composter";
+
+  const handleCompostClaim = async () => {
+    if (!session?.user || !isComposter) {
+      toast({ title: t("loginRequired"), description: t("compostLoginMsg"), variant: "destructive" });
+      return;
+    }
+    setClaiming(true);
+    const { error } = await supabase.from("orders").insert({
+      buyer_id: session.user.id,
+      vendor_id: listing.vendor_id,
+      listing_id: listing.id,
+      quantity: listing.quantity,
+      weight_kg: listing.weight_kg * listing.quantity,
+      total_price: 0,
+      status: "pending",
+    });
+    setClaiming(false);
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: t("compostClaimSuccess"), description: t("compostClaimSuccessDesc") });
+    }
+  };
 
   return (
     <div
@@ -93,9 +124,20 @@ const FoodListingCard = ({ listing }: { listing: SupabaseListing }) => {
         )}
 
         {isExpired ? (
-          <button className="text-xs font-medium px-3 py-1.5 rounded-lg bg-muted text-muted-foreground">
-            {t("compostClaim")}
-          </button>
+          isComposter ? (
+            <button
+              onClick={handleCompostClaim}
+              disabled={claiming}
+              className="text-xs font-medium px-3 py-1.5 rounded-lg bg-primary text-primary-foreground disabled:opacity-50 flex items-center gap-1.5"
+            >
+              {claiming && <Loader2 className="h-3 w-3 animate-spin" />}
+              {t("compostClaim")}
+            </button>
+          ) : (
+            <span className="text-xs font-medium px-3 py-1.5 rounded-lg bg-muted text-muted-foreground">
+              {t("compostClaim")}
+            </span>
+          )
         ) : (
           <button
             onClick={() => navigate(`/checkout/${listing.id}`)}
