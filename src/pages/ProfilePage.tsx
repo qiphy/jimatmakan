@@ -38,6 +38,10 @@ const ProfilePage = () => {
   const [editBiz, setEditBiz] = useState("");
   const [editLocation, setEditLocation] = useState("");
 
+  // Location picker state
+  const [locationPickerOpen, setLocationPickerOpen] = useState(false);
+  const [mapLocation, setMapLocation] = useState({ lat: DEFAULT_CENTER[0], lng: DEFAULT_CENTER[1], name: "" });
+
   // Payment state
   const [addingPayment, setAddingPayment] = useState<PaymentType | null>(null);
 
