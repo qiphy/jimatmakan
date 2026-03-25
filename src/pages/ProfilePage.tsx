@@ -24,7 +24,7 @@ const roleConfig = {
 type PaymentType = PaymentMethodType;
 
 const ProfilePage = () => {
-  const { user, updateProfile, logout } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const { methods: payments, add: addPaymentToDB, remove: removePaymentFromDB } = usePaymentMethods();
 
