@@ -261,18 +261,34 @@ const ListItemPage = () => {
             </div>
           </div>
 
-          {/* Weight */}
-          <div>
-            <label className="text-xs font-medium text-foreground font-body block mb-1">
-              {t("quantityLabel")} (kg)
-            </label>
-            <input
-              type="number"
-              value={weightKg}
-              onChange={(e) => setWeightKg(e.target.value)}
-              placeholder={t("quantityPlaceholder")}
-              className="w-full rounded-xl bg-secondary border border-border px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none font-body"
-            />
+          {/* Quantity & Unit Weight */}
+          <div className="flex gap-3">
+            <div className="flex-1">
+              <label className="text-xs font-medium text-foreground font-body block mb-1">
+                {t("quantityLabel")}
+              </label>
+              <input
+                type="number"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                placeholder="e.g. 5"
+                min="1"
+                className="w-full rounded-xl bg-secondary border border-border px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none font-body"
+              />
+            </div>
+            <div className="flex-1">
+              <label className="text-xs font-medium text-foreground font-body block mb-1">
+                {t("weightPerUnit")} (kg)
+              </label>
+              <input
+                type="number"
+                value={unitWeightKg}
+                onChange={(e) => setUnitWeightKg(e.target.value)}
+                placeholder="e.g. 0.5"
+                step="0.1"
+                className="w-full rounded-xl bg-secondary border border-border px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none font-body"
+              />
+            </div>
           </div>
 
           {/* Pickup Location */}
