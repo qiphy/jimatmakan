@@ -33,6 +33,8 @@ const AuthPage = () => {
   const [businessName, setBusinessName] = useState("");
   const [location, setLocation] = useState("");
   const [password, setPassword] = useState("");
+  const [locationPickerOpen, setLocationPickerOpen] = useState(false);
+  const [mapLocation, setMapLocation] = useState({ lat: DEFAULT_CENTER[0], lng: DEFAULT_CENTER[1], name: "" });
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
