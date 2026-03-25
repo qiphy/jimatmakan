@@ -213,6 +213,15 @@ const AuthPage = () => {
               </div>
             )}
 
+            {needsBusinessName && (
+              <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                <Label htmlFor="location">
+                  <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{t("locationLabel")}</span>
+                </Label>
+                <Input id="location" value={location} onChange={(e) => setLocation(e.target.value)} placeholder={t("locationPlaceholder")} />
+              </div>
+            )
+
             <div className="space-y-2">
               <Label htmlFor="signup-email">{t("emailLabel")}</Label>
               <Input id="signup-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
