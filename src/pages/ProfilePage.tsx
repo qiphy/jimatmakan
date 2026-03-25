@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import LocationPicker, { DEFAULT_CENTER } from "@/components/LocationPicker";
 import { usePaymentMethods, type PaymentMethodType } from "@/hooks/usePaymentMethods";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
