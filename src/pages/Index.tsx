@@ -14,13 +14,6 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 
-interface ReorderStore {
-  vendorId: string;
-  name: string;
-  lastItem: string;
-  hasActiveListing: boolean;
-}
-
 const CATEGORY_EMOJI: Record<string, string> = {
   rice: "🍚", bread: "🫓", vegetables: "🥬", fruits: "🍎",
   meat: "🍗", seafood: "🦐", pastries: "🍡", other: "📦",
@@ -29,77 +22,15 @@ const CATEGORY_EMOJI: Record<string, string> = {
 const Index = () => {
   const { t } = useLanguage();
   const { metrics } = useImpactMetrics();
-  const { session } = useAuth();
   const { listings, loading: listingsLoading } = useListings();
-  const [reorderStores, setReorderStores] = useState<ReorderStore[]>([]);
-  const [reorderLoading, setReorderLoading] = useState(true);
   const [locationOpen, setLocationOpen] = useState(false);
   const [location, setLocation] = useState({ lat: DEFAULT_CENTER[0], lng: DEFAULT_CENTER[1], name: "Kuala Lumpur" });
 
-  // Fetch reorder stores from past orders
-  useEffect(() => {
-    if (!session?.user) {
-      setReorderLoading(false);
-      return;
-    }
-
-    const fetchReorderStores = async () => {
-      const { data: orders } = await supabase
-        .from("orders")
-        .select("vendor_id, listing_id, created_at")
-        .eq("buyer_id", session.user.id)
-        .order("created_at", { ascending: false });
-
-      if (!orders || orders.length === 0) {
-        setReorderStores([]);
-        setReorderLoading(false);
-        return;
-      }
-
-      // Get unique vendors (most recent first)
-      const seen = new Set<string>();
-      const uniqueVendorOrders = orders.filter((o) => {
-        if (seen.has(o.vendor_id)) return false;
-        seen.add(o.vendor_id);
-        return true;
-      }).slice(0, 5);
-
-      // Fetch vendor profiles
-      const vendorIds = uniqueVendorOrders.map((o) => o.vendor_id);
-      const listingIds = uniqueVendorOrders.map((o) => o.listing_id);
-
-      const [{ data: profiles }, { data: orderListings }, { data: activeListings }] = await Promise.all([
-        supabase.from("profiles").select("id, business_name, full_name").in("id", vendorIds),
-        supabase.from("listings").select("id, title").in("id", listingIds),
-        supabase.from("listings").select("vendor_id").in("vendor_id", vendorIds).eq("status", "active"),
-      ]);
-
-      const profileMap = new Map((profiles || []).map((p) => [p.id, p.business_name || p.full_name]));
-      const listingMap = new Map((orderListings || []).map((l) => [l.id, l.title]));
-      const activeVendors = new Set((activeListings || []).map((l) => l.vendor_id));
-
-      setReorderStores(
-        uniqueVendorOrders.map((o) => ({
-          vendorId: o.vendor_id,
-          name: profileMap.get(o.vendor_id) || "Vendor",
-          lastItem: listingMap.get(o.listing_id) || "Item",
-          hasActiveListing: activeVendors.has(o.vendor_id),
-        }))
-      );
-      setReorderLoading(false);
-    };
-
-    fetchReorderStores();
-  }, [session]);
-
-  // Recent available listings for the home feed
   const now = Date.now();
-  const availableListings = listings
-    .filter((l) => {
-      const end = l.pickup_end ? new Date(l.pickup_end).getTime() : new Date(l.created_at).getTime() + 2 * 3600000;
-      return end > now && l.status === "active";
-    })
-    .slice(0, 3);
+  const availableListings = listings.filter((l) => {
+    const end = l.pickup_end ? new Date(l.pickup_end).getTime() : new Date(l.created_at).getTime() + 2 * 3600000;
+    return end > now && l.status === "active";
+  });
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -148,67 +79,34 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Reorder Section */}
+      {/* Current Listings Carousel */}
       <div className="px-4 py-2">
-        <div className="flex items-center gap-1.5 mb-3">
-          <RotateCcw className="h-4 w-4 text-primary" />
-          <h2 className="font-display font-bold text-sm text-foreground">
-            {t("reorderTitle")}
-          </h2>
-        </div>
-
-        {reorderLoading ? (
+        <h2 className="font-display font-bold text-sm text-foreground mb-3">
+          {t("availableNow")}
+        </h2>
+        {listingsLoading ? (
           <div className="text-center py-4">
             <p className="text-xs text-muted-foreground">Loading...</p>
           </div>
-        ) : reorderStores.length === 0 ? (
+        ) : availableListings.length === 0 ? (
           <div className="rounded-2xl bg-card border border-border p-6 text-center">
-            <p className="text-2xl mb-2">🏪</p>
+            <p className="text-2xl mb-2">🍽️</p>
             <p className="text-xs text-muted-foreground font-body">
-              {t("noReorderHistory")}
+              {t("noResults")}
             </p>
           </div>
         ) : (
-          <div className="flex gap-3 overflow-x-auto pb-1 scrollbar-hide">
-            {reorderStores.map((store) => (
-              <button
-                key={store.vendorId}
-                className={`flex flex-col items-center gap-2 rounded-2xl bg-card border p-4 min-w-[120px] transition-colors ${
-                  store.hasActiveListing
-                    ? "border-border hover:border-primary/40"
-                    : "border-border opacity-60"
-                }`}
-              >
-                <div className="h-12 w-12 rounded-full bg-secondary flex items-center justify-center text-2xl">
-                  🏪
-                </div>
-                <span className="text-xs font-medium text-foreground text-center leading-tight font-body">
-                  {store.name}
-                </span>
-                {store.hasActiveListing ? (
-                  <span className="text-[10px] text-muted-foreground">{store.lastItem}</span>
-                ) : (
-                  <span className="text-[10px] text-accent font-medium">{t("storeUnavailable")}</span>
-                )}
-              </button>
-            ))}
-          </div>
+          <Carousel opts={{ align: "start", loop: availableListings.length > 1 }}>
+            <CarouselContent className="-ml-3">
+              {availableListings.map((listing) => (
+                <CarouselItem key={listing.id} className="pl-3 basis-[85%]">
+                  <FoodListingCard listing={listing} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
         )}
       </div>
-
-      {/* Recent Available Listings */}
-      {!listingsLoading && availableListings.length > 0 && (
-        <div className="px-4 py-2">
-          <h2 className="font-display font-bold text-sm text-foreground mb-3">
-            {t("availableNow")}
-          </h2>
-          <div className="space-y-3">
-            {availableListings.map((listing) => (
-              <FoodListingCard key={listing.id} listing={listing} />
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Motivational Bubble */}
       <div className="px-4 py-3">
