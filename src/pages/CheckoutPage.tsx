@@ -4,6 +4,7 @@ import { ArrowLeft, Minus, Plus, CheckCircle2, Wallet, CreditCard, Building2, Sc
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { usePaymentMethods } from "@/hooks/usePaymentMethods";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
@@ -17,6 +18,12 @@ const CATEGORY_EMOJI: Record<string, string> = {
 
 type PaymentMethod = "tng" | "card" | "fpx";
 
+const PAYMENT_ICON: Record<string, React.ReactNode> = {
+  tng: <Wallet className="h-4 w-4" />,
+  card: <CreditCard className="h-4 w-4" />,
+  fpx: <Building2 className="h-4 w-4" />,
+};
+
 const CheckoutPage = () => {
   const { listingId } = useParams<{ listingId: string }>();
   const navigate = useNavigate();
@@ -28,7 +35,8 @@ const CheckoutPage = () => {
   const [vendorName, setVendorName] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [customWeight, setCustomWeight] = useState<number | null>(null);
-  const [payment, setPayment] = useState<PaymentMethod | null>(null);
+  const { methods: savedPayments, loading: paymentsLoading } = usePaymentMethods();
+  const [payment, setPayment] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [placing, setPlacing] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -116,11 +124,7 @@ const CheckoutPage = () => {
     ? Math.round((1 - listing.discounted_price / listing.original_price) * 100)
     : 0;
 
-  const paymentOptions: { id: PaymentMethod; label: string; icon: React.ReactNode }[] = [
-    { id: "tng", label: t("tngWallet"), icon: <Wallet className="h-4 w-4" /> },
-    { id: "card", label: t("creditDebit"), icon: <CreditCard className="h-4 w-4" /> },
-    { id: "fpx", label: t("bankTransfer"), icon: <Building2 className="h-4 w-4" /> },
-  ];
+  const hasPaymentMethods = savedPayments.length > 0;
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -236,23 +240,37 @@ const CheckoutPage = () => {
 
         {/* Payment */}
         <div className="rounded-xl border border-border bg-card p-4">
-          <p className="text-sm font-medium text-card-foreground mb-3">{t("selectPayment")}</p>
-          <div className="space-y-2">
-            {paymentOptions.map(opt => (
-              <button
-                key={opt.id}
-                onClick={() => setPayment(opt.id)}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border text-sm transition-colors ${
-                  payment === opt.id
-                    ? "border-primary bg-secondary text-foreground"
-                    : "border-border text-muted-foreground"
-                }`}
-              >
-                {opt.icon}
-                <span>{opt.label}</span>
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-sm font-medium text-card-foreground">{t("selectPayment")}</p>
+            {!hasPaymentMethods && (
+              <button onClick={() => navigate("/profile")} className="text-xs text-primary font-medium">
+                {t("addPayment")}
               </button>
-            ))}
+            )}
           </div>
+          {hasPaymentMethods ? (
+            <div className="space-y-2">
+              {savedPayments.map(pm => (
+                <button
+                  key={pm.id}
+                  onClick={() => setPayment(pm.id)}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border text-sm transition-colors ${
+                    payment === pm.id
+                      ? "border-primary bg-secondary text-foreground"
+                      : "border-border text-muted-foreground"
+                  }`}
+                >
+                  {PAYMENT_ICON[pm.type] || <Wallet className="h-4 w-4" />}
+                  <div className="text-left">
+                    <span className="block">{pm.nickname}</span>
+                    <span className="text-xs text-muted-foreground">{pm.detail}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">{t("noPayments")}</p>
+          )}
         </div>
 
         {/* Order summary */}

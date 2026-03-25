@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { usePaymentMethods, type PaymentMethodType } from "@/hooks/usePaymentMethods";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,19 +21,13 @@ const roleConfig = {
   composter: { icon: Recycle, color: "bg-muted-foreground" },
 };
 
-type PaymentType = "tng" | "card" | "bank";
-
-interface PaymentMethod {
-  id: string;
-  type: PaymentType;
-  label: string;
-  detail: string;
-}
+type PaymentType = PaymentMethodType;
 
 const ProfilePage = () => {
   const { user, updateProfile, logout } = useAuth();
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const { methods: payments, add: addPaymentToDB, remove: removePaymentFromDB } = usePaymentMethods();
 
   // Edit profile state
   const [editing, setEditing] = useState(false);
@@ -42,7 +37,6 @@ const ProfilePage = () => {
   const [editBiz, setEditBiz] = useState("");
 
   // Payment state
-  const [payments, setPayments] = useState<PaymentMethod[]>([]);
   const [addingPayment, setAddingPayment] = useState<PaymentType | null>(null);
 
   // Payment form state
@@ -84,27 +78,32 @@ const ProfilePage = () => {
     toast.success(t("profileUpdated"));
   };
 
-  const addPaymentMethod = () => {
-    const id = Date.now().toString();
-    let method: PaymentMethod | null = null;
+  const addPaymentMethod = async () => {
+    let nickname = "";
+    let detail = "";
+    let type: PaymentMethodType | null = null;
 
     if (addingPayment === "tng" && tngPhone) {
-      method = { id, type: "tng", label: t("tngWallet"), detail: tngPhone };
+      type = "tng"; nickname = t("tngWallet"); detail = tngPhone;
     } else if (addingPayment === "card" && cardNumber) {
-      method = { id, type: "card", label: t("creditDebit"), detail: `•••• ${cardNumber.slice(-4)}` };
-    } else if (addingPayment === "bank" && bankName && accountNumber) {
-      method = { id, type: "bank", label: t("bankTransfer"), detail: `${bankName} — •••${accountNumber.slice(-4)}` };
+      type = "card"; nickname = t("creditDebit"); detail = `•••• ${cardNumber.slice(-4)}`;
+    } else if (addingPayment === "fpx" && bankName && accountNumber) {
+      type = "fpx"; nickname = t("bankTransfer"); detail = `${bankName} — •••${accountNumber.slice(-4)}`;
     }
 
-    if (method) {
-      setPayments((prev) => [...prev, method!]);
-      toast.success(t("paymentAdded"));
-      resetPaymentForm();
+    if (type) {
+      const error = await addPaymentToDB(type, nickname, detail);
+      if (!error) {
+        toast.success(t("paymentAdded"));
+        resetPaymentForm();
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 
-  const removePayment = (id: string) => {
-    setPayments((prev) => prev.filter((p) => p.id !== id));
+  const removePayment = async (id: string) => {
+    await removePaymentFromDB(id);
     toast.success(t("paymentRemoved"));
   };
 
@@ -130,7 +129,7 @@ const ProfilePage = () => {
   const paymentTypeConfig: { type: PaymentType; icon: typeof Wallet; label: string }[] = [
     { type: "tng", icon: Wallet, label: t("tngWallet") },
     { type: "card", icon: CreditCard, label: t("creditDebit") },
-    { type: "bank", icon: Landmark, label: t("bankTransfer") },
+    { type: "fpx", icon: Landmark, label: t("bankTransfer") },
   ];
 
   return (
@@ -227,7 +226,7 @@ const ProfilePage = () => {
                     <Icon className="h-4 w-4 text-muted-foreground" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[11px] text-muted-foreground font-body">{pm.label}</p>
+                    <p className="text-[11px] text-muted-foreground font-body">{pm.nickname}</p>
                     <p className="text-sm font-medium text-foreground">{pm.detail}</p>
                   </div>
                   <button onClick={() => removePayment(pm.id)} className="p-1.5 rounded-lg hover:bg-destructive/10 transition-colors">
@@ -296,7 +295,7 @@ const ProfilePage = () => {
               </>
             )}
 
-            {addingPayment === "bank" && (
+            {addingPayment === "fpx" && (
               <>
                 <div className="space-y-2">
                   <Label>{t("bankName")}</Label>
