@@ -24,8 +24,8 @@ const Index = () => {
   const { t } = useLanguage();
   const { metrics } = useImpactMetrics();
   const { listings, loading: listingsLoading } = useListings();
+  const { location, setLocation } = useUserLocation();
   const [locationOpen, setLocationOpen] = useState(false);
-  const [location, setLocation] = useState({ lat: DEFAULT_CENTER[0], lng: DEFAULT_CENTER[1], name: "Kuala Lumpur" });
 
   const now = Date.now();
   const availableListings = listings.filter((l) => {
