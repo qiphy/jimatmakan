@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Timer, Recycle, Loader2 } from "lucide-react";
+import { Timer, Recycle, Loader2, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useCountdown } from "@/hooks/useCountdown";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserLocation } from "@/contexts/UserLocationContext";
+import { haversineDistance, formatDistance } from "@/utils/haversine";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import type { SupabaseListing } from "@/hooks/useListings";
