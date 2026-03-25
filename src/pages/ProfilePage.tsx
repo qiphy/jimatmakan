@@ -226,7 +226,7 @@ const ProfilePage = () => {
                     <Icon className="h-4 w-4 text-muted-foreground" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[11px] text-muted-foreground font-body">{pm.label}</p>
+                    <p className="text-[11px] text-muted-foreground font-body">{pm.nickname}</p>
                     <p className="text-sm font-medium text-foreground">{pm.detail}</p>
                   </div>
                   <button onClick={() => removePayment(pm.id)} className="p-1.5 rounded-lg hover:bg-destructive/10 transition-colors">
