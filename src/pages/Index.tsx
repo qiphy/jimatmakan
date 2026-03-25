@@ -1,15 +1,18 @@
-import { useEffect, useState } from "react";
-import { MapPin, Leaf, Sprout, RotateCcw } from "lucide-react";
+import { useState } from "react";
+import { MapPin, Leaf, Sprout } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useImpactMetrics } from "@/hooks/useImpactMetrics";
-import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
 import FoodListingCard from "@/components/FoodListingCard";
 import { useListings } from "@/hooks/useListings";
 import BottomNav from "@/components/BottomNav";
 import LanguageToggle from "@/components/LanguageToggle";
 import LocationPicker, { DEFAULT_CENTER } from "@/components/LocationPicker";
 import NotificationBell from "@/components/NotificationBell";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 
 interface ReorderStore {
   vendorId: string;
