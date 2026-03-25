@@ -77,27 +77,32 @@ const ProfilePage = () => {
     toast.success(t("profileUpdated"));
   };
 
-  const addPaymentMethod = () => {
-    const id = Date.now().toString();
-    let method: PaymentMethod | null = null;
+  const addPaymentMethod = async () => {
+    let nickname = "";
+    let detail = "";
+    let type: PaymentMethodType | null = null;
 
     if (addingPayment === "tng" && tngPhone) {
-      method = { id, type: "tng", label: t("tngWallet"), detail: tngPhone };
+      type = "tng"; nickname = t("tngWallet"); detail = tngPhone;
     } else if (addingPayment === "card" && cardNumber) {
-      method = { id, type: "card", label: t("creditDebit"), detail: `•••• ${cardNumber.slice(-4)}` };
-    } else if (addingPayment === "bank" && bankName && accountNumber) {
-      method = { id, type: "bank", label: t("bankTransfer"), detail: `${bankName} — •••${accountNumber.slice(-4)}` };
+      type = "card"; nickname = t("creditDebit"); detail = `•••• ${cardNumber.slice(-4)}`;
+    } else if (addingPayment === "fpx" && bankName && accountNumber) {
+      type = "fpx"; nickname = t("bankTransfer"); detail = `${bankName} — •••${accountNumber.slice(-4)}`;
     }
 
-    if (method) {
-      setPayments((prev) => [...prev, method!]);
-      toast.success(t("paymentAdded"));
-      resetPaymentForm();
+    if (type) {
+      const error = await addPaymentToDB(type, nickname, detail);
+      if (!error) {
+        toast.success(t("paymentAdded"));
+        resetPaymentForm();
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 
-  const removePayment = (id: string) => {
-    setPayments((prev) => prev.filter((p) => p.id !== id));
+  const removePayment = async (id: string) => {
+    await removePaymentFromDB(id);
     toast.success(t("paymentRemoved"));
   };
 
