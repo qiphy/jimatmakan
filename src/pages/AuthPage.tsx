@@ -57,12 +57,17 @@ const AuthPage = () => {
       setError(t("businessNameRequired"));
       return;
     }
+    if ((role === "vendor" || role === "composter") && !location) {
+      setError(t("locationRequired"));
+      return;
+    }
     setSubmitting(true);
     const { error: err } = await signup(email, password, {
       fullName,
       phone,
       role,
       businessName: role !== "user" ? businessName : undefined,
+      location: role !== "user" ? location : undefined,
     });
     setSubmitting(false);
     if (err) {
