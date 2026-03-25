@@ -90,7 +90,15 @@ const FoodListingCard = ({ listing }: { listing: SupabaseListing }) => {
               </span>
             )}
           </div>
-          <p className="text-xs text-muted-foreground mt-0.5">
+          <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
+            {t("listedBy")} {listing.vendor_name || "Vendor"}
+            {distance != null && (
+              <span className="inline-flex items-center gap-0.5 text-primary font-medium ml-1">
+                <MapPin className="h-3 w-3" />
+                {formatDistance(distance)}
+              </span>
+            )}
+          </p>
             {t("listedBy")} {listing.vendor_name || "Vendor"}
           </p>
           <div className="flex items-center justify-between mt-2">
