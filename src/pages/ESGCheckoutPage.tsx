@@ -17,7 +17,7 @@ const ESGCheckoutPage = () => {
   const { t } = useLanguage();
   const { monthly, totalRevenue, totalOrders, totalFood, totalCO2, loading } = useActivityData();
 
-  const [payment, setPayment] = useState<PaymentMethod>("tng");
+  const [payment, setPayment] = useState<PaymentMethod | null>(null);
   const [processing, setProcessing] = useState(false);
   const [success, setSuccess] = useState(false);
 
