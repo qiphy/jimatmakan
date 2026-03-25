@@ -188,6 +188,7 @@ export type Database = {
           halal_status: string
           halal_verified: boolean
           id: string
+          location: string | null
           phone: string
           role: Database["public"]["Enums"]["app_role"]
           updated_at: string
@@ -201,6 +202,7 @@ export type Database = {
           halal_status?: string
           halal_verified?: boolean
           id: string
+          location?: string | null
           phone?: string
           role?: Database["public"]["Enums"]["app_role"]
           updated_at?: string
@@ -214,6 +216,7 @@ export type Database = {
           halal_status?: string
           halal_verified?: boolean
           id?: string
+          location?: string | null
           phone?: string
           role?: Database["public"]["Enums"]["app_role"]
           updated_at?: string

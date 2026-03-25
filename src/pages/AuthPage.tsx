@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import LanguageToggle from "@/components/LanguageToggle";
-import { Leaf, ArrowLeft, Store, User, Recycle } from "lucide-react";
+import { Leaf, ArrowLeft, Store, User, Recycle, MapPin } from "lucide-react";
 
 type AuthStep = "choose" | "login" | "signup";
 
@@ -30,6 +30,7 @@ const AuthPage = () => {
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState<UserRole>("user");
   const [businessName, setBusinessName] = useState("");
+  const [location, setLocation] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -56,12 +57,17 @@ const AuthPage = () => {
       setError(t("businessNameRequired"));
       return;
     }
+    if ((role === "vendor" || role === "composter") && !location) {
+      setError(t("locationRequired"));
+      return;
+    }
     setSubmitting(true);
     const { error: err } = await signup(email, password, {
       fullName,
       phone,
       role,
       businessName: role !== "user" ? businessName : undefined,
+      location: role !== "user" ? location : undefined,
     });
     setSubmitting(false);
     if (err) {
@@ -204,6 +210,15 @@ const AuthPage = () => {
               <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-200">
                 <Label htmlFor="biz-name">{t("businessNameLabel")}</Label>
                 <Input id="biz-name" value={businessName} onChange={(e) => setBusinessName(e.target.value)} placeholder={t("businessNamePlaceholder")} />
+              </div>
+            )}
+
+            {needsBusinessName && (
+              <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                <Label htmlFor="location">
+                  <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{t("locationLabel")}</span>
+                </Label>
+                <Input id="location" value={location} onChange={(e) => setLocation(e.target.value)} placeholder={t("locationPlaceholder")} />
               </div>
             )}
 

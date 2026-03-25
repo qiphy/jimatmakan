@@ -11,6 +11,7 @@ export interface UserProfile {
   phone: string;
   role: UserRole;
   businessName?: string;
+  location?: string;
   email: string;
   halalVerified?: boolean;
   halalCertUrl?: string;
@@ -48,6 +49,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         phone: data.phone,
         role: data.role as UserRole,
         businessName: data.business_name ?? undefined,
+        location: (data as any).location ?? undefined,
         email: data.email,
         halalVerified: data.halal_verified ?? false,
         halalCertUrl: (data as any).halal_cert_url ?? undefined,
@@ -98,6 +100,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           phone: profile.phone,
           role: profile.role,
           business_name: profile.businessName,
+          location: profile.location,
         },
       },
     });
@@ -111,6 +114,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (updates.phone !== undefined) dbUpdates.phone = updates.phone;
     // Role changes are not allowed via client-side updates (enforced by RLS)
     if (updates.businessName !== undefined) dbUpdates.business_name = updates.businessName;
+    if (updates.location !== undefined) dbUpdates.location = updates.location;
     if (updates.email !== undefined) dbUpdates.email = updates.email;
     if (updates.halalVerified !== undefined) dbUpdates.halal_verified = updates.halalVerified;
     if (updates.halalCertUrl !== undefined) dbUpdates.halal_cert_url = updates.halalCertUrl;

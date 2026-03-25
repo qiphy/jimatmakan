@@ -12,7 +12,7 @@ import LanguageToggle from "@/components/LanguageToggle";
 import { toast } from "sonner";
 import {
   ArrowLeft, Mail, Phone, Store, User, Recycle, LogOut, Shield,
-  Pencil, X, CreditCard, Landmark, Wallet, Plus, Trash2,
+  Pencil, X, CreditCard, Landmark, Wallet, Plus, Trash2, MapPin,
 } from "lucide-react";
 
 const roleConfig = {
@@ -35,6 +35,7 @@ const ProfilePage = () => {
   const [editEmail, setEditEmail] = useState("");
   const [editPhone, setEditPhone] = useState("");
   const [editBiz, setEditBiz] = useState("");
+  const [editLocation, setEditLocation] = useState("");
 
   // Payment state
   const [addingPayment, setAddingPayment] = useState<PaymentType | null>(null);
@@ -64,6 +65,7 @@ const ProfilePage = () => {
     setEditEmail(user.email);
     setEditPhone(user.phone);
     setEditBiz(user.businessName || "");
+    setEditLocation(user.location || "");
     setEditing(true);
   };
 
@@ -72,7 +74,7 @@ const ProfilePage = () => {
       fullName: editName,
       email: editEmail,
       phone: editPhone,
-      ...(needsBiz ? { businessName: editBiz } : {}),
+      ...(needsBiz ? { businessName: editBiz, location: editLocation } : {}),
     });
     setEditing(false);
     toast.success(t("profileUpdated"));
@@ -122,6 +124,9 @@ const ProfilePage = () => {
     { icon: Phone, label: t("phoneLabel"), value: user.phone },
     ...(user.businessName
       ? [{ icon: Store, label: t("businessNameLabel"), value: user.businessName }]
+      : []),
+    ...(needsBiz && user.location
+      ? [{ icon: MapPin, label: t("locationLabel"), value: user.location }]
       : []),
     { icon: Shield, label: t("selectRole"), value: t(user.role === "vendor" ? "roleVendor" : user.role === "composter" ? "roleComposter" : "roleUser") },
   ];
@@ -205,8 +210,13 @@ const ProfilePage = () => {
             </Button>
           </div>
         </div>
-      )}
-
+            )}
+          {needsBiz && (
+            <div className="space-y-2">
+              <Label>{t("locationLabel")}</Label>
+              <Input value={editLocation} onChange={(e) => setEditLocation(e.target.value)} placeholder={t("locationPlaceholder")} />
+            </div>
+          )}
       {/* Payment Methods */}
       <div className="mx-4 mt-8">
         <h3 className="text-sm font-display font-bold text-foreground mb-3">{t("paymentMethods")}</h3>
