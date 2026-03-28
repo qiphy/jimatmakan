@@ -53,7 +53,7 @@ const HalalVerificationSection = () => {
         .from("halal-certificates")
         .getPublicUrl(filePath);
 
-      await updateProfile({ halalCertUrl: publicUrl, halalStatus: "pending", halalVerified: false });
+      await updateProfile({ halalCertUrl: publicUrl });
       toast.success(t("halalSubmitted"));
     } catch (err) {
       console.error(err);
