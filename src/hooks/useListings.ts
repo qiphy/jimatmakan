@@ -19,8 +19,9 @@ export const useListings = (vendorOnly = false) => {
       .select("*")
       .order("created_at", { ascending: false });
 
+    const { data: { session } } = await supabase.auth.getSession();
+
     if (vendorOnly) {
-      const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
         query = query.eq("vendor_id", session.user.id);
       }
@@ -31,6 +32,16 @@ export const useListings = (vendorOnly = false) => {
       console.error("Error fetching listings:", error);
       setListings([]);
     } else {
+      // Fetch user's ordered listing IDs to exclude them
+      let orderedListingIds = new Set<string>();
+      if (session?.user) {
+        const { data: orders } = await supabase
+          .from("orders")
+          .select("listing_id")
+          .eq("buyer_id", session.user.id);
+        orderedListingIds = new Set((orders || []).map((o) => o.listing_id));
+      }
+
       // Enrich with vendor names
       const vendorIds = [...new Set((data || []).map((l) => l.vendor_id))];
       let vendorMap = new Map<string, string>();
@@ -43,8 +54,14 @@ export const useListings = (vendorOnly = false) => {
           (profiles || []).map((p) => [p.id, p.business_name || p.full_name])
         );
       }
+
+      // Filter out listings the user has already ordered (unless vendor viewing own)
+      const filtered = (data || []).filter((l) => 
+        vendorOnly || !orderedListingIds.has(l.id)
+      );
+
       setListings(
-        (data || []).map((l) => ({
+        filtered.map((l) => ({
           ...l,
           vendor_name: vendorMap.get(l.vendor_id) || "Vendor",
         }))
