@@ -49,7 +49,7 @@ const ActivityOrderStatus = () => {
 
       const [{ data: listings }, { data: vendors }] = await Promise.all([
         supabase.from("listings").select("id, title").in("id", listingIds),
-        supabase.from("profiles").select("id, business_name, full_name").in("id", vendorIds),
+        supabase.from("vendor_public_info").select("id, business_name, full_name").in("id", vendorIds),
       ]);
 
       const listingMap = Object.fromEntries((listings || []).map((l) => [l.id, l.title]));

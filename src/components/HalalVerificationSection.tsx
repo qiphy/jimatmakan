@@ -53,7 +53,7 @@ const HalalVerificationSection = () => {
         .from("halal-certificates")
         .getPublicUrl(filePath);
 
-      await updateProfile({ halalCertUrl: publicUrl, halalStatus: "pending", halalVerified: false });
+      await updateProfile({ halalCertUrl: publicUrl });
       toast.success(t("halalSubmitted"));
     } catch (err) {
       console.error(err);
@@ -73,7 +73,7 @@ const HalalVerificationSection = () => {
           await supabase.storage.from("halal-certificates").remove([decodeURIComponent(parts[1])]);
         }
       }
-      await updateProfile({ halalCertUrl: undefined, halalVerified: false, halalStatus: "none" });
+      await updateProfile({ halalCertUrl: undefined });
       toast.success(t("halalDisabled"));
     } catch (err) {
       console.error(err);
