@@ -231,7 +231,33 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      vendor_public_info: {
+        Row: {
+          business_name: string | null
+          full_name: string | null
+          halal_status: string | null
+          halal_verified: boolean | null
+          id: string | null
+          phone: string | null
+        }
+        Insert: {
+          business_name?: string | null
+          full_name?: string | null
+          halal_status?: string | null
+          halal_verified?: boolean | null
+          id?: string | null
+          phone?: string | null
+        }
+        Update: {
+          business_name?: string | null
+          full_name?: string | null
+          halal_status?: string | null
+          halal_verified?: boolean | null
+          id?: string | null
+          phone?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
