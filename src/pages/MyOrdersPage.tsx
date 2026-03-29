@@ -135,8 +135,8 @@ const MyOrdersPage = () => {
         vendor_name: vendorMap[o.vendor_id]?.business_name || vendorMap[o.vendor_id]?.full_name || "Vendor",
         vendor_phone: "",
         pickup_address: listingMap[o.listing_id]?.pickup_address || null,
-        pickup_lat: KL_CENTER.lat + (Math.random() - 0.5) * 0.01,
-        pickup_lng: KL_CENTER.lng + (Math.random() - 0.5) * 0.01,
+        pickup_lat: listingMap[o.listing_id]?.pickup_lat || null,
+        pickup_lng: listingMap[o.listing_id]?.pickup_lng || null,
         isVendorOrder,
       });
 
