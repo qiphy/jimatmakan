@@ -54,7 +54,7 @@ const NotificationBell = () => {
             icon: <DollarSign className="h-4 w-4 text-primary" />,
             title: `RM${totalEarnings.toFixed(2)} ${t("notifTotalEarnings")}`,
             description: t("notifViewActivity"),
-            path: "/activity",
+            path: "/revenue",
           });
         }
 
@@ -64,7 +64,7 @@ const NotificationBell = () => {
             icon: <Package className="h-4 w-4 text-primary" />,
             title: `${pendingCount} ${t("notifPendingOrders")}`,
             description: t("notifCheckOrders"),
-            path: "/activity",
+            path: "/orders",
           });
         }
 
@@ -74,7 +74,7 @@ const NotificationBell = () => {
             icon: <Leaf className="h-4 w-4 text-primary" />,
             title: `${Number(impact.food_saved_kg).toFixed(1)}kg ${t("notifFoodRescued")}`,
             description: t("notifViewImpact"),
-            path: "/activity",
+            path: "/sustainability",
           });
         }
       } else if (isComposter) {
@@ -91,14 +91,14 @@ const NotificationBell = () => {
             icon: <Leaf className="h-4 w-4 text-primary" />,
             title: `${Number(impact.food_saved_kg).toFixed(1)}kg ${t("notifFoodRescued")}`,
             description: t("notifViewImpact"),
-            path: "/activity",
+            path: "/sustainability",
           });
           items.push({
             id: "composter-co2",
             icon: <TrendingDown className="h-4 w-4 text-primary" />,
             title: `${Number(impact.co2_reduced_kg).toFixed(1)}kg ${t("notifCO2Saved")}`,
             description: t("notifViewActivity"),
-            path: "/activity",
+            path: "/sustainability",
           });
         }
       } else {
@@ -134,7 +134,7 @@ const NotificationBell = () => {
             icon: <Package className="h-4 w-4 text-primary" />,
             title: `${completedOrders} ${t("notifOrdersCompleted")}`,
             description: t("notifViewActivity"),
-            path: "/activity",
+            path: "/orders",
           });
         }
 
@@ -144,7 +144,7 @@ const NotificationBell = () => {
             icon: <DollarSign className="h-4 w-4 text-primary" />,
             title: `RM${Number(impact.money_saved).toFixed(2)} ${t("notifSaved")}`,
             description: t("notifKeepSaving"),
-            path: "/activity",
+            path: "/sustainability",
           });
         }
       }
