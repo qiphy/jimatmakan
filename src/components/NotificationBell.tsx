@@ -134,7 +134,7 @@ const NotificationBell = () => {
             icon: <Package className="h-4 w-4 text-primary" />,
             title: `${completedOrders} ${t("notifOrdersCompleted")}`,
             description: t("notifViewActivity"),
-            path: "/activity",
+            path: "/orders",
           });
         }
 
@@ -144,7 +144,7 @@ const NotificationBell = () => {
             icon: <DollarSign className="h-4 w-4 text-primary" />,
             title: `RM${Number(impact.money_saved).toFixed(2)} ${t("notifSaved")}`,
             description: t("notifKeepSaving"),
-            path: "/activity",
+            path: "/sustainability",
           });
         }
       }
