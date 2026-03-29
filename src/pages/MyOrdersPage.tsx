@@ -29,9 +29,11 @@ interface OrderWithDetails {
   listing_title: string;
   vendor_name: string;
   vendor_phone: string;
+  buyer_name?: string;
   pickup_address: string | null;
   pickup_lat: number | null;
   pickup_lng: number | null;
+  isVendorOrder?: boolean;
 }
 
 const STATUS_CONFIG: Record<string, { icon: React.ReactNode; color: string }> = {
