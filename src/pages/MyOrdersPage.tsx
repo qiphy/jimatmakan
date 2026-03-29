@@ -75,58 +75,80 @@ const PickupMap = ({ lat, lng }: { lat: number; lng: number }) => {
 
 const MyOrdersPage = () => {
   const navigate = useNavigate();
-  const { session } = useAuth();
+  const { session, user } = useAuth();
   const { t } = useLanguage();
   const [orders, setOrders] = useState<OrderWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [confirmOrderId, setConfirmOrderId] = useState<string | null>(null);
   const [confirming, setConfirming] = useState(false);
+  const [tab, setTab] = useState<"bought" | "received">("bought");
+  const isVendor = user?.role === "vendor";
 
   useEffect(() => {
     if (!session?.user) return;
     (async () => {
-      const { data: rawOrders } = await supabase
+      // Fetch orders where user is buyer
+      const { data: buyerOrders } = await supabase
         .from("orders")
-        .select("id, quantity, total_price, weight_kg, status, created_at, listing_id, vendor_id")
+        .select("id, quantity, total_price, weight_kg, status, created_at, listing_id, vendor_id, buyer_id")
         .eq("buyer_id", session.user.id)
         .order("created_at", { ascending: false });
 
-      if (!rawOrders || rawOrders.length === 0) {
+      // Fetch orders where user is vendor
+      const { data: vendorOrders } = isVendor
+        ? await supabase
+            .from("orders")
+            .select("id, quantity, total_price, weight_kg, status, created_at, listing_id, vendor_id, buyer_id")
+            .eq("vendor_id", session.user.id)
+            .order("created_at", { ascending: false })
+        : { data: [] as any[] };
+
+      const allRawOrders = [...(buyerOrders || []), ...(vendorOrders || [])];
+
+      if (allRawOrders.length === 0) {
         setLoading(false);
         return;
       }
 
-      const listingIds = [...new Set(rawOrders.map((o) => o.listing_id))];
-      const vendorIds = [...new Set(rawOrders.map((o) => o.vendor_id))];
+      const listingIds = [...new Set(allRawOrders.map((o) => o.listing_id))];
+      const vendorIds = [...new Set((buyerOrders || []).map((o) => o.vendor_id))];
 
       const [{ data: listings }, { data: vendors }] = await Promise.all([
         supabase.from("listings").select("id, title, pickup_address").in("id", listingIds),
-        supabase.from("vendor_public_info").select("id, business_name, full_name").in("id", vendorIds),
+        vendorIds.length > 0
+          ? supabase.from("vendor_public_info").select("id, business_name, full_name").in("id", vendorIds)
+          : Promise.resolve({ data: [] as any[] }),
       ]);
 
       const listingMap = Object.fromEntries((listings || []).map((l) => [l.id, l]));
       const vendorMap = Object.fromEntries((vendors || []).map((v) => [v.id, v]));
 
-      setOrders(
-        rawOrders.map((o) => ({
-          id: o.id,
-          quantity: o.quantity,
-          total_price: o.total_price,
-          weight_kg: o.weight_kg,
-          status: o.status,
-          created_at: o.created_at,
-          listing_title: listingMap[o.listing_id]?.title || "Unknown Item",
-          vendor_name: vendorMap[o.vendor_id]?.business_name || vendorMap[o.vendor_id]?.full_name || "Vendor",
-          vendor_phone: "",
-          pickup_address: listingMap[o.listing_id]?.pickup_address || null,
-          pickup_lat: KL_CENTER.lat + (Math.random() - 0.5) * 0.01,
-          pickup_lng: KL_CENTER.lng + (Math.random() - 0.5) * 0.01,
-        }))
-      );
+      const mapOrder = (o: any, isVendorOrder: boolean) => ({
+        id: o.id,
+        quantity: o.quantity,
+        total_price: o.total_price,
+        weight_kg: o.weight_kg,
+        status: o.status,
+        created_at: o.created_at,
+        listing_title: listingMap[o.listing_id]?.title || "Unknown Item",
+        vendor_name: vendorMap[o.vendor_id]?.business_name || vendorMap[o.vendor_id]?.full_name || "Vendor",
+        vendor_phone: "",
+        pickup_address: listingMap[o.listing_id]?.pickup_address || null,
+        pickup_lat: KL_CENTER.lat + (Math.random() - 0.5) * 0.01,
+        pickup_lng: KL_CENTER.lng + (Math.random() - 0.5) * 0.01,
+        isVendorOrder,
+      });
+
+      const mapped = [
+        ...(buyerOrders || []).map((o) => mapOrder(o, false)),
+        ...(vendorOrders || []).map((o) => mapOrder(o, true)),
+      ];
+
+      setOrders(mapped);
       setLoading(false);
     })();
-  }, [session]);
+  }, [session, isVendor]);
 
   const formatDate = (iso: string) => {
     const d = new Date(iso);
