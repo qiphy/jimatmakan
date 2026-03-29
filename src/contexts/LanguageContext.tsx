@@ -375,6 +375,7 @@ const translations = {
     backToBrowse: "Kembali ke Carian",
     itemUnavailable: "Item ini tidak lagi tersedia.",
     myOrders: "Pesanan Saya",
+    receivedOrders: "Pesanan Diterima",
     noOrdersYet: "Tiada pesanan lagi. Layari senarai untuk mencari makanan!",
     pickupLocation: "Lokasi Pengambilan",
     contactVendor: "Hubungi peniaga untuk butiran pengambilan",
