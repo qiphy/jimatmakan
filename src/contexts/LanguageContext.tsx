@@ -155,6 +155,7 @@ const translations = {
     backToBrowse: "Back to Browse",
     itemUnavailable: "This item is no longer available.",
     myOrders: "My Orders",
+    receivedOrders: "Received Orders",
     noOrdersYet: "No orders yet. Browse listings to find food!",
     pickupLocation: "Pickup Location",
     contactVendor: "Contact vendor for pickup details",
