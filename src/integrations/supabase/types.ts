@@ -238,7 +238,6 @@ export type Database = {
           halal_status: string | null
           halal_verified: boolean | null
           id: string | null
-          phone: string | null
         }
         Insert: {
           business_name?: string | null
@@ -246,7 +245,6 @@ export type Database = {
           halal_status?: string | null
           halal_verified?: boolean | null
           id?: string | null
-          phone?: string | null
         }
         Update: {
           business_name?: string | null
@@ -254,7 +252,6 @@ export type Database = {
           halal_status?: string | null
           halal_verified?: boolean | null
           id?: string | null
-          phone?: string | null
         }
         Relationships: []
       }
