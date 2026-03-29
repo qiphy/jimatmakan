@@ -115,7 +115,7 @@ const MyOrdersPage = () => {
       const vendorIds = [...new Set((buyerOrders || []).map((o) => o.vendor_id))];
 
       const [{ data: listings }, { data: vendors }] = await Promise.all([
-        supabase.from("listings").select("id, title, pickup_address").in("id", listingIds),
+        supabase.from("listings").select("id, title, pickup_address, pickup_lat, pickup_lng").in("id", listingIds),
         vendorIds.length > 0
           ? supabase.from("vendor_public_info").select("id, business_name, full_name").in("id", vendorIds)
           : Promise.resolve({ data: [] as any[] }),
