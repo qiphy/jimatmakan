@@ -60,7 +60,8 @@ const translations = {
     foodSavedChart: "Food Waste Saved (kg)",
     co2ReducedChart: "CO₂ Emissions Reduced (kg)",
     esgReportTitle: "ESG Sustainability Report",
-    esgReportDesc: "Generate a detailed Environmental, Social & Governance report with your food waste reduction data, carbon offset metrics, and sustainability impact analysis.",
+    esgReportDesc:
+      "Generate a detailed Environmental, Social & Governance report with your food waste reduction data, carbon offset metrics, and sustainability impact analysis.",
     esgReportBtn: "Generate ESG Report",
     esgReportGenerated: "ESG report generated! Check your email.",
     totalRevenue: "Total Revenue",
@@ -275,12 +276,14 @@ const translations = {
     impactTitle: "Impak Anda",
     foodSaved: "kg makanan diselamatkan",
     co2Reduced: "kg CO₂ dikurangkan",
-    motivationalMsg: "Setiap hidangan yang diselamatkan adalah langkah ke arah Malaysia yang lebih hijau. Kurangkan pembaziran, beri makan komuniti.",
+    motivationalMsg:
+      "Setiap hidangan yang diselamatkan adalah langkah ke arah Malaysia yang lebih hijau. Kurangkan pembaziran, berikan makanan kepada komuniti.",
     reorderTitle: "Pesan dari kedai ini lagi?",
     foodSavedChart: "Sisa Makanan Diselamatkan (kg)",
     co2ReducedChart: "Pelepasan CO₂ Dikurangkan (kg)",
     esgReportTitle: "Laporan Kelestarian ESG",
-    esgReportDesc: "Jana laporan terperinci Alam Sekitar, Sosial & Tadbir Urus dengan data pengurangan sisa makanan, metrik pengimbangan karbon, dan analisis impak kelestarian anda.",
+    esgReportDesc:
+      "Jana laporan terperinci Alam Sekitar, Sosial & Tadbir Urus dengan data pengurangan sisa makanan, metrik pengimbangan karbon, dan analisis impak kelestarian anda.",
     esgReportBtn: "Jana Laporan ESG",
     esgReportGenerated: "Laporan ESG dijana! Semak e-mel anda.",
     totalRevenue: "Jumlah Pendapatan",
@@ -458,16 +461,9 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [lang, setLang] = useState<Lang>("en");
 
-  const t = useCallback(
-    (key: TranslationKey) => translations[lang][key] || key,
-    [lang]
-  );
+  const t = useCallback((key: TranslationKey) => translations[lang][key] || key, [lang]);
 
-  return (
-    <LanguageContext.Provider value={{ lang, setLang, t }}>
-      {children}
-    </LanguageContext.Provider>
-  );
+  return <LanguageContext.Provider value={{ lang, setLang, t }}>{children}</LanguageContext.Provider>;
 };
 
 export const useLanguage = () => {
