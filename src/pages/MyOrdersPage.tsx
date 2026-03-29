@@ -164,18 +164,37 @@ const MyOrdersPage = () => {
         <h1 className="font-display font-bold text-foreground">{t("myOrders")}</h1>
       </div>
 
+      {isVendor && (
+        <div className="flex gap-2 px-4 pt-3">
+          <button
+            onClick={() => setTab("bought")}
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition-colors ${tab === "bought" ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"}`}
+          >
+            <ShoppingBag className="h-3.5 w-3.5" />
+            {t("myOrders")}
+          </button>
+          <button
+            onClick={() => setTab("received")}
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition-colors ${tab === "received" ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"}`}
+          >
+            <Store className="h-3.5 w-3.5" />
+            {t("receivedOrders") || "Received Orders"}
+          </button>
+        </div>
+      )}
+
       <div className="p-4 space-y-3 max-w-lg mx-auto">
         {loading ? (
           <div className="flex justify-center py-12">
             <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
           </div>
-        ) : orders.length === 0 ? (
+        ) : orders.filter((o) => isVendor ? (tab === "received" ? o.isVendorOrder : !o.isVendorOrder) : true).length === 0 ? (
           <div className="text-center py-12 space-y-3">
             <Package className="h-12 w-12 text-muted-foreground mx-auto" />
             <p className="text-muted-foreground text-sm">{t("noOrdersYet")}</p>
           </div>
         ) : (
-          orders.map((order) => {
+          orders.filter((o) => isVendor ? (tab === "received" ? o.isVendorOrder : !o.isVendorOrder) : true).map((order) => {
             const cfg = STATUS_CONFIG[order.status] || STATUS_CONFIG.pending;
             const isExpanded = expandedId === order.id;
 
