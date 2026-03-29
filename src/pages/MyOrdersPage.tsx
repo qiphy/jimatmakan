@@ -178,7 +178,7 @@ const MyOrdersPage = () => {
             className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition-colors ${tab === "received" ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"}`}
           >
             <Store className="h-3.5 w-3.5" />
-            {t("receivedOrders") || "Received Orders"}
+            {t("receivedOrders")}
           </button>
         </div>
       )}
