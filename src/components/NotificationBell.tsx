@@ -91,14 +91,14 @@ const NotificationBell = () => {
             icon: <Leaf className="h-4 w-4 text-primary" />,
             title: `${Number(impact.food_saved_kg).toFixed(1)}kg ${t("notifFoodRescued")}`,
             description: t("notifViewImpact"),
-            path: "/activity",
+            path: "/sustainability",
           });
           items.push({
             id: "composter-co2",
             icon: <TrendingDown className="h-4 w-4 text-primary" />,
             title: `${Number(impact.co2_reduced_kg).toFixed(1)}kg ${t("notifCO2Saved")}`,
             description: t("notifViewActivity"),
-            path: "/activity",
+            path: "/sustainability",
           });
         }
       } else {
