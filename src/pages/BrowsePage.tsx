@@ -154,9 +154,86 @@ const BrowsePage = () => {
               <X className="h-3.5 w-3.5 text-muted-foreground" />
             </button>
           )}
-          <button className="rounded-lg bg-secondary p-1.5">
-            <SlidersHorizontal className="h-3.5 w-3.5 text-foreground" />
-          </button>
+          <Sheet open={filterOpen} onOpenChange={setFilterOpen}>
+            <SheetTrigger asChild>
+              <button className="rounded-lg bg-secondary p-1.5 relative">
+                <SlidersHorizontal className="h-3.5 w-3.5 text-foreground" />
+                {activeFilterCount > 0 && (
+                  <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-primary-foreground text-[10px] flex items-center justify-center font-bold">
+                    {activeFilterCount}
+                  </span>
+                )}
+              </button>
+            </SheetTrigger>
+            <SheetContent side="bottom" className="rounded-t-2xl max-h-[80vh] overflow-y-auto">
+              <SheetHeader>
+                <SheetTitle className="flex items-center justify-between">
+                  <span>{t("filters")}</span>
+                  {activeFilterCount > 0 && (
+                    <Button variant="ghost" size="sm" onClick={clearFilters} className="text-xs text-muted-foreground">
+                      {t("clearAll")}
+                    </Button>
+                  )}
+                </SheetTitle>
+              </SheetHeader>
+              <div className="space-y-6 py-4">
+                {/* Distance */}
+                <div className="space-y-3">
+                  <label className="text-sm font-semibold text-foreground">{t("maxDistance")}</label>
+                  <Slider
+                    value={[maxDistance]}
+                    onValueChange={([v]) => setMaxDistance(v)}
+                    min={1}
+                    max={50}
+                    step={1}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {maxDistance >= 50 ? t("anyDistance") : `≤ ${maxDistance} km`}
+                  </p>
+                </div>
+
+                {/* Max Price */}
+                <div className="space-y-3">
+                  <label className="text-sm font-semibold text-foreground">{t("maxPriceLabel")}</label>
+                  <Slider
+                    value={[maxPrice]}
+                    onValueChange={([v]) => setMaxPrice(v)}
+                    min={1}
+                    max={100}
+                    step={1}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {maxPrice >= 100 ? t("anyPrice") : `≤ RM ${maxPrice}`}
+                  </p>
+                </div>
+
+                {/* Dietary */}
+                <div className="space-y-3">
+                  <label className="text-sm font-semibold text-foreground">{t("dietaryPreferences")}</label>
+                  <div className="flex flex-wrap gap-2">
+                    {dietaryOptions.map((opt) => (
+                      <button
+                        key={opt.key}
+                        onClick={() => toggleDietary(opt.key)}
+                        className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium transition-colors ${
+                          selectedDietary.includes(opt.key)
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-card border border-border text-foreground"
+                        }`}
+                      >
+                        <span>{opt.emoji}</span>
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <Button className="w-full" onClick={() => setFilterOpen(false)}>
+                  {t("applyFilters")}
+                </Button>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
 
