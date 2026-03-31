@@ -176,7 +176,7 @@ const Chatbot = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && send()}
-              placeholder={t("lang") === "ms" ? "Taip mesej..." : "Type a message..."}
+              placeholder={lang === "ms" ? "Taip mesej..." : "Type a message..."}
               className="text-xs h-9 rounded-xl"
               disabled={loading}
             />
