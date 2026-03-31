@@ -2,9 +2,15 @@ import { useState, useMemo } from "react";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserLocation } from "@/contexts/UserLocationContext";
+import { haversineDistance } from "@/utils/haversine";
 import FoodListingCard from "@/components/FoodListingCard";
 import BottomNav from "@/components/BottomNav";
 import { useListings, type SupabaseListing } from "@/hooks/useListings";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Slider } from "@/components/ui/slider";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 const categories = [
   { key: "allCategories" as const, emoji: "🍽️", value: "all" },
@@ -15,6 +21,12 @@ const categories = [
   { key: "meat" as const, emoji: "🍗", value: "meat" },
   { key: "seafood" as const, emoji: "🦐", value: "seafood" },
   { key: "pastries" as const, emoji: "🍡", value: "pastries" },
+];
+
+const dietaryOptions = [
+  { key: "halal", label: "Halal", emoji: "🕌" },
+  { key: "vegetarian", label: "Vegetarian", emoji: "🥗" },
+  { key: "vegan", label: "Vegan", emoji: "🌱" },
 ];
 
 const fuzzyMatch = (text: string, query: string): number => {
@@ -42,16 +54,62 @@ const getRelevance = (listing: SupabaseListing, query: string): number => {
 const BrowsePage = () => {
   const { t } = useLanguage();
   const { user } = useAuth();
+  const { location: userLocation } = useUserLocation();
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
+  const [maxDistance, setMaxDistance] = useState(50); // km
+  const [maxPrice, setMaxPrice] = useState(100); // RM
+  const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
+  const [filterOpen, setFilterOpen] = useState(false);
   const { listings, loading } = useListings();
   const showComposting = user?.role === "vendor" || user?.role === "composter";
+
+  const activeFilterCount = (maxDistance < 50 ? 1 : 0) + (maxPrice < 100 ? 1 : 0) + (selectedDietary.length > 0 ? 1 : 0);
+
+  const toggleDietary = (key: string) => {
+    setSelectedDietary((prev) =>
+      prev.includes(key) ? prev.filter((d) => d !== key) : [...prev, key]
+    );
+  };
+
+  const clearFilters = () => {
+    setMaxDistance(50);
+    setMaxPrice(100);
+    setSelectedDietary([]);
+  };
 
   const filtered = useMemo(() => {
     let results = listings;
 
     if (activeCategory !== "all") {
       results = results.filter((l) => l.category === activeCategory);
+    }
+
+    // Distance filter
+    if (maxDistance < 50) {
+      results = results.filter((l) => {
+        if (l.pickup_lat == null || l.pickup_lng == null) return true;
+        const dist = haversineDistance(userLocation.lat, userLocation.lng, l.pickup_lat, l.pickup_lng);
+        return dist <= maxDistance;
+      });
+    }
+
+    // Price filter
+    if (maxPrice < 100) {
+      results = results.filter((l) => l.discounted_price <= maxPrice);
+    }
+
+    // Dietary filter — match against category/title/description keywords
+    if (selectedDietary.length > 0) {
+      results = results.filter((l) => {
+        const text = `${l.title} ${l.description || ""} ${l.category}`.toLowerCase();
+        return selectedDietary.every((d) => {
+          if (d === "vegetarian") return ["vegetables", "fruits", "bread", "pastries", "rice"].includes(l.category) || text.includes("vegetarian");
+          if (d === "vegan") return ["vegetables", "fruits"].includes(l.category) || text.includes("vegan");
+          if (d === "halal") return text.includes("halal");
+          return true;
+        });
+      });
     }
 
     if (query.trim()) {
@@ -63,7 +121,7 @@ const BrowsePage = () => {
     }
 
     return results;
-  }, [listings, query, activeCategory]);
+  }, [listings, query, activeCategory, maxDistance, maxPrice, selectedDietary, userLocation]);
 
   const now = Date.now();
   const available = filtered.filter((l) => {
