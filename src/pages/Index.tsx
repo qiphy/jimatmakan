@@ -6,6 +6,7 @@ import { useImpactMetrics } from "@/hooks/useImpactMetrics";
 import FoodListingCard from "@/components/FoodListingCard";
 import { useListings } from "@/hooks/useListings";
 import BottomNav from "@/components/BottomNav";
+import Chatbot from "@/components/Chatbot";
 import LanguageToggle from "@/components/LanguageToggle";
 import LocationPicker from "@/components/LocationPicker";
 import NotificationBell from "@/components/NotificationBell";
