@@ -138,7 +138,7 @@ const Chatbot = () => {
             <div ref={scrollRef} className="p-3 space-y-3">
               {messages.length === 0 && (
                 <p className="text-xs text-muted-foreground text-center py-6 font-body">
-                  👋 {t("lang") === "ms" ? "Ada soalan? Tanya saya!" : "Need help? Ask me anything!"}
+                  👋 {lang === "ms" ? "Ada soalan? Tanya saya!" : "Need help? Ask me anything!"}
                 </p>
               )}
               {messages.map((m, i) => (
