@@ -453,6 +453,14 @@ const translations = {
     maxAvailable: "Maksimum tersedia",
     allStock: "Semua",
     estimatedPrice: "Anggaran harga",
+    filters: "Penapis",
+    clearAll: "Padam semua",
+    maxDistance: "Jarak Maksimum",
+    anyDistance: "Sebarang jarak",
+    maxPriceLabel: "Harga Maksimum",
+    anyPrice: "Sebarang harga",
+    dietaryPreferences: "Pilihan Pemakanan",
+    applyFilters: "Guna Penapis",
   },
 } as const;
 
