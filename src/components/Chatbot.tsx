@@ -137,9 +137,37 @@ const Chatbot = () => {
           <ScrollArea className="flex-1 min-h-0 max-h-[340px]">
             <div ref={scrollRef} className="p-3 space-y-3">
               {messages.length === 0 && (
-                <p className="text-xs text-muted-foreground text-center py-6 font-body">
-                  👋 {lang === "ms" ? "Ada soalan? Tanya saya!" : "Need help? Ask me anything!"}
-                </p>
+                <div className="py-4 space-y-3">
+                  <p className="text-xs text-muted-foreground text-center font-body">
+                    👋 {lang === "ms" ? "Ada soalan? Tanya saya!" : "Need help? Ask me anything!"}
+                  </p>
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    {(lang === "ms"
+                      ? [
+                          "Bagaimana nak beli makanan?",
+                          "Cara senaraikan makanan lebihan",
+                          "Di mana pesanan saya?",
+                          "Apa itu pengesahan halal?",
+                          "Bagaimana impak saya dikira?",
+                        ]
+                      : [
+                          "How do I buy food?",
+                          "How to list surplus food",
+                          "Where are my orders?",
+                          "What is halal verification?",
+                          "How is my impact calculated?",
+                        ]
+                    ).map((q) => (
+                      <button
+                        key={q}
+                        onClick={() => { setInput(q); }}
+                        className="text-[11px] px-3 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary hover:bg-primary/10 transition-colors font-body"
+                      >
+                        {q}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               )}
               {messages.map((m, i) => (
                 <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
