@@ -66,7 +66,7 @@ const Chatbot = () => {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { t } = useLanguage();
+  const { lang } = useLanguage();
 
   useEffect(() => {
     if (scrollRef.current) {
