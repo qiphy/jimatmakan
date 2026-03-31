@@ -2,9 +2,15 @@ import { useState, useMemo } from "react";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserLocation } from "@/contexts/UserLocationContext";
+import { haversineDistance } from "@/utils/haversine";
 import FoodListingCard from "@/components/FoodListingCard";
 import BottomNav from "@/components/BottomNav";
 import { useListings, type SupabaseListing } from "@/hooks/useListings";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Slider } from "@/components/ui/slider";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 const categories = [
   { key: "allCategories" as const, emoji: "🍽️", value: "all" },
@@ -15,6 +21,12 @@ const categories = [
   { key: "meat" as const, emoji: "🍗", value: "meat" },
   { key: "seafood" as const, emoji: "🦐", value: "seafood" },
   { key: "pastries" as const, emoji: "🍡", value: "pastries" },
+];
+
+const dietaryOptions = [
+  { key: "halal", label: "Halal", emoji: "🕌" },
+  { key: "vegetarian", label: "Vegetarian", emoji: "🥗" },
+  { key: "vegan", label: "Vegan", emoji: "🌱" },
 ];
 
 const fuzzyMatch = (text: string, query: string): number => {
@@ -42,16 +54,62 @@ const getRelevance = (listing: SupabaseListing, query: string): number => {
 const BrowsePage = () => {
   const { t } = useLanguage();
   const { user } = useAuth();
+  const { location: userLocation } = useUserLocation();
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
+  const [maxDistance, setMaxDistance] = useState(50); // km
+  const [maxPrice, setMaxPrice] = useState(100); // RM
+  const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
+  const [filterOpen, setFilterOpen] = useState(false);
   const { listings, loading } = useListings();
   const showComposting = user?.role === "vendor" || user?.role === "composter";
+
+  const activeFilterCount = (maxDistance < 50 ? 1 : 0) + (maxPrice < 100 ? 1 : 0) + (selectedDietary.length > 0 ? 1 : 0);
+
+  const toggleDietary = (key: string) => {
+    setSelectedDietary((prev) =>
+      prev.includes(key) ? prev.filter((d) => d !== key) : [...prev, key]
+    );
+  };
+
+  const clearFilters = () => {
+    setMaxDistance(50);
+    setMaxPrice(100);
+    setSelectedDietary([]);
+  };
 
   const filtered = useMemo(() => {
     let results = listings;
 
     if (activeCategory !== "all") {
       results = results.filter((l) => l.category === activeCategory);
+    }
+
+    // Distance filter
+    if (maxDistance < 50) {
+      results = results.filter((l) => {
+        if (l.pickup_lat == null || l.pickup_lng == null) return true;
+        const dist = haversineDistance(userLocation.lat, userLocation.lng, l.pickup_lat, l.pickup_lng);
+        return dist <= maxDistance;
+      });
+    }
+
+    // Price filter
+    if (maxPrice < 100) {
+      results = results.filter((l) => l.discounted_price <= maxPrice);
+    }
+
+    // Dietary filter — match against category/title/description keywords
+    if (selectedDietary.length > 0) {
+      results = results.filter((l) => {
+        const text = `${l.title} ${l.description || ""} ${l.category}`.toLowerCase();
+        return selectedDietary.every((d) => {
+          if (d === "vegetarian") return ["vegetables", "fruits", "bread", "pastries", "rice"].includes(l.category) || text.includes("vegetarian");
+          if (d === "vegan") return ["vegetables", "fruits"].includes(l.category) || text.includes("vegan");
+          if (d === "halal") return text.includes("halal");
+          return true;
+        });
+      });
     }
 
     if (query.trim()) {
@@ -63,7 +121,7 @@ const BrowsePage = () => {
     }
 
     return results;
-  }, [listings, query, activeCategory]);
+  }, [listings, query, activeCategory, maxDistance, maxPrice, selectedDietary, userLocation]);
 
   const now = Date.now();
   const available = filtered.filter((l) => {
@@ -96,9 +154,86 @@ const BrowsePage = () => {
               <X className="h-3.5 w-3.5 text-muted-foreground" />
             </button>
           )}
-          <button className="rounded-lg bg-secondary p-1.5">
-            <SlidersHorizontal className="h-3.5 w-3.5 text-foreground" />
-          </button>
+          <Sheet open={filterOpen} onOpenChange={setFilterOpen}>
+            <SheetTrigger asChild>
+              <button className="rounded-lg bg-secondary p-1.5 relative">
+                <SlidersHorizontal className="h-3.5 w-3.5 text-foreground" />
+                {activeFilterCount > 0 && (
+                  <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-primary-foreground text-[10px] flex items-center justify-center font-bold">
+                    {activeFilterCount}
+                  </span>
+                )}
+              </button>
+            </SheetTrigger>
+            <SheetContent side="bottom" className="rounded-t-2xl max-h-[80vh] overflow-y-auto">
+              <SheetHeader>
+                <SheetTitle className="flex items-center justify-between">
+                  <span>{t("filters")}</span>
+                  {activeFilterCount > 0 && (
+                    <Button variant="ghost" size="sm" onClick={clearFilters} className="text-xs text-muted-foreground">
+                      {t("clearAll")}
+                    </Button>
+                  )}
+                </SheetTitle>
+              </SheetHeader>
+              <div className="space-y-6 py-4">
+                {/* Distance */}
+                <div className="space-y-3">
+                  <label className="text-sm font-semibold text-foreground">{t("maxDistance")}</label>
+                  <Slider
+                    value={[maxDistance]}
+                    onValueChange={([v]) => setMaxDistance(v)}
+                    min={1}
+                    max={50}
+                    step={1}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {maxDistance >= 50 ? t("anyDistance") : `≤ ${maxDistance} km`}
+                  </p>
+                </div>
+
+                {/* Max Price */}
+                <div className="space-y-3">
+                  <label className="text-sm font-semibold text-foreground">{t("maxPriceLabel")}</label>
+                  <Slider
+                    value={[maxPrice]}
+                    onValueChange={([v]) => setMaxPrice(v)}
+                    min={1}
+                    max={100}
+                    step={1}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {maxPrice >= 100 ? t("anyPrice") : `≤ RM ${maxPrice}`}
+                  </p>
+                </div>
+
+                {/* Dietary */}
+                <div className="space-y-3">
+                  <label className="text-sm font-semibold text-foreground">{t("dietaryPreferences")}</label>
+                  <div className="flex flex-wrap gap-2">
+                    {dietaryOptions.map((opt) => (
+                      <button
+                        key={opt.key}
+                        onClick={() => toggleDietary(opt.key)}
+                        className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium transition-colors ${
+                          selectedDietary.includes(opt.key)
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-card border border-border text-foreground"
+                        }`}
+                      >
+                        <span>{opt.emoji}</span>
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <Button className="w-full" onClick={() => setFilterOpen(false)}>
+                  {t("applyFilters")}
+                </Button>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
 
