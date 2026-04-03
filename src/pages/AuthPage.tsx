@@ -10,7 +10,7 @@ import LanguageToggle from "@/components/LanguageToggle";
 import { Leaf, ArrowLeft, Store, User, Recycle, MapPin } from "lucide-react";
 import LocationPicker, { DEFAULT_CENTER } from "@/components/LocationPicker";
 
-type AuthStep = "choose" | "login" | "signup";
+type AuthStep = "choose" | "login" | "signup" | "confirm-email";
 
 const AuthPage = () => {
   const { t } = useLanguage();
