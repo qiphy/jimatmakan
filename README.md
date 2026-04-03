@@ -1,9 +1,11 @@
 # Jimat Makan
 
 Project Overview
+
 JimatMakan is a streamlined web application built to help users navigate the rising costs of dining out. By providing a platform to track food expenses and discover budget-friendly local eateries, it empowers the community to make smarter financial decisions without sacrificing the joy of a good meal.
 
 Technologies Used
+
 Frontend: React.js with TypeScript
 
 Styling: Tailwind CSS (via Shadcn UI components)
@@ -45,6 +47,7 @@ npm run dev
 Open http://localhost:8080 to view the app.
 
 Future Roadmap
+
 Interactive Price Maps: Integration with Mapbox or Google Maps to visualize "Cheap Eat" clusters in real-time.
 
 OCR Receipt Scanner: Allow users to snap a photo of their receipt to automatically log expenses.
