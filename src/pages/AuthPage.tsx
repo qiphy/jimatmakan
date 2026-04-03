@@ -77,6 +77,9 @@ const AuthPage = () => {
     if (err) {
       setError(err);
     } else {
+      // Sign out immediately so AuthRoute doesn't redirect to home
+      // (user must confirm email first)
+      await logout();
       setStep("confirm-email");
     }
   };
