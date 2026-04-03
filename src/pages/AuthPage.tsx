@@ -76,7 +76,7 @@ const AuthPage = () => {
     if (err) {
       setError(err);
     } else {
-      navigate("/");
+      setStep("confirm-email");
     }
   };
 
