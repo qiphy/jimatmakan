@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Mail } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth, UserRole } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +11,7 @@ import LanguageToggle from "@/components/LanguageToggle";
 import { Leaf, ArrowLeft, Store, User, Recycle, MapPin } from "lucide-react";
 import LocationPicker, { DEFAULT_CENTER } from "@/components/LocationPicker";
 
-type AuthStep = "choose" | "login" | "signup";
+type AuthStep = "choose" | "login" | "signup" | "confirm-email";
 
 const AuthPage = () => {
   const { t } = useLanguage();
@@ -76,7 +77,7 @@ const AuthPage = () => {
     if (err) {
       setError(err);
     } else {
-      navigate("/");
+      setStep("confirm-email");
     }
   };
 
@@ -266,6 +267,21 @@ const AuthPage = () => {
               </button>
             </p>
           </form>
+        )}
+
+        {/* Confirm Email */}
+        {step === "confirm-email" && (
+          <div className="w-full max-w-sm text-center space-y-5">
+            <div className="mx-auto h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
+              <Mail className="h-8 w-8 text-primary" />
+            </div>
+            <h2 className="text-xl font-display font-bold text-foreground">{t("confirmEmailTitle")}</h2>
+            <p className="text-sm text-muted-foreground">{t("confirmEmailDesc")}</p>
+            <p className="text-xs text-muted-foreground font-medium">{email}</p>
+            <Button className="w-full h-11" onClick={() => { setStep("login"); setError(""); }}>
+              {t("goToLogin")}
+            </Button>
+          </div>
         )}
       </div>
     </div>
