@@ -15,7 +15,7 @@ type AuthStep = "choose" | "login" | "signup" | "confirm-email";
 
 const AuthPage = () => {
   const { t } = useLanguage();
-  const { login, signup, logout } = useAuth();
+  const { login, signup } = useAuth();
   const navigate = useNavigate();
 
   const [step, setStep] = useState<AuthStep>("choose");
@@ -77,7 +77,7 @@ const AuthPage = () => {
     if (err) {
       setError(err);
     } else {
-      navigate("/");
+      setStep("confirm-email");
     }
   };
 
