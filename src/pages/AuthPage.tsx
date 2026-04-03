@@ -268,6 +268,21 @@ const AuthPage = () => {
             </p>
           </form>
         )}
+
+        {/* Confirm Email */}
+        {step === "confirm-email" && (
+          <div className="w-full max-w-sm text-center space-y-5">
+            <div className="mx-auto h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
+              <Mail className="h-8 w-8 text-primary" />
+            </div>
+            <h2 className="text-xl font-display font-bold text-foreground">{t("confirmEmailTitle")}</h2>
+            <p className="text-sm text-muted-foreground">{t("confirmEmailDesc")}</p>
+            <p className="text-xs text-muted-foreground font-medium">{email}</p>
+            <Button className="w-full h-11" onClick={() => { setStep("login"); setError(""); }}>
+              {t("goToLogin")}
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
