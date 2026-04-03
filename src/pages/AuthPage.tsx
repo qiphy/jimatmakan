@@ -15,7 +15,7 @@ type AuthStep = "choose" | "login" | "signup" | "confirm-email";
 
 const AuthPage = () => {
   const { t } = useLanguage();
-  const { login, signup } = useAuth();
+  const { login, signup, logout } = useAuth();
   const navigate = useNavigate();
 
   const [step, setStep] = useState<AuthStep>("choose");
@@ -77,6 +77,9 @@ const AuthPage = () => {
     if (err) {
       setError(err);
     } else {
+      // Sign out immediately so AuthRoute doesn't redirect to home
+      // (user must confirm email first)
+      await logout();
       setStep("confirm-email");
     }
   };
