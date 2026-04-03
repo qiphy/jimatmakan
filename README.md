@@ -16,6 +16,8 @@
 
 ## Installation / Setup Guide
 
+Live URL: https://jimatmakan.lovable.app
+
 To run this project on your local machine, follow these steps:
 
 ### 1. Prerequisites
